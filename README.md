@@ -193,3 +193,49 @@ END WHILE;
 
 SELECT counts;
 ```
+
+
+### Faster, same(ish) result
+
+```
+DECLARE pages_all ARRAY<STRING(255)>;
+SET pages_all = ['/', '/resume/', '/work/'];
+
+WITH history AS (
+    SELECT ev1.uid, ev1.path as path_1, -- TIMESTAMP(ev1.ts) as timez_1,
+        ev2.path as path_2 --, TIMESTAMP(ev2.ts) as timez_2
+    FROM `probable-skill-330219.pixel_events.events` ev1 
+
+    FULL OUTER JOIN `probable-skill-330219.pixel_events.events` ev2
+        ON ev2.uid = ev1.uid
+        AND DATE(ev2.ts) > '2021-11-19'
+        AND ev2.host = 'www.timcieplowski.com'
+        AND ev2.ev = 'pageload'
+        AND ev2.ts < ev1.ts
+        AND ev2.path != ev1.path
+        AND (
+            (ev2.path is null)
+            OR
+            ( ev2.path in UNNEST(pages_all) )
+        )
+    WHERE DATE(ev1.ts) > '2021-11-19'
+        AND ev1.host = 'www.timcieplowski.com'
+        AND ev1.ev = 'pageload'
+        AND ev1.path in UNNEST(pages_all)
+    GROUP BY uid, path_1, path_2
+)
+
+SELECT steps_completed, COUNT(uid) AS users,
+    SUM(COUNT(*)) OVER (ORDER BY steps_completed DESC) AS total_users
+FROM (
+    SELECT uid, count(*) steps_completed
+    FROM history
+    WHERE ('/' = path_1)
+        OR ('/resume/' = path_1 AND '/' = path_2)
+        OR ('/work/' = path_1 AND '/resume/' = path_2)
+    GROUP BY uid
+)
+GROUP BY steps_completed 
+ORDER BY steps_completed 
+
+```
