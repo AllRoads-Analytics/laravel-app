@@ -7,20 +7,20 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">Path</th>
-                        <th scope="col">Views</th>
+                        <th scope="col">Sites</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @foreach ($pages as $page)
+                    @foreach ($hosts as $host)
                         <tr>
                             <td>
-                                {{ $page['path'] }}
-                            </td>
-
-                            <td>
-                                {{ $page['views'] }}
+                                <a href="{{ route('pathfinder.tracker.host', [
+                                    'tracker_pixel_id' => $Tracker->pixel_id,
+                                    'host' => $host['host'],
+                                ]) }}">
+                                    {{ $host['host'] }}
+                                </a>
                             </td>
                         </tr>
                     @endforeach

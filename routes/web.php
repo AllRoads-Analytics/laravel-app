@@ -22,4 +22,10 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/pathfinder', [App\Http\Controllers\PathfinderController::class, 'index'])->name('pathfinder');
+Route::get('/pathfinder/{tracker_pixel_id}', [
+    App\Http\Controllers\PathfinderController::class, 'get_tracker'
+])->name('pathfinder.tracker');
+
+Route::get('/pathfinder/{tracker_pixel_id}/{host}', [
+    App\Http\Controllers\PathfinderController::class, 'get_tracker_host'
+])->name('pathfinder.tracker.host');
