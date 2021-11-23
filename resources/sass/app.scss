@@ -7,6 +7,22 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+ul, ol {
+    margin-bottom: 0;
+}
+
+code {
+    color: #00661e;
+}
+
+pre {
+    font-size: inherit;
+}
+
 .form-group {
     @extend .mb-2;
+}
+
+.navbar-expand-md .navbar-collapse {
+    justify-content: end;
 }

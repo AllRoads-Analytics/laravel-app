@@ -4,19 +4,34 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+            @if ($organizations->count())
+                <h3>Your Organizations</h3>
+            @endif
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
+            @foreach ($organizations as $Organization)
+                <a href="{{ $Organization->getTracker()->getRoute() }}">
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    {{ $Organization->name }}
+                                </div>
+
+                                <div>
+                                    <a href="{{ route('organizations.show', $Organization->id) }}"
+                                    class="btn btn-primary btn-sm">
+                                        ⚙️
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                    @endif
+                    </div>
+                </a>
+            @endforeach
 
-                    {{ __('You are logged in!') }}
-                </div>
-            </div>
+            <a href="{{ route('organizations.create') }}" class="btn btn-primary">
+                Create New Organization
+            </a>
         </div>
     </div>
 </div>

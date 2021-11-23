@@ -4,14 +4,20 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            <h2>Org: {{ $Tracker->Organization->name ?? 'n/a' }}</h2>
+
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">Sites</th>
+                        <th scope="col">Site</th>
                     </tr>
                 </thead>
 
                 <tbody>
+                    @if ( ! $hosts->current())
+                        <tr><td><i>No tracking data sent yet.</i></td></tr>
+                    @endif
+
                     @foreach ($hosts as $host)
                         <tr>
                             <td>
