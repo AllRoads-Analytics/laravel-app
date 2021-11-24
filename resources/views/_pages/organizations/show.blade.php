@@ -48,7 +48,18 @@
                     </div>
 
                     <div class="card-body">
-                        todo
+                        <p>// todo</p>
+
+                        <p>
+                            <form action="{{ route('organizations.destroy', $Organization->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+
+                                <button class="btn btn-danger">
+                                    Delete
+                                </button>
+                            </form>
+                        </p>
                     </div>
                 </div>
             </div>

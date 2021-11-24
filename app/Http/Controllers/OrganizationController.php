@@ -94,8 +94,17 @@ class OrganizationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $Organization = Organization::find($id);
+
+        $Organization->delete();
+
+        $request->session()->flash('alert', [
+            'type' => 'success',
+            'message' => "Organization [$Organization->name] deleted.",
+        ]);
+
+        return redirect()->route('home');
     }
 }

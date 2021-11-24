@@ -41,7 +41,8 @@ class Organizations extends Migration
 
             $table->foreign('organization_id')
                 ->references('id')->on('organizations')
-                ->cascadeOnUpdate();
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
         });
     }
 
@@ -57,8 +58,8 @@ class Organizations extends Migration
             $table->dropColumn('organization_id');
         });
 
-        Schema::dropIfExists('organizations');
         Schema::dropIfExists('organization_user');
+        Schema::dropIfExists('organizations');
 
     }
 }

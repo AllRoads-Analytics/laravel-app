@@ -76,6 +76,14 @@
         </nav>
 
         <main class="py-4">
+            @if ($alert = session('alert'))
+                <div class="alert alert-{{ $alert['type'] ?? 'primary' }}" role="alert">
+                    <div class="container">
+                        {{ $alert['message'] ?? $alert }}
+                    </div>
+                </div>
+            @endif
+
             @yield('content')
         </main>
     </div>
