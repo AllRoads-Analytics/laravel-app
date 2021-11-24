@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\OrganizationController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PathfinderController;
+use App\Http\Controllers\OrganizationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,9 +25,13 @@ Route::resources([
 ]);
 
 Route::get('/pathfinder/{tracker_pixel_id}', [
-    App\Http\Controllers\PathfinderController::class, 'get_tracker'
+    PathfinderController::class, 'get_tracker'
 ])->name('pathfinder.tracker');
 
 Route::get('/pathfinder/{tracker_pixel_id}/{host}', [
-    App\Http\Controllers\PathfinderController::class, 'get_tracker_host'
+    PathfinderController::class, 'get_tracker_host'
 ])->name('pathfinder.tracker.host');
+
+Route::get('/pathfinder/ajax/{tracker_pixel_id}/{host}', [
+    PathfinderController::class, 'ajax_get_next_paths'
+])->name('pathfinder.ajax.get_next_paths');

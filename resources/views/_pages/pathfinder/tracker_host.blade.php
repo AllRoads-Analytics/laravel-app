@@ -5,14 +5,14 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container" id="vue-app">
     <div class="row">
         <div class="col">
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="{{ route('pathfinder.tracker', $Tracker->pixel_id) }}">
-                            {{ $Tracker->pixel_id }}
+                            {{ $Tracker->Organization->name }}
                         </a>
                     </li>
 
@@ -32,7 +32,16 @@
         </div>
     </div>
 
-    @if (count($previous_pages))
+    <div class="row">
+        <div class="col">
+            <pathfinder
+            pixel_id="{{ $Tracker->pixel_id }}"
+            host="{{ $host }}"
+            ></pathfinder>
+        </div>
+    </div>
+
+    {{-- @if (count($previous_pages))
         <div class="row justify-content-center mb-5">
             <div class="col-md-8">
                 <div class="card">
@@ -109,6 +118,6 @@
                 </tbody>
             </table>
         </div>
-    </div>
+    </div> --}}
 </div>
 @endsection

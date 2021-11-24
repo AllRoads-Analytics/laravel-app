@@ -19,9 +19,9 @@ try {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = require('axios');
+window.Axios = require('axios');
 
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.Axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
@@ -39,3 +39,18 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+// =============================================================================
+// Vue init:
+// =============================================================================
+
+import { createApp } from 'vue';
+
+const app = createApp({})
+
+const files = require.context('./', true, /\.vue$/i);
+files.keys().map(key => app.component(key.split('/').pop().split('.')[0], files(key).default));
+
+if ( !! document.getElementById("vue-app")) {
+    const vm = app.mount('#vue-app')
+}
