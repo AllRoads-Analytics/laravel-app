@@ -1,0 +1,1 @@
+* Events other than PAGEVIEW.

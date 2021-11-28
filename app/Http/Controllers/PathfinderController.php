@@ -24,7 +24,7 @@ class PathfinderController extends Controller
 
     public function get_tracker_host(Request $Request, $tracker_pixel_id, $host) {
         $Tracker = Tracker::findByPixelId($tracker_pixel_id);
-        $previous_pages = $Request->query('previous_pages', []);
+        // $previous_pages = $Request->query('previous_pages', []);
 
         if ( ! $Tracker) {
             return abort(404);
@@ -39,7 +39,7 @@ class PathfinderController extends Controller
             'host' => $host,
             // 'pageviews' => $pageviews,
             // 'funnel_pages' => $funnel_pages,
-            'previous_pages' => $previous_pages,
+            // 'previous_pages' => $previous_pages,
         ]);
     }
 
@@ -48,7 +48,7 @@ class PathfinderController extends Controller
     // Ajax.
     // =========================================================================
 
-    public function ajax_get_next_paths(Request $Request, $tracker_pixel_id, $host) {
+    public function ajax_get_next_pages(Request $Request, $tracker_pixel_id, $host) {
         $Tracker = Tracker::findByPixelId($tracker_pixel_id);
         $previous_pages = $Request->query('previous_pages', []);
 
@@ -62,6 +62,21 @@ class PathfinderController extends Controller
 
         return [
             'paths' => $pageviews,
+        ];
+    }
+
+    public function ajax_get_funnel(Request $Request, $tracker_pixel_id, $host) {
+        $Tracker = Tracker::findByPixelId($tracker_pixel_id);
+        $pages = $Request->query('pages', []);
+
+        if ( ! $Tracker) {
+            return abort(404);
+        }
+
+        $pages = $pages ? $Tracker->getFunnelViews2($host, now()->subDays(40), now(), $pages) : null;
+
+        return [
+            'page_views' => $pages,
         ];
     }
 }

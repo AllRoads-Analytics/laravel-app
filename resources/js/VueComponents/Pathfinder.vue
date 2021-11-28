@@ -1,36 +1,35 @@
 <template>
     <div>
-        <div v-if="loading">
-            Loading...
+        <div>
+            <funnel
+                :pixel_id="pixel_id"
+                :host="host"
+                :pages="previous_pages"
+                @removePage="removePreviousPage"
+            ></funnel>
         </div>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">Path</th>
-                    <th scope="col">Views</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <tr v-for="path, idx in next_paths" :key="idx" >
-                    <td>
-                        <a href="#">
-                            {{ path.path }}
-                        </a>
-                    </td>
-
-                    <td>
-                        {{ path.views }}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div>
+            <next-pages
+                :pixel_id="pixel_id"
+                :host="host"
+                :previous_pages="previous_pages"
+                @addPreviousPage="addPreviousPage"
+            ></next-pages>
+        </div>
     </div>
 </template>
 
 <script>
+import Funnel from './Pathfinder/Funnel.vue';
+import NextPages from './Pathfinder/NextPages.vue';
+
+const queryString = require('query-string');
+
 export default {
+    components: { Funnel },
+    components: [ NextPages, Funnel ],
+
     props: {
         pixel_id: String,
         host: String,
@@ -38,23 +37,37 @@ export default {
 
     data() {
         return {
-            loading: true,
-            next_paths: [],
+            previous_pages: [],
         };
     },
 
-    mounted() {
-        Axios.get(route('pathfinder.ajax.get_next_paths', {
-            tracker_pixel_id: this.pixel_id,
-            host: this.host,
-        })).then( (response) => {
-            console.log(response.data);
-            this.next_paths = response.data.paths;
-            this.loading = false;
-        }).catch( (error) => {
-            console.log(error);
-            window.alert('Something went wrong.');
-        });
+    methods: {
+        addPreviousPage(page) {
+            this.previous_pages.push(page);
+            this.updateUrl();
+        },
+
+        removePreviousPage(page) {
+            _.pull(this.previous_pages, page);
+            this.updateUrl();
+        },
+
+        updateUrl() {
+            const url = new URL(window.location);
+
+            url.searchParams.delete('previous_pages');
+
+            this.previous_pages.forEach(page => {
+                url.searchParams.append('previous_pages', page);
+            });
+
+            window.history.pushState({}, '', url);
+        }
+    },
+
+    beforeMount() {
+        const parsed = queryString.parse(location.search);
+        this.previous_pages = parsed ? (parsed.previous_pages ?? [] ) : [];
     },
 }
 </script>

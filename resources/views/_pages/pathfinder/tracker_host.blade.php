@@ -16,17 +16,17 @@
                         </a>
                     </li>
 
-                    @if ( ! count($previous_pages))
+                    {{-- @if ( ! count($previous_pages))
                         <li class="breadcrumb-item active">
                             {{ $host }}
                         </li>
-                    @else
+                    @else --}}
                         <li class="breadcrumb-item">
                             <a href="{{ route('pathfinder.tracker.host', [$Tracker->pixel_id, $host]) }}">
                                 {{ $host }}
                             </a>
                         </li>
-                    @endif
+                    {{-- @endif --}}
                 </ol>
               </nav>
         </div>

@@ -32,6 +32,10 @@ Route::get('/pathfinder/{tracker_pixel_id}/{host}', [
     PathfinderController::class, 'get_tracker_host'
 ])->name('pathfinder.tracker.host');
 
-Route::get('/pathfinder/ajax/{tracker_pixel_id}/{host}', [
-    PathfinderController::class, 'ajax_get_next_paths'
-])->name('pathfinder.ajax.get_next_paths');
+Route::get('/pathfinder/ajax/{tracker_pixel_id}/{host}/next_pages', [
+    PathfinderController::class, 'ajax_get_next_pages'
+])->name('pathfinder.ajax.get_next_pages');
+
+Route::get('/pathfinder/ajax/{tracker_pixel_id}/{host}/funnel', [
+    PathfinderController::class, 'ajax_get_funnel'
+])->name('pathfinder.ajax.get_funnel');
