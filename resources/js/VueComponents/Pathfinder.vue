@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div>
+        <div v-show="previous_pages.length > 0" class="mb-3">
             <funnel
                 :pixel_id="pixel_id"
                 :host="host"
@@ -67,7 +67,8 @@ export default {
 
     beforeMount() {
         const parsed = queryString.parse(location.search);
-        this.previous_pages = parsed ? (parsed.previous_pages ?? [] ) : [];
+        const previous_pages = parsed ? (parsed.previous_pages ?? [] ) : [];
+        this.previous_pages = Array.isArray(previous_pages) ? previous_pages : [ previous_pages ];
     },
 }
 </script>

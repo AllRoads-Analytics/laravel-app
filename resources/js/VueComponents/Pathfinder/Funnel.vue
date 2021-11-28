@@ -1,10 +1,6 @@
 <template>
     <div>
-        <div v-if="loading">
-            Loading...
-        </div>
-
-        <div v-else>
+        <div ref="loader" class="vld-parent" style="min-height: 100px;">
             <div class="d-flex flex-wrap p-1">
                 <div class="p-1" v-for="page, idx in page_views" :key="idx">
                     <div class="card">
@@ -13,19 +9,9 @@
                             <p>Page: {{ page.page }}</p>
                             <p>Views: {{ page.views }}</p>
 
-                            <button type="button" class="btn btn-link" @click="$emit('removePage', page.page)">
-                                Remove
+                            <button type="button" class="btn btn-sm btn-outline-danger" @click="$emit('removePage', page.page)">
+                                X
                             </button>
-
-                            <!-- <a href="{{ route('pathfinder.tracker.host', [
-                                'tracker_pixel_id' => $Tracker->pixel_id,
-                                'host' => $host,
-                                'previous_pages' => array_values(
-                                        Arr::where( $previous_pages, fn($_page) => ( $_page !== $page_views['page'] ) )
-                                    ),
-                            ]) }}">
-                                Remove
-                            </a> -->
                         </div>
                     </div>
                 </div>
@@ -46,6 +32,7 @@ export default {
         return {
             loading: true,
             page_views: [],
+            // show: false,
         };
     },
 
@@ -57,10 +44,12 @@ export default {
                 return;
             }
 
-            this.loading = true;
+            let loader = this.$loading.show({
+                container: this.$refs.loader,
+            });
 
-            Axios.get(route('pathfinder.ajax.get_funnel', {
-                tracker_pixel_id: this.pixel_id,
+            Axios.get( route('pathfinder.ajax.get_funnel', {
+                tracker: this.pixel_id,
                 host: this.host,
                 pages: this.pages,
             })).then( (response) => {
@@ -69,7 +58,7 @@ export default {
                 console.log(error);
                 window.alert('Something went wrong.');
             }).then( () => {
-                this.loading = false;
+                loader.hide();
             });
         }
     },
@@ -77,14 +66,12 @@ export default {
     watch: {
         pages: {
             deep: true,
-            handler() {
+            immediate: true,
+            handler(_pages) {
+                // this.show = _pages.length > 0;
                 this.update();
             }
         }
-    },
-
-    mounted() {
-        this.update();
     },
 }
 </script>

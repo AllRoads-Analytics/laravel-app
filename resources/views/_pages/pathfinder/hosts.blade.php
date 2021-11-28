@@ -22,7 +22,7 @@
                         <tr>
                             <td>
                                 <a href="{{ route('pathfinder.tracker.host', [
-                                    'tracker_pixel_id' => $Tracker->pixel_id,
+                                    'tracker' => $Tracker,
                                     'host' => $host['host'],
                                 ]) }}">
                                     {{ $host['host'] }}

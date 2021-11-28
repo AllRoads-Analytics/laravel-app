@@ -7,12 +7,8 @@ use Illuminate\Http\Request;
 
 class PathfinderController extends Controller
 {
-    public function get_tracker(Request $Request, $tracker_pixel_id) {
-        $Tracker = Tracker::findByPixelId($tracker_pixel_id);
-
-        if ( ! $Tracker) {
-            return abort(404);
-        }
+    public function get_tracker(Request $Request, Tracker $Tracker) {
+        $this->authorize('view', $Tracker->Organization);
 
         $hosts = $Tracker->getHosts();
 
@@ -22,24 +18,12 @@ class PathfinderController extends Controller
         ]);
     }
 
-    public function get_tracker_host(Request $Request, $tracker_pixel_id, $host) {
-        $Tracker = Tracker::findByPixelId($tracker_pixel_id);
-        // $previous_pages = $Request->query('previous_pages', []);
-
-        if ( ! $Tracker) {
-            return abort(404);
-        }
-
-        // $pageviews = $Tracker->getUniquePageviews($host, now()->subDays(40), now(), $previous_pages);
-
-        // $funnel_pages = $previous_pages ? $Tracker->getFunnelViews2($host, now()->subDays(40), now(), $previous_pages) : null;
+    public function get_tracker_host(Request $Request, Tracker $Tracker, $host) {
+        $this->authorize('view', $Tracker->Organization);
 
         return view('_pages.pathfinder.tracker_host', [
             'Tracker' => $Tracker,
             'host' => $host,
-            // 'pageviews' => $pageviews,
-            // 'funnel_pages' => $funnel_pages,
-            // 'previous_pages' => $previous_pages,
         ]);
     }
 
@@ -48,35 +32,29 @@ class PathfinderController extends Controller
     // Ajax.
     // =========================================================================
 
-    public function ajax_get_next_pages(Request $Request, $tracker_pixel_id, $host) {
-        $Tracker = Tracker::findByPixelId($tracker_pixel_id);
+    public function ajax_get_next_pages(Request $Request, Tracker $Tracker, $host) {
+        $this->authorize('view', $Tracker->Organization);
+
         $previous_pages = $Request->query('previous_pages', []);
 
-        if ( ! $Tracker) {
-            return abort(404);
-        }
-
-        $pageviews = iterator_to_array($Tracker->getUniquePageviews($host, now()->subDays(40), now(), $previous_pages));
-
-        // dd($pageviews);
+        $pageviews = iterator_to_array(
+            $Tracker->getUniquePageviews($host, now()->subDays(40), now(), $previous_pages)
+        );
 
         return [
             'paths' => $pageviews,
         ];
     }
 
-    public function ajax_get_funnel(Request $Request, $tracker_pixel_id, $host) {
-        $Tracker = Tracker::findByPixelId($tracker_pixel_id);
+    public function ajax_get_funnel(Request $Request, Tracker $Tracker, $host) {
+        $this->authorize('view', $Tracker->Organization);
+
         $pages = $Request->query('pages', []);
 
-        if ( ! $Tracker) {
-            return abort(404);
-        }
-
-        $pages = $pages ? $Tracker->getFunnelViews2($host, now()->subDays(40), now(), $pages) : null;
+        $page_views = $pages ? $Tracker->getFunnelViews2($host, now()->subDays(40), now(), $pages) : null;
 
         return [
-            'page_views' => $pages,
+            'page_views' => $page_views,
         ];
     }
 }

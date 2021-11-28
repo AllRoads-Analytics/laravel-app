@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class OrganizationController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -56,6 +61,8 @@ class OrganizationController extends Controller
     {
         $Organization = Organization::find($id);
 
+        $this->authorize('view', $Organization);
+
         if ( ! $Organization) {
             return abort(404);
         }
@@ -97,6 +104,8 @@ class OrganizationController extends Controller
     public function destroy(Request $request, $id)
     {
         $Organization = Organization::find($id);
+
+        $this->authorize('view', $Organization);
 
         $Organization->delete();
 

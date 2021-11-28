@@ -7,7 +7,10 @@
         <table v-else class="table">
             <thead>
                 <tr>
-                    <th scope="col">Path</th>
+                    <th scope="col">
+                        Select {{ first ? 'starting' : 'next' }} page
+                    </th>
+
                     <th scope="col">Views</th>
                 </tr>
             </thead>
@@ -42,6 +45,7 @@ export default {
         return {
             loading: true,
             next_pages: [],
+            first: false,
         };
     },
 
@@ -50,7 +54,7 @@ export default {
             this.loading = true;
 
             Axios.get(route('pathfinder.ajax.get_next_pages', {
-                tracker_pixel_id: this.pixel_id,
+                tracker: this.pixel_id,
                 host: this.host,
                 previous_pages: this.previous_pages,
             })).then( (response) => {
@@ -67,14 +71,12 @@ export default {
     watch: {
         previous_pages: {
             deep: true,
+            immediate: true,
             handler() {
+                this.first = this.previous_pages.length === 0;
                 this.update();
             }
         }
-    },
-
-    mounted() {
-        this.update();
     },
 }
 </script>
