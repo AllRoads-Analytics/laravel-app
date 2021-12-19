@@ -53,6 +53,8 @@ class BigQueryService {
     public function rawQuery($query, array $parameters = []) {
         $query = str_replace(':table', $this->getTableRef(), $query);
 
+        // echo $query; die;
+
         return $this->BigQuery->runQuery(
             $this->BigQuery->query($query)->parameters($parameters),
             [

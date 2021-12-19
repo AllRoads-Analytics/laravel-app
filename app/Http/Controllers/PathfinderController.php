@@ -51,7 +51,7 @@ class PathfinderController extends Controller
 
         $pages = $Request->query('pages', []);
 
-        $page_views = $pages ? $Tracker->getFunnelViews2($host, now()->subDays(40), now(), $pages) : null;
+        $page_views = $pages ? $Tracker->getFunnelViews($host, now()->subDays(40), now(), $pages) : null;
 
         return [
             'page_views' => $page_views,
