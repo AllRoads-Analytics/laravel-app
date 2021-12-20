@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tracker;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PathfinderController extends Controller
@@ -38,7 +39,12 @@ class PathfinderController extends Controller
         $previous_pages = $Request->query('previous_pages', []);
 
         $pageviews = iterator_to_array(
-            $Tracker->getUniquePageviews($host, now()->subDays(40), now(), $previous_pages)
+            $Tracker->getUniquePageviews(
+                $host,
+                Carbon::createFromFormat('Y-m-d', $Request->input('start_date')),
+                Carbon::createFromFormat('Y-m-d', $Request->input('end_date')),
+                $previous_pages
+            )
         );
 
         return [
@@ -51,7 +57,12 @@ class PathfinderController extends Controller
 
         $pages = $Request->query('pages', []);
 
-        $page_views = $pages ? $Tracker->getFunnelViews($host, now()->subDays(40), now(), $pages) : null;
+        $page_views = $pages ? $Tracker->getFunnelViews(
+            $host,
+            Carbon::createFromFormat('Y-m-d', $Request->input('start_date')),
+            Carbon::createFromFormat('Y-m-d', $Request->input('end_date')),
+            $pages
+        ) : null;
 
         return [
             'page_views' => $page_views,

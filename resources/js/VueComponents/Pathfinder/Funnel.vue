@@ -25,7 +25,7 @@ export default {
     props: {
         pixel_id: String,
         host: String,
-        pages: Array,
+        filters: Object,
     },
 
     data() {
@@ -38,7 +38,7 @@ export default {
 
     methods: {
         update() {
-            if (0 === this.pages.length) {
+            if (0 === this.filters.previous_pages.length) {
                 this.page_views = [];
                 this.loading = false;
                 return;
@@ -51,7 +51,9 @@ export default {
             Axios.get( route('pathfinder.ajax.get_funnel', {
                 tracker: this.pixel_id,
                 host: this.host,
-                pages: this.pages,
+                pages: this.filters.previous_pages,
+                start_date: this.filters.start_date,
+                end_date: this.filters.end_date,
             })).then( (response) => {
                 this.page_views = response.data.page_views;
             }).catch( (error) => {
@@ -64,7 +66,7 @@ export default {
     },
 
     watch: {
-        pages: {
+        filters: {
             deep: true,
             immediate: true,
             handler(_pages) {

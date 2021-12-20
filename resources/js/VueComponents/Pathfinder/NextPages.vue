@@ -30,6 +30,10 @@
                 </tr>
             </tbody>
         </table>
+
+        <div v-show=" ! loading && next_pages.length < 1" class="mx-3">
+            <i>No subsequent pages.</i>
+        </div>
     </div>
 </template>
 
@@ -38,7 +42,7 @@ export default {
     props: {
         pixel_id: String,
         host: String,
-        previous_pages: Array,
+        filters: Object,
     },
 
     data() {
@@ -53,10 +57,12 @@ export default {
         update() {
             this.loading = true;
 
-            Axios.get(route('pathfinder.ajax.get_next_pages', {
+            Axios.get( route('pathfinder.ajax.get_next_pages', {
                 tracker: this.pixel_id,
                 host: this.host,
-                previous_pages: this.previous_pages,
+                previous_pages: this.filters.previous_pages,
+                start_date: this.filters.start_date,
+                end_date: this.filters.end_date,
             })).then( (response) => {
                 this.next_pages = response.data.paths;
             }).catch( (error) => {
@@ -69,11 +75,11 @@ export default {
     },
 
     watch: {
-        previous_pages: {
+        filters: {
             deep: true,
             immediate: true,
             handler() {
-                this.first = this.previous_pages.length === 0;
+                this.first = this.filters.previous_pages.length === 0;
                 this.update();
             }
         }

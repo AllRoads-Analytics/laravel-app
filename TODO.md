@@ -1,7 +1,8 @@
 * Events other than PAGEVIEW.
-* Date range.
+* Re-do dynamic hostname in queries
 * UTM source/medium/etc filtering.
 * Save funnels.
 * Admin/viewer roles.
 * Consolidate Org/Tracker?
 * Domain name for Laravel & Pixel.
+* parametize values from frontend (like pages) in queries, like @host
