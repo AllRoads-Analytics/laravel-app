@@ -35,6 +35,10 @@ class Organization extends ModelAbstract
         return $this->belongsToMany(User::class);
     }
 
+    public function Invites() {
+        return $this->hasMany(Invite::class);
+    }
+
 
     // =========================================================================
     // Public instance functions.

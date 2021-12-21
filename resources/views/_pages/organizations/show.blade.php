@@ -28,40 +28,106 @@
                     </div>
                 </div>
 
-                <div class="card">
-                    <div class="card-header">
-                        Users
-                    </div>
+                @if (auth()->user()->can('manage', $Organization))
+                    <div class="card">
+                        <div class="card-header">
+                            Users
+                        </div>
 
-                    <div class="card-body">
-                        <ul>
-                            @foreach ($Organization->Users as $User)
-                                <li>{{ $User->name }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
+                        <div class="card-body">
+                            <div>
+                                <ul>
+                                    @foreach ($Organization->Users()->withPivot('role')->get()->sortBy('name') as $User)
+                                        <form action="{{ route('organizations.users.remove', [
+                                            'organization' => $Organization->id,
+                                            'user' => $User->id,
+                                        ]) }}"
+                                        method="post"
+                                        onsubmit="confirm('Are you sure you want to remove this user?')">
+                                            @csrf
 
-                <div class="card">
-                    <div class="card-header">
-                        Plan/Billing
-                    </div>
+                                            <li>
+                                                {{ $User->name }} | {{ $User->email }}
 
-                    <div class="card-body">
-                        <p>// todo</p>
+                                                <span class="badge rounded-pill bg-dark">
+                                                    {{ $User->pivot->role }}
+                                                </span>
 
-                        <p>
-                            <form action="{{ route('organizations.destroy', $Organization->id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
+                                                @if ($User->id === auth()->user()->id)
 
-                                <button class="btn btn-danger">
-                                    Delete
+                                                @else
+                                                    <button class="btn btn-sm btn-outline-danger">
+                                                        X
+                                                    </button>
+                                                @endif
+                                            </li>
+                                        </form>
+                                    @endforeach
+                                </ul>
+                            </div>
+
+                            @if ($Organization->Invites->count())
+                                <p class="mt-3 mb-1"><i>Invites:</i></p>
+                            @endif
+
+                            <div>
+                                <ul>
+                                    @foreach ($Organization->Invites->sortBy('email') as $Invite)
+                                        <li class="fst-italic">{{ $Invite->email }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+
+                            <div class="mt-3"
+                            x-data="{ open: false }">
+                                <button class="btn btn-success"
+                                x-on:click="open = true" x-show=" ! open">
+                                    Add
                                 </button>
-                            </form>
-                        </p>
+
+                                <div x-show="open" x-cloak
+                                class="col-md-6">
+                                    <form action="{{ route('organizations.invites.create', ['organization' => $Organization->id]) }}"
+                                    method="post"
+                                    class="d-grid gap-2">
+                                        @csrf
+
+                                        <input type="email" name="email" id="email" class="form-control"
+                                        placeholder="Email">
+
+                                        <div>
+                                            <button type="submit" class="btn btn-success">
+                                                Invite
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+
+
+                    <div class="card">
+                        <div class="card-header">
+                            Plan/Billing
+                        </div>
+
+                        <div class="card-body">
+                            <p>// todo</p>
+
+                            <p>
+                                <form action="{{ route('organizations.destroy', $Organization->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button class="btn btn-danger">
+                                        Delete
+                                    </button>
+                                </form>
+                            </p>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

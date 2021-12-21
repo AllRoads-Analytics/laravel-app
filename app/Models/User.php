@@ -12,16 +12,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -42,6 +33,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    const ROLE_ADMIN = 'admin';
+    const ROLE_EDITOR = 'editor';
+    const ROLE_VIEWER = 'viewer';
+
+    const ROLES = [
+        self::ROLE_ADMIN,
+        self::ROLE_EDITOR,
+        self::ROLE_VIEWER,
+    ];
 
     // =========================================================================
     // Relations.

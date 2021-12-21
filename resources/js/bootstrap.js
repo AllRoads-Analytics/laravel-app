@@ -59,3 +59,12 @@ files.keys().map(key => app.component(key.split('/').pop().split('.')[0], files(
 if ( !! document.getElementById("vue-app")) {
     const vm = app.mount('#vue-app');
 }
+
+
+// =============================================================================
+// Alpine init:
+// =============================================================================
+
+import Alpine from 'alpinejs'
+window.Alpine = Alpine
+Alpine.start()

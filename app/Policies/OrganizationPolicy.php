@@ -10,85 +10,54 @@ class OrganizationPolicy
 {
     use HandlesAuthorization;
 
-    /**
-     * Determine whether the user can view any models.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function viewAny(User $user)
-    {
+    protected $Organization;
+
+    public function viewAny(User $User) {
         return false;
     }
 
-    /**
-     * Determine whether the user can view the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Organization  $organization
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function view(User $user, Organization $organization)
-    {
-        return $user->Organizations()->where('id', $organization->id)->count() ? true : false;
+    public function view(User $User, Organization $Organization) {
+        return $this->isAdmin($User, $Organization)
+            || $this->isEditor($User, $Organization)
+            || $this->isViewer($User, $Organization);
     }
 
-    /**
-     * Determine whether the user can create models.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function create(User $user)
-    {
-        //
+    public function edit(User $User, Organization $Organization) {
+        return $this->isAdmin($User, $Organization)
+            || $this->isEditor($User, $Organization);
     }
 
-    /**
-     * Determine whether the user can update the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Organization  $organization
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function update(User $user, Organization $organization)
-    {
-        //
+    public function manage(User $User, Organization $Organization) {
+        return $this->isAdmin($User, $Organization);
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Organization  $organization
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function delete(User $user, Organization $organization)
-    {
-        //
+    // =========================================================================
+    // Protected functions.
+    // =========================================================================
+
+    protected function getUserOrganization($User, $Organization) {
+        if ( ! isset($this->Organization)) {
+            $this->Organization = $User->Organizations()
+            ->withPivot('role')
+            ->where('id', $Organization->id)
+            ->first();
+        }
+
+        return $this->Organization;
     }
 
-    /**
-     * Determine whether the user can restore the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Organization  $organization
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function restore(User $user, Organization $organization)
-    {
-        //
+    protected function isAdmin($User, $Organization) {
+        $Organization = $this->getUserOrganization($User, $Organization);
+        return $Organization && $Organization->pivot->role === $User::ROLE_ADMIN;
     }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Organization  $organization
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function forceDelete(User $user, Organization $organization)
-    {
-        //
+    protected function isEditor($User, $Organization) {
+        $Organization = $this->getUserOrganization($User, $Organization);
+        return $Organization && $Organization->pivot->role === $User::ROLE_EDITOR;
+    }
+
+    protected function isViewer($User, $Organization) {
+        $Organization = $this->getUserOrganization($User, $Organization);
+        return $Organization && $Organization->pivot->role === $User::ROLE_VIEWER;
     }
 }

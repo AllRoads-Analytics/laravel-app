@@ -26,7 +26,16 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+
+    protected function redirectTo() {
+        if ($invite_code = session('invite_code')) {
+            return route('organizations.invites.get_accept', [
+                'invite_code' => $invite_code,
+            ]);
+        }
+
+        return RouteServiceProvider::HOME;
+    }
 
     /**
      * Create a new controller instance.

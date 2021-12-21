@@ -3,6 +3,8 @@
 * UTM source/medium/etc filtering.
 * Save funnels.
 * Admin/viewer roles.
+* Invite other users.
 * Consolidate Org/Tracker?
 * Domain name for Laravel & Pixel.
 * parametize values from frontend (like pages) in queries, like @host
+* pagination?

@@ -105,7 +105,7 @@ class OrganizationController extends Controller
     {
         $Organization = Organization::find($id);
 
-        $this->authorize('view', $Organization);
+        $this->authorize('manage', $Organization);
 
         $Organization->delete();
 

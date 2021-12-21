@@ -2,8 +2,10 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PathfinderController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\OrganizationUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,9 +22,29 @@ Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::resources([
-    'organizations' => OrganizationController::class,
-]);
+
+// =============================================================================
+// Organization:
+// =============================================================================
+
+// https://laravel.com/docs/8.x/controllers#actions-handled-by-resource-controller
+Route::resource('organizations', OrganizationController::class);
+
+Route::post('/organizations/{organization}/invites/create', [
+    OrganizationUserController::class, 'create_invite'
+])->name('organizations.invites.create');
+
+Route::post('/organizations/{organization}/users/{user}/remove', [
+    OrganizationUserController::class, 'remove_user'
+])->name('organizations.users.remove');
+
+Route::get('/accept-invite/{invite_code}', [
+    OrganizationUserController::class, 'get_accept_invite'
+])->name('organizations.invites.get_accept');
+
+Route::post('/accept-invite/{invite_code}', [
+    OrganizationUserController::class, 'post_accept_invite'
+])->name('organizations.invites.post_accept')->middleware('auth');;
 
 
 // =============================================================================
