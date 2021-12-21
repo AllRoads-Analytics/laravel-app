@@ -46,6 +46,7 @@ export default {
 
             let loader = this.$loading.show({
                 container: this.$refs.loader,
+                backgroundColor: '#f8fafc',
             });
 
             Axios.get( route('pathfinder.ajax.get_funnel', {
@@ -60,6 +61,7 @@ export default {
                 console.log(error);
                 window.alert('Something went wrong.');
             }).then( () => {
+                this.loading = false;
                 loader.hide();
             });
         }

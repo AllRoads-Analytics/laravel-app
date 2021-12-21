@@ -1,35 +1,37 @@
 <template>
     <div>
-        <div v-if="loading">
-            Loading...
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            Select {{ first ? 'starting' : 'next' }} page
+                        </th>
+
+                        <th scope="col">Views</th>
+                    </tr>
+                </thead>
+
+                <tbody v-show=" ! loading">
+                    <tr v-for="path, idx in next_pages" :key="idx" >
+                        <td>
+                            <button type="button" class="btn btn-link"
+                            @click="$emit('addPreviousPage', path.path)">
+                                {{ path.path }}
+                            </button>
+                        </td>
+
+                        <td>
+                            {{ path.views }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
-        <table v-else class="table">
-            <thead>
-                <tr>
-                    <th scope="col">
-                        Select {{ first ? 'starting' : 'next' }} page
-                    </th>
-
-                    <th scope="col">Views</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <tr v-for="path, idx in next_pages" :key="idx" >
-                    <td>
-                        <button type="button" class="btn btn-link"
-                        @click="$emit('addPreviousPage', path.path)">
-                            {{ path.path }}
-                        </button>
-                    </td>
-
-                    <td>
-                        {{ path.views }}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div v-show="loading" class="mx-3 text-secondary">
+            <i>Loading...</i>
+        </div>
 
         <div v-show=" ! loading && next_pages.length < 1" class="mx-3">
             <i>No subsequent pages.</i>
