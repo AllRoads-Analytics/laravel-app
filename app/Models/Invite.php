@@ -22,4 +22,13 @@ class Invite extends ModelAbstract
     public function Organization() {
         return $this->belongsTo(Organization::class);
     }
+
+
+    // =========================================================================
+    // Public instance functions.
+    // =========================================================================
+
+    public function getAcceptRoute() {
+        return route('organizations.invites.get_accept', ['invite_code' => $this->code]);
+    }
 }

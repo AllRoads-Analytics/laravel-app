@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Invite;
 use App\Models\Organization;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 
 class OrganizationUserController extends Controller
@@ -18,6 +19,7 @@ class OrganizationUserController extends Controller
 
         $Request->validate([
             'email' => ['required', 'string', 'email', 'max:255'],
+            'role' => ['required', Rule::in(User::ROLES)],
         ]);
 
         $email = $Request->input('email');
@@ -25,6 +27,7 @@ class OrganizationUserController extends Controller
         Invite::updateOrCreate([
             'organization_id' => $Organization->id,
             'email' => $email,
+            'role' => $Request->input('role'),
         ]);
 
         $Request->session()->flash('alert', [
@@ -43,6 +46,40 @@ class OrganizationUserController extends Controller
         $Request->session()->flash('alert', [
             'type' => 'success',
             'message' => "User [$User->name] removed.",
+        ]);
+
+        return redirect()->route('organizations.show', $Organization->id);
+    }
+
+    public function edit_user(Request $Request, Organization $Organization, User $User) {
+        $this->authorize('manage', $Organization);
+
+        $Request->validate([
+            'role' => ['required', Rule::in(User::ROLES)],
+        ]);
+
+        $User->Organizations()->updateExistingPivot($Organization->id, [
+            'role' => $Request->input('role'),
+        ]);
+
+        $Request->session()->flash('alert', [
+            'type' => 'success',
+            'message' => "User [$User->name] updated.",
+        ]);
+
+        return redirect()->route('organizations.show', $Organization->id);
+    }
+
+    public function remove_invite(Request $Request, Organization $Organization, Invite $Invite) {
+        $this->authorize('manage', $Organization);
+
+        $email = $Invite->email;
+
+        $Invite->delete();
+
+        $Request->session()->flash('alert', [
+            'type' => 'success',
+            'message' => "Invite to [$email] removed.",
         ]);
 
         return redirect()->route('organizations.show', $Organization->id);
@@ -80,7 +117,10 @@ class OrganizationUserController extends Controller
 
         $Organization = $Invite->Organization;
 
-        $Organization->Users()->attach(auth()->user());
+        $Organization->Users()->attach(auth()->user(), [
+            'role' => $Invite->role,
+        ]);
+
         $Invite->delete();
 
         $Request->session()->flash('alert', [

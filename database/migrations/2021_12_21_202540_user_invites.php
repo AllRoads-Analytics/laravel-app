@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\User;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class UserInvites extends Migration
 {
@@ -21,9 +22,11 @@ class UserInvites extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
+            $table->uuid('code')->index();
+
             $table->string('email');
 
-            $table->uuid('code')->index();
+            $table->string('role')->default(User::ROLE_VIEWER);
 
             $table->timestamps();
         });

@@ -38,6 +38,14 @@ Route::post('/organizations/{organization}/users/{user}/remove', [
     OrganizationUserController::class, 'remove_user'
 ])->name('organizations.users.remove');
 
+Route::post('/organizations/{organization}/users/{user}/edit', [
+    OrganizationUserController::class, 'edit_user'
+])->name('organizations.users.edit');
+
+Route::post('/organizations/{organization}/invites/{invite}/remove', [
+    OrganizationUserController::class, 'remove_invite'
+])->name('organizations.invites.remove');
+
 Route::get('/accept-invite/{invite_code}', [
     OrganizationUserController::class, 'get_accept_invite'
 ])->name('organizations.invites.get_accept');
