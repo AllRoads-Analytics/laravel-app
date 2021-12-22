@@ -12,7 +12,7 @@
 
             <div class="d-grid gap-3">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header fs-5 fw-bold">
                         Tracking code
                     </div>
 
@@ -34,7 +34,7 @@
 
                 @if (auth()->user()->can('manage', $Organization))
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header fs-5 fw-bold">
                             Users
                         </div>
 
@@ -184,7 +184,7 @@
 
 
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header fs-5 fw-bold">
                             Plan/Billing
                         </div>
 

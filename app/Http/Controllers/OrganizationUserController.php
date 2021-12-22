@@ -32,7 +32,7 @@ class OrganizationUserController extends Controller
 
         $Request->session()->flash('alert', [
             'type' => 'success',
-            'message' => "$email invited.",
+            'message' => "Invite email sent to $email.",
         ]);
 
         return redirect()->route('organizations.show', $Organization->id);
