@@ -7,7 +7,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-lg-8">
             <h1>Manage <i>{{ $Organization->name }}</i></h1>
 
             <div class="d-grid gap-3">
@@ -21,7 +21,7 @@
 
                         <p>
                             <div class="form">
-                                <textarea style="resize: none" readonly id="codeSnippet" class="form-control" rows="10"
+                                <textarea style="resize: none" readonly id="codeSnippet" class="form-control bg-light" rows="10"
                                 >{{ $Organization->getTracker()->getCodeSnippet() }}</textarea>
                             </div>
                         </p>

@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="">
+        <div class="col-lg-6">
             @if ($organizations->count())
                 <h3>Your Organizations</h3>
             @endif
@@ -20,7 +20,7 @@
                                 <div>
                                     <a href="{{ route('organizations.show', $Organization->id) }}"
                                     class="btn btn-primary btn-sm">
-                                        ⚙️
+                                        <i class="fas fa-cog"></i>
                                     </a>
                                 </div>
                             </div>

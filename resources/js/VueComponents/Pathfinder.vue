@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="mb-3 form">
-            <div class="row gx-3">
+            <div class="row g-3">
                 <div class="col">
                     <label for="start_date">Start</label>
                     <input type="date" class="form-control" id="start_date"

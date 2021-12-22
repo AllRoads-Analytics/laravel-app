@@ -34,9 +34,13 @@ class BigQueryService {
             'FROM ' . $this->getTableRef() . ' ' .
             $suffix;
 
+            dd('ay');
+
         return $this->BigQuery->runQuery(
-            $this->BigQuery->query($query), [
+            $this->BigQuery->query($query),
+            [
                 'returnRawResults' => true,
+                'maxResults' => 1,
             ]
         );
     }
@@ -59,6 +63,7 @@ class BigQueryService {
             $this->BigQuery->query($query)->parameters($parameters),
             [
                 'returnRawResults' => true,
+                'maxResults' => 1,
             ]
         );
     }

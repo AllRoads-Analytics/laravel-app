@@ -4,7 +4,15 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <h2>Org: {{ $Tracker->Organization->name ?? 'n/a' }}</h2>
+            <h2>
+                Organization: {{ $Tracker->Organization->name ?? 'n/a' }}
+
+                <a href="{{ route('organizations.show', $Tracker->Organization->id) }}"
+                class="btn btn-link">
+                    <i class="fas fa-cog"></i>
+                </a>
+            </h2>
+
 
             <table class="table">
                 <thead>
