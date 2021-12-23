@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tracker;
+use App\Services\PixelData\PixelDataFunnel;
+use App\Services\PixelData\PixelDataHosts;
+use App\Services\PixelData\PixelDataUniquePageviews;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -11,7 +14,9 @@ class PathfinderController extends Controller
     public function get_tracker(Request $Request, Tracker $Tracker) {
         $this->authorize('view', $Tracker->Organization);
 
-        $hosts = $Tracker->getHosts();
+        $hosts = PixelDataHosts::init()
+            ->setTracker($Tracker)
+            ->getHosts();
 
         return view('_pages.pathfinder.hosts', [
             'Tracker' => $Tracker,
@@ -38,14 +43,19 @@ class PathfinderController extends Controller
 
         $previous_pages = $Request->query('previous_pages', []);
 
-        $pageviews = iterator_to_array(
-            $Tracker->getUniquePageviews(
-                $host,
+        $pageviews = PixelDataUniquePageviews::init()
+            ->setTracker($Tracker)
+            ->setHost($host)
+            ->setPreviousPages($previous_pages)
+            ->setDateRange(
                 Carbon::createFromFormat('Y-m-d', $Request->input('start_date')),
-                Carbon::createFromFormat('Y-m-d', $Request->input('end_date')),
-                $previous_pages
+                Carbon::createFromFormat('Y-m-d', $Request->input('end_date'))
             )
-        );
+            // ->setLimit(3)
+            // ->setOffset(3)
+            ->getUniquePageviews();
+
+        $pageviews = iterator_to_array($pageviews);
 
         return [
             'paths' => $pageviews,
@@ -57,12 +67,13 @@ class PathfinderController extends Controller
 
         $pages = $Request->query('pages', []);
 
-        $page_views = $pages ? $Tracker->getFunnelViews(
-            $host,
-            Carbon::createFromFormat('Y-m-d', $Request->input('start_date')),
-            Carbon::createFromFormat('Y-m-d', $Request->input('end_date')),
-            $pages
-        ) : null;
+        $page_views = PixelDataFunnel::init()
+            ->setTracker($Tracker)
+            ->setPreviousPages($pages)
+            ->setDateRange(
+                Carbon::createFromFormat('Y-m-d', $Request->input('start_date')),
+                Carbon::createFromFormat('Y-m-d', $Request->input('end_date'))
+            )->getFunnelViews();
 
         return [
             'page_views' => $page_views,

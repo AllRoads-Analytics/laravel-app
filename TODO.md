@@ -6,3 +6,4 @@
 * Domain name for Laravel & Pixel.
 * parametize values from frontend (like pages) in queries, like @host
 * pagination?
+* page path search
