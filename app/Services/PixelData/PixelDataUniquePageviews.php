@@ -37,7 +37,7 @@ class PixelDataUniquePageviews extends PixelDataAbstract {
 
                 WITH uidz as ( $uids_query )
                 SELECT evNext.path, COUNT(DISTINCT evNext.uid) as views
-                FROM pixel_events.events evNext
+                FROM :table evNext
                     JOIN uidz
                         ON uidz.paths = $page_count
                             AND uidz.uid = evNext.uid
@@ -48,7 +48,11 @@ class PixelDataUniquePageviews extends PixelDataAbstract {
             SQL;
         }
 
-        return $this->runRawQuery($query);
+        // dd($query);
+
+        return $this->runRawQuery($query, [
+            'pixel_id' => $this->Tracker->pixel_id,
+        ]);
     }
 
 
@@ -93,7 +97,7 @@ class PixelDataUniquePageviews extends PixelDataAbstract {
                 FROM pixel_events.events ev0
                     $joins_string
 
-                WHERE date(ev0.ts) > '$start_string'
+                WHERE date(ev0.ts) >= '$start_string'
                     AND date(ev0.ts) <= '$end_string'
                     AND ev0.host = '$this->host'
                     AND ev0.ev = 'pageload'

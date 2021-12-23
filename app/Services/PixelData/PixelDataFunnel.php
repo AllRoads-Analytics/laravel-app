@@ -41,6 +41,8 @@ class PixelDataFunnel extends PixelDataAbstract {
             ORDER BY paths
         SQL;
 
+        // dd($query);
+
         $results = $this->runRawQuery($query);
 
         $step_users = [];
@@ -109,7 +111,7 @@ class PixelDataFunnel extends PixelDataAbstract {
                 FROM pixel_events.events ev0
                     $joins_string
 
-                WHERE date(ev0.ts) > '$start_string'
+                WHERE date(ev0.ts) >= '$start_string'
                     AND date(ev0.ts) <= '$end_string'
                     AND ev0.host = '$this->host'
                     AND ev0.ev = 'pageload'

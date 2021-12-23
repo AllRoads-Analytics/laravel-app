@@ -72,6 +72,7 @@ class PathfinderController extends Controller
 
         $page_views = PixelDataFunnel::init()
             ->setTracker($Tracker)
+            ->setHost($host)
             ->setPreviousPages($pages)
             ->setDateRange(
                 Carbon::createFromFormat('Y-m-d', $Request->input('start_date')),
