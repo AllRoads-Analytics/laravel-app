@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 
 class PathfinderController extends Controller
 {
+    const PAGE_SIZE = 5;
+
     public function get_tracker(Request $Request, Tracker $Tracker) {
         $this->authorize('view', $Tracker->Organization);
 
@@ -51,14 +53,15 @@ class PathfinderController extends Controller
                 Carbon::createFromFormat('Y-m-d', $Request->input('start_date')),
                 Carbon::createFromFormat('Y-m-d', $Request->input('end_date'))
             )
-            // ->setLimit(3)
-            // ->setOffset(3)
+            ->setLimit($this::PAGE_SIZE)
+            ->setOffset($Request->input('page', 0) * $this::PAGE_SIZE)
             ->getUniquePageviews();
 
         $pageviews = iterator_to_array($pageviews);
 
         return [
             'paths' => $pageviews,
+            'page_size' => $this::PAGE_SIZE,
         ];
     }
 

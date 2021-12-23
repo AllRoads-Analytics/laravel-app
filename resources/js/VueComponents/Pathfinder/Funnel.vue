@@ -10,7 +10,7 @@
                             <p>Views: {{ page.views }}</p>
 
                             <button type="button" class="btn btn-sm btn-outline-danger" @click="$emit('removePage', page.page)">
-                                X
+                                <i class="fas fa-minus-circle"></i>
                             </button>
                         </div>
                     </div>
