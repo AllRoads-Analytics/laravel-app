@@ -3,6 +3,7 @@
 class PixelDataUniquePageviews extends PixelDataAbstract {
     protected $host;
     protected $previous_pages;
+    protected $search;
 
     public function setHost(string $host) {
         $this->host = $host;
@@ -14,7 +15,14 @@ class PixelDataUniquePageviews extends PixelDataAbstract {
         return $this;
     }
 
+    public function setSearch(string $search) {
+        $this->search = $search;
+        return $this;
+    }
+
     public function getUniquePageviews() {
+        $search_where = $this->search ? " AND path LIKE '%$this->search%'" : '';
+
         if ( ! count($this->previous_pages)) {
             $query = ('
                 SELECT path, count(distinct uid) as views
@@ -24,6 +32,7 @@ class PixelDataUniquePageviews extends PixelDataAbstract {
                     ' AND id = "' . $this->Tracker->pixel_id . '"' .
                     ' AND host = "' . $this->host . '"' .
                     ' AND ev = "pageload"' .
+                    $search_where .
                 ' GROUP BY path ORDER BY views desc, path'
             );
         } else {
@@ -43,6 +52,7 @@ class PixelDataUniquePageviews extends PixelDataAbstract {
                             AND uidz.uid = evNext.uid
                             AND evNext.ts > uidz.end_ts
                 WHERE evNext.path NOT IN UNNEST(pages_all)
+                    $search_where
                 GROUP BY evNext.path
                 ORDER BY views DESC, evNext.path
             SQL;

@@ -1,10 +1,31 @@
 <template>
     <div>
+        <div class="row mt-2">
+            <h5 class="col-lg-8 m-0">
+                Select {{ first ? 'starting' : 'next' }} page
+            </h5>
+        </div>
+
+        <div class="row my-1">
+            <div class="col-lg-8">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search"
+                    ref="search_input"
+                    v-debounce:500="searchMe">
+
+                    <button class="btn btn-outline-secondary" type="button"
+                    @click="clearSearch">
+                        <i class="fas fa-eraser"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div>
                     <table class="table">
-                        <thead>
+                        <!-- <thead>
                             <tr>
                                 <th scope="col">
                                     Select {{ first ? 'starting' : 'next' }} page
@@ -12,7 +33,7 @@
 
                                 <th scope="col">Views</th>
                             </tr>
-                        </thead>
+                        </thead> -->
 
                         <tbody v-show=" ! loading">
                             <tr v-for="path, idx in next_pages" :key="idx" >
@@ -79,6 +100,7 @@ export default {
             first: false,
             page: 0,
             page_size: 0,
+            search_term: '',
         };
     },
 
@@ -93,6 +115,7 @@ export default {
                 start_date: this.filters.start_date,
                 end_date: this.filters.end_date,
                 page: this.page,
+                search: this.search_term,
             })).then( (response) => {
                 this.next_pages = response.data.paths;
                 this.page_size = response.data.page_size;
@@ -102,6 +125,19 @@ export default {
             }).then( () => {
                 this.loading = false;
             });
+        },
+
+        searchMe(search_term) {
+            this.search_term = search_term;
+            this.update();
+        },
+
+        clearSearch() {
+            if (this.search_term !== '') {
+                this.$refs.search_input.value = '';
+                this.search_term = '';
+                this.update();
+            }
         },
 
         incrementPage() {
@@ -121,6 +157,8 @@ export default {
             immediate: true,
             handler() {
                 this.page = 0;
+                this.$refs.search_input.value = '';
+                this.search_term = '';
                 this.first = this.filters.previous_pages.length === 0;
                 this.update();
             }

@@ -30,6 +30,7 @@
         "date-and-time": "^2.0.1",
         "query-string": "^7.0.1",
         "vue": "^3.2.22",
+        "vue-debounce": "^3.0.1",
         "vue-loading-overlay": "^4.0.4"
     }
 }

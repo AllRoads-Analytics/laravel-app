@@ -5,4 +5,3 @@
 * Consolidate Org/Tracker?
 * Domain name for Laravel & Pixel.
 * parametize values from frontend (like pages) in queries, like @host
-* page path search

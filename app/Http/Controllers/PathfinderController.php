@@ -49,6 +49,7 @@ class PathfinderController extends Controller
             ->setTracker($Tracker)
             ->setHost($host)
             ->setPreviousPages($previous_pages)
+            ->setSearch($Request->input('search') ?? '')
             ->setDateRange(
                 Carbon::createFromFormat('Y-m-d', $Request->input('start_date')),
                 Carbon::createFromFormat('Y-m-d', $Request->input('end_date'))

@@ -46,12 +46,17 @@ window.Axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 import { createApp } from 'vue';
 import VueLoading from 'vue-loading-overlay';
+import vueDebounce from 'vue-debounce'
+
 import 'vue-loading-overlay/dist/vue-loading.css';
 
 const app = createApp({});
 
 // https://github.com/ankurk91/vue-loading-overlay
 app.use(VueLoading);
+
+// https://www.npmjs.com/package/vue-debounce
+app.use(vueDebounce)
 
 const files = require.context('./', true, /\.vue$/i);
 files.keys().map(key => app.component(key.split('/').pop().split('.')[0], files(key).default));
