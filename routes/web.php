@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FunnelController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -20,7 +21,7 @@ use App\Http\Controllers\OrganizationUserController;
 
 Auth::routes();
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
 // =============================================================================
@@ -30,21 +31,37 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 // https://laravel.com/docs/8.x/controllers#actions-handled-by-resource-controller
 Route::resource('organizations', OrganizationController::class);
 
-Route::post('/organizations/{organization}/invites/create', [
-    OrganizationUserController::class, 'create_invite'
-])->name('organizations.invites.create');
+Route::prefix('organizations/{organization}')->group(function() {
+    Route::post('/invites/create', [
+        OrganizationUserController::class, 'create_invite'
+    ])->name('organizations.invites.create');
 
-Route::post('/organizations/{organization}/users/{user}/remove', [
-    OrganizationUserController::class, 'remove_user'
-])->name('organizations.users.remove');
+    Route::post('/users/{user}/remove', [
+        OrganizationUserController::class, 'remove_user'
+    ])->name('organizations.users.remove');
 
-Route::post('/organizations/{organization}/users/{user}/edit', [
-    OrganizationUserController::class, 'edit_user'
-])->name('organizations.users.edit');
+    Route::post('/users/{user}/edit', [
+        OrganizationUserController::class, 'edit_user'
+    ])->name('organizations.users.edit');
 
-Route::post('/organizations/{organization}/invites/{invite}/remove', [
-    OrganizationUserController::class, 'remove_invite'
-])->name('organizations.invites.remove');
+    Route::post('/invites/{invite}/remove', [
+        OrganizationUserController::class, 'remove_invite'
+    ])->name('organizations.invites.remove');
+
+
+    // =============================================================================
+    // Funnel:
+    // =============================================================================
+
+    Route::get('/funnels', [
+        FunnelController::class, 'index'
+    ])->name('funnels.index');
+});
+
+
+// =============================================================================
+// Invite accept.
+// =============================================================================
 
 Route::get('/accept-invite/{invite_code}', [
     OrganizationUserController::class, 'get_accept_invite'
@@ -74,3 +91,18 @@ Route::get('/pathfinder/ajax/{tracker:pixel_id}/{host}/next_pages', [
 Route::get('/pathfinder/ajax/{tracker:pixel_id}/{host}/funnel', [
     PathfinderController::class, 'ajax_get_funnel'
 ])->name('pathfinder.ajax.get_funnel');
+
+Route::post('/pathfinder/ajax/{tracker:pixel_id}/{host}/funnel', [
+    PathfinderController::class, 'ajax_post_funnel'
+])->name('pathfinder.ajax.post_funnel');
+
+Route::get('/pathfinder/ajax/saved_funnel_pages/{funnel}', [
+    PathfinderController::class, 'ajax_get_saved_funnel_pages'
+])->name('pathfinder.ajax.get_saved_funnel_pages');
+
+Route::post('/pathfinder/ajax/funnel/{funnel}/delete', [
+    PathfinderController::class, 'post_funnel_delete'
+])->name('pathfinder.ajax.post_funnel_delete');
+
+
+

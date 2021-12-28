@@ -54,16 +54,13 @@ class PixelDataFunnel extends PixelDataAbstract {
         // dump($step_users);
 
         $page_counts = [];
-        $prev_views = 1;
         foreach ($this->previous_pages as $idx => $page) {
-            $views = $step_users[$idx +1] ?? $prev_views;
+            $views = $step_users[$idx +1] ?? ( $step_users[$idx +2] ?? 0 );
 
             $page_counts[] = [
                 'page' => $page,
                 'views' => $views,
             ];
-
-            $prev_views = $views;
         }
 
         return $page_counts;

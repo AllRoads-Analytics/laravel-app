@@ -39,6 +39,10 @@ class Organization extends ModelAbstract
         return $this->hasMany(Invite::class);
     }
 
+    public function Funnels() {
+        return $this->hasMany(Funnel::class);
+    }
+
 
     // =========================================================================
     // Public instance functions.

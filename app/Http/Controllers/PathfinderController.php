@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Funnel;
 use App\Models\Tracker;
 use App\Services\PixelData\PixelDataFunnel;
 use App\Services\PixelData\PixelDataHosts;
@@ -82,6 +83,55 @@ class PathfinderController extends Controller
 
         return [
             'page_views' => $page_views,
+        ];
+    }
+
+    public function ajax_get_saved_funnel_pages(Request $Request, Funnel $Funnel) {
+        $this->authorize('view', $Funnel->Organization);
+
+        $pages = collect($Funnel->steps)
+            ->filter(fn($step) => 'pageload' === $step['ev'])
+            ->pluck('path')
+            ->toArray();
+
+        return [
+            'name' => $Funnel->name,
+            'pages' => $pages,
+            'organization_id' => $Funnel->Organization->id,
+        ];
+    }
+
+    public function ajax_post_funnel(Request $Request, Tracker $Tracker, $host) {
+        $this->authorize('edit', $Tracker->Organization);
+
+        $pages = $Request->query('pages', []);
+
+        if ($id = $Request->input('id')) {
+            $Funnel = Funnel::find($id);
+            $Funnel->updatePages($pages);
+
+        } else {
+            $Funnel = Funnel::createFromPages($Tracker->Organization, $host, $Request->input('name'), $pages);
+        }
+
+        return [
+            'Funnel' => $Funnel,
+        ];
+    }
+
+    public function post_funnel_delete(Request $Request, Funnel $Funnel) {
+        $this->authorize('edit', $Funnel->Organization);
+
+        $name = $Funnel->name;
+        $Funnel->delete();
+
+        $Request->session()->flash('alert', [
+            'type' => 'success',
+            'message' => "Funnel [$name] deleted.",
+        ]);
+
+        return [
+            'success' => true,
         ];
     }
 }

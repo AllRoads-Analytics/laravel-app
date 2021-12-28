@@ -1,17 +1,39 @@
 <template>
     <div>
-        <div ref="loader" class="vld-parent" style="min-height: 100px;">
-            <div class="d-flex flex-wrap p-1">
-                <div class="p-1" v-for="page, idx in page_views" :key="idx">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="fw-bold">{{ idx + 1 }}</p>
-                            <p>Page: {{ page.page }}</p>
-                            <p>Views: {{ page.views }}</p>
+        <div class="row mt-2">
+            <div class="col">
+                <div class="d-flex">
+                    <div class="pe-3">
+                        Visitors: {{ visitors_count }}
+                    </div>
 
-                            <button type="button" class="btn btn-sm btn-outline-danger" @click="$emit('removePage', page.page)">
-                                <i class="fas fa-minus-circle"></i>
-                            </button>
+                    <div class="pe-3">
+                        Convertors: {{ convertors_count }}
+                    </div>
+
+                    <div class="">
+                        {{ conversion_percentage }}%
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div ref="loader" class="vld-parent" style="min-height: 100px;">
+                <div class="d-flex flex-wrap p-1">
+                    <div class="p-1" v-for="page, idx in page_views" :key="idx">
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="fw-bold">{{ idx + 1 }}</p>
+                                <p>Page: {{ page.page }}</p>
+                                <p>Views: {{ page.views }}</p>
+
+                                <button type="button" class="btn btn-sm btn-outline-danger"
+                                v-show="editing"
+                                @click="$emit('removePage', page.page)">
+                                    <i class="fas fa-minus-circle"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -26,6 +48,8 @@ export default {
         pixel_id: String,
         host: String,
         filters: Object,
+        ready: Boolean,
+        editing: Boolean,
     },
 
     data() {
@@ -64,7 +88,25 @@ export default {
                 this.loading = false;
                 loader.hide();
             });
-        }
+        },
+    },
+
+    computed: {
+        visitors_count() {
+            return this.page_views.length > 0 ?
+                this.page_views[0].views : null;
+        },
+
+        convertors_count() {
+            return this.page_views.length > 0 ?
+                this.page_views[this.page_views.length - 1].views : null;
+        },
+
+        conversion_percentage() {
+            return this.page_views.length > 0 ?
+                Math.round((this.page_views[this.page_views.length - 1].views / this.page_views[0].views) * 100)
+                : null;
+        },
     },
 
     watch: {
@@ -73,7 +115,9 @@ export default {
             immediate: true,
             handler(_pages) {
                 // this.show = _pages.length > 0;
-                this.update();
+                if (this.filters.ready) {
+                    this.update();
+                }
             }
         }
     },

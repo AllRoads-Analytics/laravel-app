@@ -1,12 +1,12 @@
 <template>
     <div>
-        <div class="row mt-2">
+        <div class="row justify-content-center mt-2">
             <h5 class="col-lg-8 m-0">
                 Select {{ first ? 'starting' : 'next' }} page
             </h5>
         </div>
 
-        <div class="row my-1">
+        <div class="row justify-content-center my-1">
             <div class="col-lg-8">
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Search"
@@ -21,7 +21,7 @@
             </div>
         </div>
 
-        <div class="row justify-content-center">
+        <div class="row justify-content-center my-1">
             <div class="col-lg-8">
                 <div>
                     <table class="table">
@@ -91,6 +91,7 @@ export default {
         pixel_id: String,
         host: String,
         filters: Object,
+        ready: Boolean,
     },
 
     data() {
@@ -157,10 +158,15 @@ export default {
             immediate: true,
             handler() {
                 this.page = 0;
-                this.$refs.search_input.value = '';
+                if ('undefined' !== typeof this.$refs.search_input) {
+                    this.$refs.search_input.value = '';
+                }
                 this.search_term = '';
                 this.first = this.filters.previous_pages.length === 0;
-                this.update();
+
+                if (this.filters.ready) {
+                    this.update();
+                }
             }
         },
     },

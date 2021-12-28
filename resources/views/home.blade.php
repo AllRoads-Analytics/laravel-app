@@ -9,28 +9,44 @@
             @endif
 
             @foreach ($organizations as $Organization)
-                <a href="{{ $Organization->getTracker()->getRoute() }}">
-                    <div class="card mb-2">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    {{ $Organization->name }}
-                                </div>
 
-                                <div>
-                                    <a href="{{ route('organizations.show', $Organization->id) }}"
-                                    class="btn btn-primary btn-sm">
-                                        <i class="fas fa-cog"></i>
-                                    </a>
-                                </div>
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col fs-4">
+                                {{ $Organization->name }}
+                            </div>
+
+                            <div class="col text-center">
+                                <a href="{{ $Organization->getTracker()->getRoute() }}"
+                                class="btn btn-primary">
+                                    <i class="fas fa-compass"></i>
+                                    Pathfinder
+                                </a>
+                            </div>
+
+                            <div class="col text-center">
+                                <a href="{{ route('funnels.index', ['organization' => $Organization->id]) }}"
+                                class="btn btn-primary">
+                                    <i class="fas fa-filter"></i>
+                                    Saved Funnels
+                                </a>
+                            </div>
+
+                            <div class="col text-end">
+                                <a href="{{ route('organizations.show', $Organization->id) }}"
+                                class="btn btn-secondary btn-sm">
+                                    <i class="fas fa-cog"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
-                </a>
+                </div>
             @endforeach
 
-            <a href="{{ route('organizations.create') }}" class="btn btn-primary">
-                Create New Organization
+            <a href="{{ route('organizations.create') }}" class="btn btn-success mt-2">
+                <i class="fas fa-plus"></i>
+                New Organization
             </a>
         </div>
     </div>
