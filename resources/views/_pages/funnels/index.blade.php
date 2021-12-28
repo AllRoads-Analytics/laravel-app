@@ -34,7 +34,7 @@
                                 <div>
                                     <button x-on:click="show = !show" class="btn btn-light">
                                         Pages
-                                        <span x-show="!show"><i class="fas fa-chevron-down"></i></span>
+                                        <span x-show="!show" x-cloak><i class="fas fa-chevron-down"></i></span>
                                         <span x-show="show"><i class="fas fa-chevron-up"></i></span>
                                     </button>
                                 </div>

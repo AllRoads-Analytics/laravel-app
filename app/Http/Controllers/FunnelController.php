@@ -17,7 +17,7 @@ class FunnelController extends Controller
         $this->authorize('view', $Organization);
 
         return view('_pages.funnels.index', [
-            'funnels' => $Organization->Funnels,
+            'funnels' => $Organization->Funnels->sortBy('name'),
             'Tracker' => $Organization->getTracker(),
         ]);
     }

@@ -26,9 +26,9 @@
                             </div>
                         </p>
 
-                        <p>
+                        <div>
                             <button class="btn btn-primary" onclick="copyCode()">Copy to Clipboard</button>
-                        </p>
+                        </div>
                     </div>
                 </div>
 
@@ -191,7 +191,7 @@
                         <div class="card-body">
                             <p>// todo</p>
 
-                            <p>
+                            <div>
                                 <form action="{{ route('organizations.destroy', $Organization->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
@@ -200,7 +200,7 @@
                                         Delete
                                     </button>
                                 </form>
-                            </p>
+                            </div>
                         </div>
                     </div>
                 @endif

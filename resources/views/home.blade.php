@@ -13,19 +13,17 @@
                 <div class="card mb-2">
                     <div class="card-body">
                         <div class="row align-items-center">
-                            <div class="col fs-4">
+                            <div class="col-5 fs-4">
                                 {{ $Organization->name }}
                             </div>
 
-                            <div class="col text-center">
+                            <div class="col-6 text-center">
                                 <a href="{{ $Organization->getTracker()->getRoute() }}"
-                                class="btn btn-primary">
+                                class="btn btn-primary me-2">
                                     <i class="fas fa-compass"></i>
                                     Pathfinder
                                 </a>
-                            </div>
 
-                            <div class="col text-center">
                                 <a href="{{ route('funnels.index', ['organization' => $Organization->id]) }}"
                                 class="btn btn-primary">
                                     <i class="fas fa-filter"></i>
@@ -33,7 +31,7 @@
                                 </a>
                             </div>
 
-                            <div class="col text-end">
+                            <div class="col-1 text-end">
                                 <a href="{{ route('organizations.show', $Organization->id) }}"
                                 class="btn btn-secondary btn-sm">
                                     <i class="fas fa-cog"></i>
