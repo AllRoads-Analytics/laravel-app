@@ -22,7 +22,7 @@ class Funnel extends ModelAbstract
 
 
     // =========================================================================
-    // Public instance functions.
+    // Public getters.
     // =========================================================================
 
     public function getPages() {
@@ -31,6 +31,19 @@ class Funnel extends ModelAbstract
             ->pluck('path')
             ->toArray();
     }
+
+    public function getRoute() {
+        return route('pathfinder.tracker.host', [
+            'tracker' => $this->Organization->getTracker()->pixel_id,
+            'host' => $this->hostname,
+            'funnel' => $this->id,
+        ]);
+    }
+
+
+    // =========================================================================
+    // Public mutators.
+    // =========================================================================
 
     public function updatePages(array $pages) {
         return $this->update([
