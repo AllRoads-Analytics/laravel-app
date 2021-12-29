@@ -62,25 +62,27 @@
             </div>
         </div>
 
-        <div class="row mt-1" v-show=" ! loading">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item" :class="page === 0 ? 'disabled' : ''">
-                        <button class="page-link"
-                        @click="decrementPage()">
-                            <span aria-hidden="true">&laquo;</span> Previous
-                        </button>
-                    </li>
+        <div class="row justify-content-center mt-1" v-show=" ! loading">
+            <div class="col-lg-8">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item" :class="page === 0 ? 'disabled' : ''">
+                            <button class="page-link"
+                            @click="decrementPage()">
+                                <span aria-hidden="true">&laquo;</span> Previous
+                            </button>
+                        </li>
 
-                    <li class="page-item"
-                    :class="next_pages.length < page_size ? 'disabled' : ''">
-                        <button class="page-link"
-                        @click="incrementPage()">
-                            Next <span aria-hidden="true">&raquo;</span>
-                        </button>
-                    </li>
-                </ul>
-            </nav>
+                        <li class="page-item"
+                        :class="next_pages.length < page_size ? 'disabled' : ''">
+                            <button class="page-link"
+                            @click="incrementPage()">
+                                Next <span aria-hidden="true">&raquo;</span>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </div>
 </template>

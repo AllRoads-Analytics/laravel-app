@@ -54,12 +54,25 @@ class PixelDataFunnel extends PixelDataAbstract {
         // dump($step_users);
 
         $page_counts = [];
+        $views_next = null;
         foreach ($this->previous_pages as $idx => $page) {
-            $views = $step_users[$idx +1] ?? ( $step_users[$idx +2] ?? 0 );
+            // $views = $step_users[$idx +1] ?? ( $step_users[$idx +2] ?? 0 );
+
+            $views = $views_next ?: $this->getNextFromArray($step_users, ($idx + 1));
+            $views_next = $idx+1 === count($this->previous_pages) ? null : $this->getNextFromArray($step_users, ($idx + 2));
 
             $page_counts[] = [
                 'page' => $page,
                 'views' => $views,
+                'dropped' => is_null($views_next) ? null : $views - $views_next,
+                'proceeded' => $views_next,
+                'percentage' => count($page_counts) ?
+                    round($views / $page_counts[0]['views'] * 100)
+                    : 100,
+                'step_dropped_percentage' => is_null($views_next) ?
+                    null : round(($views - $views_next) / $views * 100),
+                'step_proceeded_percentage' => is_null($views_next) ?
+                    null : round($views_next / $views * 100),
             ];
         }
 
@@ -70,6 +83,16 @@ class PixelDataFunnel extends PixelDataAbstract {
     // =========================================================================
     // Protected functions.
     // =========================================================================
+
+    protected function getNextFromArray($array, $starting_index) {
+        foreach ($array as $key => $value) {
+            if ($key < $starting_index) continue;
+
+            return $value;
+        }
+
+        return 0;
+    }
 
     protected function getUidsQuery() {
         $start_string = $this->start_date->toDateString();

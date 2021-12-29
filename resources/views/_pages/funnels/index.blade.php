@@ -13,8 +13,8 @@
             @foreach ($funnels as $Funnel)
                 <div class="card mb-2">
                     <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col">
+                        <div class="row align-items-center g-2">
+                            <div class="col-md">
                                 <a href="{{ route('pathfinder.tracker.host', [
                                     'tracker' => $Tracker->pixel_id,
                                     'host' => $Funnel->hostname,
@@ -24,13 +24,13 @@
                                 </a>
                             </div>
 
-                            <div class="col">
+                            <div class="col-md">
                                 Site:
                                 {{ $Funnel->hostname }}
                             </div>
 
                             <div x-data="{ show: false}"
-                            class="col text-end">
+                            class="col-md text-md-end">
                                 <div>
                                     <button x-on:click="show = !show" class="btn btn-light">
                                         Pages
@@ -38,7 +38,7 @@
                                         <span x-show="show"><i class="fas fa-chevron-up"></i></span>
                                     </button>
                                 </div>
-                                <div x-show="show" x-cloak class="mt-2 text-secondary">
+                                <div x-show="show" x-cloak class="mt-2 ms-2 ms-md-0 text-secondary">
                                     {!! implode('<br>', $Funnel->getPages()) !!}
                                 </div>
                             </div>

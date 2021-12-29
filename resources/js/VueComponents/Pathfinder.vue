@@ -25,7 +25,11 @@
                 <div class="col">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
-                            <h4 class="mb-1">Funnel</h4>
+                            <h4 class="mb-1">
+                                {{ funnel_id ? '' : 'New' }}
+                                Funnel
+                            </h4>
+
                             <h5><i>{{ funnel_name ? funnel_name : '' }}</i></h5>
                         </div>
 
@@ -54,7 +58,7 @@
                                 </div>
                             </div>
 
-                            <div class="row mt-2" v-show="editing">
+                            <div class="row mt-2" v-show="editing && funnel_id">
                                 <div class="col">
                                     <button type="button" class="btn btn-sm btn-danger"
                                     @click="deleteFunnel">

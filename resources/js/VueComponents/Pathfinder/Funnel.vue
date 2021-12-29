@@ -20,19 +20,62 @@
 
         <div class="row mt-2">
             <div ref="loader" class="vld-parent" style="min-height: 100px;">
-                <div class="d-flex flex-wrap p-1">
-                    <div class="p-1" v-for="page, idx in page_views" :key="idx">
-                        <div class="card">
-                            <div class="card-body">
-                                <p class="fw-bold">{{ idx + 1 }}</p>
-                                <p>Page: {{ page.page }}</p>
-                                <p>Views: {{ page.views }}</p>
+                <div class="d-flex flex-wrap">
+                    <div class="col-12 col-md-6 col-lg-3" v-for="page, idx in page_views" :key="idx">
+                        <div class="p-1 w-100">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="fw-bold d-flex align-items-center">
+                                        <div class="badge bg-dark me-3 fs-6">{{ idx + 1 }}</div>
+                                        <div>{{ page.page }}</div>
+                                    </div>
 
-                                <button type="button" class="btn btn-sm btn-outline-danger"
-                                v-show="editing"
-                                @click="$emit('removePage', page.page)">
-                                    <i class="fas fa-minus-circle"></i>
-                                </button>
+                                    <div class="mt-3">
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar progress-bar-striped bg-success"
+                                            :style="'width: ' + page.percentage + '%'"
+                                            aria-valuenow="page.percentage" aria-valuemin="0" aria-valuemax="100">
+                                                <!-- <span class="fs-6 fw-bold">
+                                                    {{ page.percentage }}%
+                                                </span> -->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-1 text-center">
+                                        <span class="fs-3 fw-bold">
+                                            {{ page.percentage }}%
+                                        </span>
+                                    </div>
+
+                                    <div class="mt-2">
+                                        {{ page.views }} visitor{{ page.views > 1 ? 's' : '' }}.
+                                    </div>
+
+                                    <div v-if="page.proceeded !== null">
+                                        <div class="mt-1 text-danger">
+                                            {{ page.dropped }}
+                                            <span class="">
+                                                ({{ page.step_dropped_percentage }}%)
+                                            </span>
+                                            dropped.
+                                        </div>
+
+                                        <div class="mt-1 text-success">
+                                            {{ page.proceeded }}
+                                            <span class="">
+                                                ({{ page.step_proceeded_percentage }}%)
+                                            </span>
+                                            proceeded.
+                                        </div>
+                                    </div>
+
+                                    <button type="button" class="btn btn-sm btn-outline-danger mt-3"
+                                    v-show="editing"
+                                    @click="$emit('removePage', page.page)">
+                                        <i class="fas fa-minus-circle"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
