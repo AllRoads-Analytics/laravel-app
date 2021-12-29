@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div ref="loader" class="vld-parent">
         <div class="row mt-2">
             <div class="col">
                 <div class="d-flex flex-wrap">
@@ -25,7 +25,7 @@
         </div>
 
         <div class="row mt-2">
-            <div ref="loader" class="vld-parent" style="min-height: 100px;">
+            <div style="min-height: 100px;">
                 <div class="d-flex flex-wrap">
                     <div class="col-12 col-md-6 col-lg-3" v-for="page, idx in page_views" :key="idx">
                         <div class="p-1 w-100">

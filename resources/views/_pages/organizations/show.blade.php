@@ -192,7 +192,8 @@
                             <p>// todo</p>
 
                             <div>
-                                <form action="{{ route('organizations.destroy', $Organization->id) }}" method="POST">
+                                <form action="{{ route('organizations.destroy', $Organization->id) }}" method="POST"
+                                    onsubmit="return confirm('Are you sure you want to PERMANENTLY DELETE this Organization?')">
                                     @csrf
                                     @method('DELETE')
 

@@ -48,8 +48,14 @@ class Organization extends ModelAbstract
     // Public instance functions.
     // =========================================================================
 
-    public function addUser(User $User) {
-        $this->Users()->attach($User->id);
+    public function addUser(User $User, string $role) {
+        if ( ! in_array($role, User::ROLES)) {
+            throw new \Exception("Role [$role] not legit.");
+        }
+
+        $this->Users()->attach($User->id, [
+            'role' => $role,
+        ]);
         return $this;
     }
 }

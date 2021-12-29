@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Organization;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class OrganizationController extends Controller
@@ -46,7 +47,7 @@ class OrganizationController extends Controller
 
         $Organization = Organization::create([
             'name' => $request->input('company'),
-        ])->addUser(auth()->user());
+        ])->addUser(auth()->user(), User::ROLE_ADMIN);
 
         return redirect()->route('organizations.show', $Organization->id);
     }
