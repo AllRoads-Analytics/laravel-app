@@ -21,25 +21,30 @@
 
         <!-- Funnel -->
         <div v-show="filters.previous_pages.length > 0" class="mb-5">
-            <div class="row mb-2">
+            <div class="row mb-3">
                 <div class="col">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
+                    <div class="row g-2 align-items-center justify-content-between">
+                        <div class="col-md">
                             <h4 class="mb-1">
                                 {{ funnel_id ? '' : 'New' }}
                                 Funnel
                             </h4>
 
-                            <h5><i>{{ funnel_name ? funnel_name : '' }}</i></h5>
+                            <h5 class="m-0" v-if="!editing"><i>{{ funnel_name ? funnel_name : '' }}</i></h5>
+
+                            <input type="text" class="form-control"
+                            style="min-width: 40vw;"
+                            v-model="input_funnel_name"
+                            v-if="editing">
                         </div>
 
-                        <div>
-                            <div class="row gx-2">
-                                <div class="col" v-if="funnel_id">
+                        <div class="col-md text-md-end">
+                            <div class="d-flex align-items-center justify-content-md-end">
+                                <div class="mr-2" v-if="funnel_id">
                                     <button type="button" class="btn btn-primary"
                                     v-show="!editing"
                                     @click="editing = true">
-                                        <i class="fas fa-edit"></i>
+                                        <i class="fas fa-edit"></i> Edit
                                     </button>
 
                                     <button type="button" class="btn btn-link"
@@ -49,18 +54,19 @@
                                     </button>
                                 </div>
 
-                                <div class="col">
+                                <div class="">
                                     <button type="button" class="btn btn-success"
                                     v-show="editing"
                                     @click="saveFunnel">
                                         <i class="fas fa-save"></i>
+                                        Save
                                     </button>
                                 </div>
                             </div>
 
                             <div class="row mt-2" v-show="editing && funnel_id">
                                 <div class="col">
-                                    <button type="button" class="btn btn-sm btn-danger"
+                                    <button type="button" class="btn btn-sm btn-outline-danger"
                                     @click="deleteFunnel">
                                         <i class="fas fa-trash"></i>
                                         Delete this Funnel
@@ -125,6 +131,8 @@ export default {
             editing: false,
             funnel_id: null,
             funnel_name: null,
+
+            input_funnel_name: '',
         };
     },
 
@@ -165,6 +173,7 @@ export default {
                 })).then( (response) => {
                     this.filters.previous_pages = response.data.pages;
                     this.funnel_name = response.data.name;
+                    this.input_funnel_name = this.funnel_name;
                     this.filters.ready = true;
                     this.organization_id = response.data.organization_id;
                 }).catch( (error) => {
@@ -189,7 +198,7 @@ export default {
                 tracker: this.pixel_id,
                 host: this.host,
                 pages: this.filters.previous_pages,
-                name: 'foo', // todo
+                name: this.input_funnel_name,
             })).then( (response) => {
                 this.funnel_id = response.data.Funnel.id;
                 this.funnel_name = response.data.Funnel.name;

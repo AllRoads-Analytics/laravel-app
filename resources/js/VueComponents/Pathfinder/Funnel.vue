@@ -2,17 +2,23 @@
     <div>
         <div class="row mt-2">
             <div class="col">
-                <div class="d-flex">
-                    <div class="pe-3">
-                        Visitors: {{ visitors_count }}
+                <div class="d-flex flex-wrap">
+                    <div class="p-1">
+                        <span class="badge bg-warning text-dark fs-6">
+                            {{ visitors_count }} Visitors
+                        </span>
                     </div>
 
-                    <div class="pe-3">
-                        Convertors: {{ convertors_count }}
+                    <div class="p-1">
+                        <span class="badge bg-warning text-dark fs-6">
+                            {{ convertors_count }} Convertors
+                        </span>
                     </div>
 
-                    <div class="">
-                        {{ conversion_percentage }}%
+                    <div class="p-1">
+                        <span class="badge bg-warning text-dark fs-6">
+                            {{ conversion_percentage }}% Conversion Rate
+                        </span>
                     </div>
                 </div>
             </div>

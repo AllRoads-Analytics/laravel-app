@@ -109,6 +109,8 @@ class PathfinderController extends Controller
         if ($id = $Request->input('id')) {
             $Funnel = Funnel::find($id);
             $Funnel->updatePages($pages);
+            $Funnel->name = $Request->input('name');
+            $Funnel->save();
 
         } else {
             $Funnel = Funnel::createFromPages($Tracker->Organization, $host, $Request->input('name'), $pages);

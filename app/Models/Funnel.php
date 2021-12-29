@@ -46,7 +46,7 @@ class Funnel extends ModelAbstract
     // =========================================================================
 
     public function updatePages(array $pages) {
-        return $this->update([
+        return $this->fill([
             'steps' => array_map(function($page) {
                 return [
                     'ev' => 'pageload',

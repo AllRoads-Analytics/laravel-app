@@ -42,19 +42,19 @@
             <div class="card mb-2">
                 <div class="card-body">
                     <div class="row align-items-center g-2">
-                        <div class="col-md">
+                        <div class="col-md-5">
                             <a href="{{ $Funnel->getRoute() }}">
                                 <span class="fs-5">{{ $Funnel->name }}</span>
                             </a>
                         </div>
 
-                        <div class="col-md">
+                        <div class="col-md-5">
                             Site:
                             {{ $Funnel->hostname }}
                         </div>
 
                         <div x-data="{ show: false}"
-                        class="col-md text-md-end">
+                        class="col-md-2 text-md-end">
                             <div>
                                 <button x-on:click="show = !show" class="btn btn-light">
                                     Pages
