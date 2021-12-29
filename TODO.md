@@ -4,4 +4,3 @@
 * UTM source/medium/etc filtering.
 * Consolidate Org/Tracker?
 * Domain name for Laravel & Pixel.
-* funnel list page filters. Livewire?

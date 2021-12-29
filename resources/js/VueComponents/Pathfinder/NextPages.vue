@@ -1,87 +1,89 @@
 <template>
-    <div>
-        <div class="row justify-content-center mt-2">
-            <h5 class="col-lg-8 m-0">
-                Select {{ first ? 'starting' : 'next' }} page
+    <div class="card">
+        <div class="card-header bg-info p-3">
+            <h5 class=" m-0">
+                Select {{ first ? 'starting' : 'next' }} page:
             </h5>
-        </div>
 
-        <div class="row justify-content-center my-1">
-            <div class="col-lg-8">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search"
-                    ref="search_input"
-                    v-debounce:500="searchMe">
+            <div class="row mt-2 mb-1">
+                <div class="col-lg-8">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search"
+                        ref="search_input"
+                        v-debounce:500="searchMe">
 
-                    <button class="btn btn-outline-secondary" type="button"
-                    @click="clearSearch">
-                        <i class="fas fa-eraser"></i>
-                    </button>
+                        <button class="btn btn-outline-secondary" type="button"
+                        @click="clearSearch">
+                            <i class="fas fa-eraser"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="row justify-content-center my-1">
-            <div class="col-lg-8">
-                <div>
-                    <table class="table">
-                        <!-- <thead>
-                            <tr>
-                                <th scope="col">
-                                    Select {{ first ? 'starting' : 'next' }} page
-                                </th>
+        <div class="card-body">
+            <div class="row justify-content-center my-1">
+                <div class="col">
+                    <div>
+                        <table class="table align-middle">
+                            <!-- <thead>
+                                <tr>
+                                    <th scope="col">
+                                        Select {{ first ? 'starting' : 'next' }} page
+                                    </th>
 
-                                <th scope="col">Views</th>
-                            </tr>
-                        </thead> -->
+                                    <th scope="col">Views</th>
+                                </tr>
+                            </thead> -->
 
-                        <tbody v-show=" ! loading">
-                            <tr v-for="path, idx in next_pages" :key="idx" >
-                                <td>
-                                    <button type="button" class="btn btn-link text-start"
-                                    @click="$emit('addPreviousPage', path.path)">
-                                        {{ path.path }}
-                                    </button>
-                                </td>
+                            <tbody v-show=" ! loading">
+                                <tr v-for="path, idx in next_pages" :key="idx" >
+                                    <td>
+                                        <button type="button" class="btn btn-link text-start"
+                                        @click="$emit('addPreviousPage', path.path)">
+                                            {{ path.path }}
+                                        </button>
+                                    </td>
 
-                                <td class="text-end">
-                                    {{ path.views }}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                                    <td class="text-end">
+                                        {{ path.views }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-                <div v-show="loading" class="mx-3 text-secondary">
-                    <i>Loading...</i>
-                </div>
+                    <div v-show="loading" class="mx-3 text-secondary">
+                        <i>Loading...</i>
+                    </div>
 
-                <div v-show=" ! loading && next_pages.length < 1 && this.page === 0" class="mx-3 mb-2">
-                    <i>No subsequent pages.</i>
+                    <div v-show=" ! loading && next_pages.length < 1 && this.page === 0" class="mx-3 mb-2">
+                        <i>No subsequent pages.</i>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row justify-content-center mt-1" v-show=" ! loading">
-            <div class="col-lg-8">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item" :class="page === 0 ? 'disabled' : ''">
-                            <button class="page-link"
-                            @click="decrementPage()">
-                                <span aria-hidden="true">&laquo;</span> Previous
-                            </button>
-                        </li>
+            <div class="row justify-content-center mt-1" v-show=" ! loading">
+                <div class="col">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item" :class="page === 0 ? 'disabled' : ''">
+                                <button class="page-link"
+                                @click="decrementPage()">
+                                    <span aria-hidden="true">&laquo;</span> Previous
+                                </button>
+                            </li>
 
-                        <li class="page-item"
-                        :class="next_pages.length < page_size ? 'disabled' : ''">
-                            <button class="page-link"
-                            @click="incrementPage()">
-                                Next <span aria-hidden="true">&raquo;</span>
-                            </button>
-                        </li>
-                    </ul>
-                </nav>
+                            <li class="page-item"
+                            :class="next_pages.length < page_size ? 'disabled' : ''">
+                                <button class="page-link"
+                                @click="incrementPage()">
+                                    Next <span aria-hidden="true">&raquo;</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
         </div>
     </div>

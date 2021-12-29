@@ -20,7 +20,7 @@
         <hr>
 
         <!-- Funnel -->
-        <div v-show="filters.previous_pages.length > 0" class="mb-3">
+        <div v-show="filters.previous_pages.length > 0" class="mb-5">
             <div class="row mb-2">
                 <div class="col">
                     <div class="d-flex align-items-center justify-content-between">
@@ -83,13 +83,15 @@
         </div>
 
         <!-- Next pages -->
-        <div v-if="editing">
-            <next-pages
-                :pixel_id="pixel_id"
-                :host="host"
-                :filters="filters"
-                @addPreviousPage="addPreviousPage"
-            ></next-pages>
+        <div v-if="editing" class="row justify-content-center">
+            <div class="col-lg-8">
+                <next-pages
+                    :pixel_id="pixel_id"
+                    :host="host"
+                    :filters="filters"
+                    @addPreviousPage="addPreviousPage"
+                ></next-pages>
+            </div>
         </div>
     </div>
 </template>
