@@ -6,6 +6,16 @@ use App\Services\BigQueryService;
 use Illuminate\Support\Facades\App;
 
 class PixelDataAbstract {
+    const FILTERABLE_FIELDS = [
+        'md' => 'Mobile Device?',
+        'bn' => 'Browser',
+        'utm_source' => 'Source (utm_source)',
+        'utm_medium' => 'Medium (utm_medium)',
+        'utm_term' => 'Term (utm_term)',
+        'utm_content' => 'Content (utm_content)',
+        'utm_campaign' => 'Name (utm_campaign)',
+    ];
+
     /** @var Tracker */
     protected $Tracker;
 
@@ -95,8 +105,9 @@ class PixelDataAbstract {
         return $wheres;
     }
 
-    protected function generateWhereString(array $wheres) {
+    protected function generateWhereString(array $wheres, string $table_prefix = '') {
         $string = '';
+        $table_prefix = $table_prefix ? "$table_prefix." : '';
 
         $i = 0;
         foreach ($wheres as $key => $value) {
@@ -105,13 +116,21 @@ class PixelDataAbstract {
             }
 
             if (is_array($value)) {
-                $string .= "{$value[0]} {$value[1]} "
-                    . ( is_int($value[2]) || substr($value[2], 0, 1) === '@'
-                        ? $value[2] : "\"{$value[2]}\"" );
+                $string .= "{$table_prefix}{$value[0]} {$value[1]} "
+                    . (
+                        is_int($value[2]) || substr($value[2], 0, 1) === '@'
+                        || 'true' === $value[2] || 'false' === $value[2]
+
+                        ? $value[2] : "\"{$value[2]}\""
+                    );
             } else {
-                $string .= "{$key} = "
-                    . ( is_int($value) || substr($value, 0, 1) === '@'
-                        ? $value : "\"{$value}\"" );
+                $string .= "{$table_prefix}{$key} = "
+                    . (
+                        is_int($value) || substr($value, 0, 1) === '@'
+                        || 'true' === $value || 'false' === $value
+
+                        ? $value : "\"{$value}\""
+                    );
             }
 
             $i++;

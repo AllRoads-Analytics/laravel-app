@@ -5,13 +5,13 @@
                 <div class="d-flex flex-wrap">
                     <div class="p-1">
                         <span class="badge bg-warning text-dark fs-6">
-                            {{ visitors_count }} Visitors
+                            {{ visitors_count }} Visitor{{ visitors_count === 1 ? '' : 's' }}
                         </span>
                     </div>
 
                     <div class="p-1">
                         <span class="badge bg-warning text-dark fs-6">
-                            {{ convertors_count }} Convertors
+                            {{ convertors_count }} Converted
                         </span>
                     </div>
 
@@ -55,7 +55,7 @@
                                     </div>
 
                                     <div class="mt-2">
-                                        {{ page.views }} visitor{{ page.views > 1 ? 's' : '' }}.
+                                        {{ page.views }} visitor{{ page.views === 1 ? '' : 's' }}.
                                     </div>
 
                                     <div v-if="page.proceeded !== null">
@@ -125,9 +125,7 @@ export default {
             Axios.get( route('pathfinder.ajax.get_funnel', {
                 tracker: this.pixel_id,
                 host: this.host,
-                pages: this.filters.previous_pages,
-                start_date: this.filters.start_date,
-                end_date: this.filters.end_date,
+                ...this.filters,
             })).then( (response) => {
                 this.page_views = response.data.page_views;
             }).catch( (error) => {
@@ -162,8 +160,7 @@ export default {
         filters: {
             deep: true,
             immediate: true,
-            handler(_pages) {
-                // this.show = _pages.length > 0;
+            handler() {
                 if (this.filters.ready) {
                     this.update();
                 }

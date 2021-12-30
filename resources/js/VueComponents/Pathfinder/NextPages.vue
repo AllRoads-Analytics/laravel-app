@@ -116,11 +116,9 @@ export default {
             Axios.get( route('pathfinder.ajax.get_next_pages', {
                 tracker: this.pixel_id,
                 host: this.host,
-                previous_pages: this.filters.previous_pages,
-                start_date: this.filters.start_date,
-                end_date: this.filters.end_date,
                 page: this.page,
                 search: this.search_term,
+                ...this.filters,
             })).then( (response) => {
                 this.next_pages = response.data.paths;
                 this.page_size = response.data.page_size;

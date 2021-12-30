@@ -15,6 +15,75 @@
                     v-model="filters.end_date">
                 </div>
             </div>
+
+            <div class="row mt-3">
+                <div class="col">
+                    <div class="card bg-light">
+                        <div class="card-header">
+                            <button @click="filters_open = ! filters_open" class="btn-plain w-100">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        Filters
+                                    </div>
+
+                                    <div>
+                                        <span v-show="!filters_open" v-cloak><i class="fas fa-chevron-down"></i></span>
+                                        <span v-show="filters_open"><i class="fas fa-chevron-up"></i></span>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+
+                        <div class="card-body"
+                        v-cloak v-show="filters_open">
+                            <div class="form">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="filter_field">Field</label>
+
+                                        <select name="filter_field" id="filter_field" class="form-select"
+                                        v-model="selected_filter">
+                                            <option value="">-- Select --</option>
+
+                                            <option v-for="filter_option, idx in filter_options" :key="idx"
+                                            :value="filter_option.key">
+                                                {{ filter_option.label }}
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6" v-if="selected_filter">
+                                        <label for="filter_option">Value</label>
+
+                                        <select name="filter_option" id="filter_option" class="form-select"
+                                        v-model="selected_filter_option"
+                                        @change="addActiveFilter">
+                                            <option value="">-- Select --</option>
+
+                                            <option v-for="option, idx in active_filter_option.options" :key="idx"
+                                            :value="option">
+                                                {{ option }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="grid g-2 mt-2">
+                                    <div class="g-col" v-for="value, field in filters_secondary" :key="field+value">
+                                        <button class="btn-plain" @click="removeFilter(field)">
+                                            <span class="badge bg-secondary">
+                                                <b>{{ field }}:</b> {{ value }}
+                                                &nbsp;
+                                                <i class="fas fa-times"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <hr>
@@ -81,7 +150,7 @@
             <funnel
                 :pixel_id="pixel_id"
                 :host="host"
-                :filters="filters"
+                :filters="filters_all"
                 :init_funnel_id="funnel_id"
                 :editing="editing"
                 @removePage="removePreviousPage"
@@ -94,7 +163,7 @@
                 <next-pages
                     :pixel_id="pixel_id"
                     :host="host"
-                    :filters="filters"
+                    :filters="filters_all"
                     @addPreviousPage="addPreviousPage"
                 ></next-pages>
             </div>
@@ -108,10 +177,14 @@ import NextPages from './Pathfinder/NextPages.vue';
 
 import date from 'date-and-time';
 
+// import { reactive } from "vue";
+
 const queryString = require('query-string');
 
+const endDate = new Date();
+const startDate = date.addMonths(endDate, -1);
+
 export default {
-    components: { Funnel },
     components: [ NextPages, Funnel ],
 
     props: {
@@ -119,20 +192,35 @@ export default {
         host: String,
     },
 
+    // setup() {
+    //     let filters_secondary = reactive({});
+
+    //     return {
+    //         filters_secondary
+    //     };
+    // },
+
     data() {
         return {
             filters: {
                 previous_pages: [],
-                start_date: '',
-                end_date: '',
+                start_date: date.format(startDate, 'YYYY-MM-DD'),
+                end_date: date.format(endDate, 'YYYY-MM-DD'),
                 ready: false,
             },
+
+            filters_secondary: {},
 
             editing: false,
             funnel_id: null,
             funnel_name: null,
 
             input_funnel_name: '',
+            filters_open: false,
+
+            filter_options: [],
+            selected_filter: '',
+            selected_filter_option: '',
         };
     },
 
@@ -147,6 +235,16 @@ export default {
             // this.updateUrl();
         },
 
+        addActiveFilter() {
+            this.filters_secondary[this.selected_filter] = this.selected_filter_option;
+
+            this.selected_filter = this.selected_filter_option = '';
+        },
+
+        removeFilter(key) {
+            delete this.filters_secondary[key];
+        },
+
         // updateUrl() {
         //     const url = new URL(window.location);
 
@@ -158,6 +256,22 @@ export default {
 
         //     window.history.pushState({}, '', url);
         // },
+
+        updateFilterOptions() {
+            Axios.get( route('pathfinder.ajax.get_filter_options', {
+                tracker: this.pixel_id,
+                host: this.host,
+                start_date: this.filters.start_date,
+                end_date: this.filters.end_date,
+            })).then( (response) => {
+                this.filter_options = response.data.filter_options;
+            }).catch( (error) => {
+                console.log(error);
+                window.alert('Something went wrong (filter options).');
+            }).then( () => {
+                //
+            });
+        },
 
         parseUrl() {
             const parsed = queryString.parse(location.search);
@@ -174,8 +288,8 @@ export default {
                     this.filters.previous_pages = response.data.pages;
                     this.funnel_name = response.data.name;
                     this.input_funnel_name = this.funnel_name;
-                    this.filters.ready = true;
                     this.organization_id = response.data.organization_id;
+                    this.filters.ready = true;
                 }).catch( (error) => {
                     console.log(error);
                     window.alert('Something went wrong (saved funnel).');
@@ -236,14 +350,51 @@ export default {
         },
     },
 
+    computed: {
+        from_date: function() {
+            return this.filters.start_date;
+        },
+        to_date: function() {
+            return this.filters.end_date;
+        },
+
+        active_filter_option: function() {
+            if (this.selected_filter) {
+                return _.find(this.filter_options, (filter_option) => {
+                    return filter_option.key === this.selected_filter;
+                });
+            } else {
+                return null;
+            }
+        },
+
+        filters_all: function() {
+            return {
+                ...this.filters,
+                ...this.filters_secondary,
+            };
+        }
+    },
+
+
+    watch: {
+        from_date: function() {
+            this.updateFilterOptions();
+        },
+        to_date: function() {
+            this.updateFilterOptions();
+        },
+    },
+
     beforeMount() {
         this.parseUrl();
+        this.updateFilterOptions();
 
-        const end = new Date();
-        const start = date.addMonths(end, -1);
+        // const end = new Date();
+        // const start = date.addMonths(end, -1);
 
-        this.filters.start_date = date.format(start, 'YYYY-MM-DD');
-        this.filters.end_date = date.format(end, 'YYYY-MM-DD');
+        // this.filters.start_date = date.format(start, 'YYYY-MM-DD');
+        // this.filters.end_date = date.format(end, 'YYYY-MM-DD');
 
         if ( ! this.funnel_id) {
             this.editing = true;

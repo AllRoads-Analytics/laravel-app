@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Funnel;
 use App\Models\Tracker;
+use App\Services\PixelData\PixelDataFilterOptions;
 use App\Services\PixelData\PixelDataFunnel;
 use App\Services\PixelData\PixelDataHosts;
 use App\Services\PixelData\PixelDataUniquePageviews;
@@ -41,6 +42,20 @@ class PathfinderController extends Controller
     // Ajax.
     // =========================================================================
 
+    public function ajax_get_filter_options(Request $Request, Tracker $Tracker, $host) {
+        $filter_options = PixelDataFilterOptions::init()
+            ->setTracker($Tracker)
+            ->setHost($host)
+            ->setDateRange(
+                Carbon::createFromFormat('Y-m-d', $Request->input('start_date')),
+                Carbon::createFromFormat('Y-m-d', $Request->input('end_date'))
+            )->getFilterOptions();
+
+        return [
+            'filter_options' => $filter_options,
+        ];
+    }
+
     public function ajax_get_next_pages(Request $Request, Tracker $Tracker, $host) {
         $this->authorize('view', $Tracker->Organization);
 
@@ -51,6 +66,7 @@ class PathfinderController extends Controller
             ->setHost($host)
             ->setPreviousPages($previous_pages)
             ->setSearch($Request->input('search') ?? '')
+            ->setFilters($Request->only(array_keys(PixelDataFunnel::FILTERABLE_FIELDS)))
             ->setDateRange(
                 Carbon::createFromFormat('Y-m-d', $Request->input('start_date')),
                 Carbon::createFromFormat('Y-m-d', $Request->input('end_date'))
@@ -70,12 +86,13 @@ class PathfinderController extends Controller
     public function ajax_get_funnel(Request $Request, Tracker $Tracker, $host) {
         $this->authorize('view', $Tracker->Organization);
 
-        $pages = $Request->query('pages', []);
+        $pages = $Request->query('previous_pages', []);
 
         $page_views = PixelDataFunnel::init()
             ->setTracker($Tracker)
             ->setHost($host)
             ->setPreviousPages($pages)
+            ->setFilters($Request->only(array_keys(PixelDataFunnel::FILTERABLE_FIELDS)))
             ->setDateRange(
                 Carbon::createFromFormat('Y-m-d', $Request->input('start_date')),
                 Carbon::createFromFormat('Y-m-d', $Request->input('end_date'))
@@ -90,7 +107,7 @@ class PathfinderController extends Controller
         $this->authorize('view', $Funnel->Organization);
 
         $pages = collect($Funnel->steps)
-            ->filter(fn($step) => 'pageload' === $step['ev'])
+            ->filter( fn($step) => 'pageload' === $step['ev'] )
             ->pluck('path')
             ->toArray();
 

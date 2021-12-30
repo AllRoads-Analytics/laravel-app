@@ -3,6 +3,7 @@
 class PixelDataFunnel extends PixelDataAbstract {
     protected $host;
     protected $previous_pages;
+    protected $filters = [];
 
     public function setHost(string $host) {
         $this->host = $host;
@@ -11,6 +12,11 @@ class PixelDataFunnel extends PixelDataAbstract {
 
     public function setPreviousPages(array $previous_pages) {
         $this->previous_pages = $previous_pages;
+        return $this;
+    }
+
+    public function setFilters(array $filters) {
+        $this->filters = array_intersect_key($filters, $this::FILTERABLE_FIELDS);
         return $this;
     }
 
@@ -69,9 +75,9 @@ class PixelDataFunnel extends PixelDataAbstract {
                 'percentage' => count($page_counts) ?
                     round($views / $page_counts[0]['views'] * 100)
                     : 100,
-                'step_dropped_percentage' => is_null($views_next) ?
+                'step_dropped_percentage' => is_null($views_next) || !$views ?
                     null : round(($views - $views_next) / $views * 100),
-                'step_proceeded_percentage' => is_null($views_next) ?
+                'step_proceeded_percentage' => is_null($views_next) || !$views ?
                     null : round($views_next / $views * 100),
             ];
         }
@@ -104,23 +110,32 @@ class PixelDataFunnel extends PixelDataAbstract {
         $paths_select_string = '';
         $joins_string = '';
         foreach ($this->previous_pages as $idx => $_page) {
+            $filter_wheres = count($this->filters)
+                ? 'AND ' . $this->generateWhereString($this->filters, "ev$idx")
+                : '';
+
             if ($idx !== 0) {
                 $paths_select_string .= ' + ';
 
                 $prev_idx = $idx-1;
                 $joins_string .= "
-                    FULL OUTER JOIN pixel_events.events ev$idx
+                    FULL OUTER JOIN :table ev$idx
                         ON ev$idx.uid = ev0.uid
                             AND ev$idx.ts > ev$prev_idx.ts
                             AND date(ev$idx.ts) <= '$end_string'
                             AND ev$idx.host = '$this->host'
                             AND ev$idx.ev = 'pageload'
                             AND ev$idx.path = '$_page'
+                            $filter_wheres
                 ";
             }
 
             $paths_select_string .= "IF(ev$idx.path IS NOT NULL, 1, 0)";
         }
+
+        $filter_wheres = count($this->filters)
+            ? 'AND ' . $this->generateWhereString($this->filters, "ev0")
+            : '';
 
         $query = <<<SQL
             SELECT uid, MAX(paths) as paths,
@@ -128,7 +143,7 @@ class PixelDataFunnel extends PixelDataAbstract {
             FROM (
                 SELECT ev0.uid as uid, ev$last_page_idx.ts as last_ts,
                     ( $paths_select_string ) AS paths
-                FROM pixel_events.events ev0
+                FROM :table ev0
                     $joins_string
 
                 WHERE date(ev0.ts) >= '$start_string'
@@ -136,9 +151,12 @@ class PixelDataFunnel extends PixelDataAbstract {
                     AND ev0.host = '$this->host'
                     AND ev0.ev = 'pageload'
                     AND ev0.path = '$first_page'
+                    $filter_wheres
                 ) inz
             GROUP BY uid
         SQL;
+
+        // dd($query);
 
         return $query;
     }
