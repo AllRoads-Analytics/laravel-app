@@ -2,24 +2,22 @@
     <div>
         <!-- Filters -->
         <div class="mb-3 form">
-            <div class="row g-3">
-                <div class="col">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
                     <label for="start_date">Start</label>
                     <input type="date" class="form-control" id="start_date"
                     @change="setStartDate"
                     v-model="input_start_date">
                 </div>
 
-                <div class="col">
+                <div class="col-md-3">
                     <label for="start_date">End</label>
                     <input type="date" class="form-control" id="end_date"
                     @change="setEndDate"
                     v-model="input_end_date">
                 </div>
-            </div>
 
-            <div class="row mt-3">
-                <div class="col">
+                <div class="col-md-6">
                     <div class="card bg-light">
                         <div class="card-header">
                             <button @click="filters_open = ! filters_open" class="btn-plain w-100">
