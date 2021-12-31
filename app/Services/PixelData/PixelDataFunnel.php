@@ -67,14 +67,22 @@ class PixelDataFunnel extends PixelDataAbstract {
             $views = $views_next ?: $this->getNextFromArray($step_users, ($idx + 1));
             $views_next = $idx+1 === count($this->previous_pages) ? null : $this->getNextFromArray($step_users, ($idx + 2));
 
+            if (count($page_counts)) {
+                // If not the first page, and first page had views, calculate.
+                // If not the first page, and first page had 0 views, 0%.
+                $percentage = $page_counts[0]['views'] > 0
+                    ? round($views / $page_counts[0]['views'] * 100) : 0;
+            } else {
+                // First page, 100&.
+                $percentage = 100;
+            }
+
             $page_counts[] = [
                 'page' => $page,
                 'views' => $views,
                 'dropped' => is_null($views_next) ? null : $views - $views_next,
                 'proceeded' => $views_next,
-                'percentage' => count($page_counts) ?
-                    round($views / $page_counts[0]['views'] * 100)
-                    : 100,
+                'percentage' => $percentage,
                 'step_dropped_percentage' => is_null($views_next) || !$views ?
                     null : round(($views - $views_next) / $views * 100),
                 'step_proceeded_percentage' => is_null($views_next) || !$views ?
