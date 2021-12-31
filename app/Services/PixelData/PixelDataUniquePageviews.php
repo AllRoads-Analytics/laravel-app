@@ -41,7 +41,7 @@ class PixelDataUniquePageviews extends PixelDataAbstract {
                     ' AND DATE(ts) <= "' . $this->end_date->toDateString() . '"' .
                     ' AND id = "' . $this->Tracker->pixel_id . '"' .
                     ' AND host = "' . $this->host . '"' .
-                    ' AND ev = "pageload"' .
+                    ' AND ( ev = "pageload" OR ev = "pageview" )' .
                     $search_where . $filter_wheres .
                 ' GROUP BY path ORDER BY views desc, path'
             );
@@ -105,7 +105,7 @@ class PixelDataUniquePageviews extends PixelDataAbstract {
                             AND ev$idx.ts > ev$prev_idx.ts
                             AND date(ev$idx.ts) <= '$end_string'
                             AND ev$idx.host = '$this->host'
-                            AND ev$idx.ev = 'pageload'
+                            AND ( ev$idx.ev = 'pageload' OR ev$idx.ev = 'pageview' )
                             AND ev$idx.path = '$_page'
                             $filter_wheres
                 ";
@@ -130,7 +130,7 @@ class PixelDataUniquePageviews extends PixelDataAbstract {
                 WHERE date(ev0.ts) >= '$start_string'
                     AND date(ev0.ts) <= '$end_string'
                     AND ev0.host = '$this->host'
-                    AND ev0.ev = 'pageload'
+                    AND ( ev0.ev = 'pageload' OR ev0.ev = 'pageview' )
                     AND ev0.path = '$first_page'
                     $filter_wheres
                 ) inz

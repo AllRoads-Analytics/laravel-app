@@ -45,7 +45,7 @@ class PixelDataFilterOptions extends PixelDataAbstract {
                     AND date(ev0.ts) <= '$end_string'
                     AND ev0.host = @host
                     AND ev0.id = @pixel_id
-                    AND ev0.ev = 'pageload'
+                    AND ( ev0.ev = 'pageload' OR ev0.ev = 'pageview' )
             )
 
             SELECT $select_distincts_array

@@ -17,18 +17,32 @@
                     </div>
 
                     <div class="card-body">
-                        <p>Add the following, before the end of the <code>{{ '<body>' }}</code> tag.</p>
-
-                        <p>
-                            <div class="form">
-                                <textarea style="resize: none" readonly id="codeSnippet" class="form-control bg-light" rows="10"
-                                >{{ $Organization->getTracker()->getCodeSnippet() }}</textarea>
-                            </div>
+                        <p class="mb-2">
+                            Add the following, before the end of the <code>{{ '<body>' }}</code> tag.
                         </p>
 
-                        <div>
-                            <button class="btn btn-primary" onclick="copyCode()">Copy to Clipboard</button>
+                        <div class="form">
+                            <textarea style="resize: none" readonly id="codeSnippet" class="form-control bg-light" rows="10"
+                            >{{ $Organization->getTracker()->getCodeSnippet() }}</textarea>
                         </div>
+
+                        <div class="mt-2">
+                            <button class="btn btn-primary" onclick="copyCode()">
+                                <i class="fas fa-copy"></i>
+                                Copy to Clipboard
+                            </button>
+                        </div>
+
+                        <p class="mt-4 mb-2">
+                            For Single Page Applications (SPAs), call the following JavaScript code each time the URL path changes.
+                        </p>
+
+                        <p class="m-0">
+                            <div class="form">
+                                <textarea style="resize: none" readonly id="codeSnippet" class="form-control bg-light" rows="1"
+                                >pathfinder("event", "pageview");</textarea>
+                            </div>
+                        </p>
                     </div>
                 </div>
 

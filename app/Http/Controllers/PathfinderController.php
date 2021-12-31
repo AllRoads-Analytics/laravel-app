@@ -107,7 +107,7 @@ class PathfinderController extends Controller
         $this->authorize('view', $Funnel->Organization);
 
         $pages = collect($Funnel->steps)
-            ->filter( fn($step) => 'pageload' === $step['ev'] )
+            ->filter( fn($step) => in_array($step['ev'], Tracker::PAGEVIEW_EVENTS) )
             ->pluck('path')
             ->toArray();
 

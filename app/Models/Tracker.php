@@ -8,6 +8,10 @@ class Tracker extends ModelAbstract
 {
     use HasFactory;
 
+    const PAGEVIEW_EVENTS = [
+        'pageload', 'pageview'
+    ];
+
     // =========================================================================
     // Finders.
     // =========================================================================

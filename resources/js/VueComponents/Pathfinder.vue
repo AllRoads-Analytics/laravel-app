@@ -6,13 +6,15 @@
                 <div class="col">
                     <label for="start_date">Start</label>
                     <input type="date" class="form-control" id="start_date"
-                    v-model="filters.start_date">
+                    @change="setStartDate"
+                    v-model="input_start_date">
                 </div>
 
                 <div class="col">
                     <label for="start_date">End</label>
                     <input type="date" class="form-control" id="end_date"
-                    v-model="filters.end_date">
+                    @change="setEndDate"
+                    v-model="input_end_date">
                 </div>
             </div>
 
@@ -23,6 +25,7 @@
                             <button @click="filters_open = ! filters_open" class="btn-plain w-100">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
+                                        <i class="fas fa-filter"></i>
                                         Filters
                                     </div>
 
@@ -184,6 +187,9 @@ const queryString = require('query-string');
 const endDate = new Date();
 const startDate = date.addMonths(endDate, -1);
 
+const startDateString = date.format(startDate, 'YYYY-MM-DD');
+const endDateString = date.format(endDate, 'YYYY-MM-DD');
+
 export default {
     components: [ NextPages, Funnel ],
 
@@ -204,8 +210,8 @@ export default {
         return {
             filters: {
                 previous_pages: [],
-                start_date: date.format(startDate, 'YYYY-MM-DD'),
-                end_date: date.format(endDate, 'YYYY-MM-DD'),
+                start_date: startDateString,
+                end_date: endDateString,
                 ready: false,
             },
 
@@ -215,6 +221,8 @@ export default {
             funnel_id: null,
             funnel_name: null,
 
+            input_start_date: startDateString,
+            input_end_date: endDateString,
             input_funnel_name: '',
             filters_open: false,
 
@@ -243,6 +251,18 @@ export default {
 
         removeFilter(key) {
             delete this.filters_secondary[key];
+        },
+
+        setStartDate() {
+            if (HELPER.isValidDate(this.input_start_date)) {
+                this.filters.start_date = this.input_start_date;
+            }
+        },
+
+        setEndDate() {
+            if (HELPER.isValidDate(this.input_end_date)) {
+                this.filters.end_date = this.input_end_date;
+            }
         },
 
         // updateUrl() {
