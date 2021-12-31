@@ -14,7 +14,7 @@ class Funnels extends Migration
     public function up()
     {
         Schema::create('funnels', function (Blueprint $table) {
-            $table->id();
+            $table->id()->startingValue(rand(1000, 9999));
 
             $table->foreignId('organization_id')
                 ->constrained()

@@ -14,7 +14,7 @@ class CreateTrackersTable extends Migration
     public function up()
     {
         Schema::create('trackers', function (Blueprint $table) {
-            $table->id();
+            $table->id()->startingValue(rand(1000, 9999));
 
             $table->string('pixel_id', 20);
 

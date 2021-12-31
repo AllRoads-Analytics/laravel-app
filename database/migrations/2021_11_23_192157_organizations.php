@@ -14,7 +14,7 @@ class Organizations extends Migration
     public function up()
     {
         Schema::create('organizations', function (Blueprint $table) {
-            $table->id();
+            $table->id()->startingValue(rand(1000, 9999));
 
             $table->string('name');
 
