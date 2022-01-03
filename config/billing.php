@@ -1,0 +1,56 @@
+<?php
+
+return [
+    'plans' => [
+        'free' => [
+            'id' => 'free',
+            'label' => 'Free',
+            'monthly_price' => 0,
+            'limit_funnels' => 1,
+            'limit_data_view_days' => 7,
+            'limit_users' => 1,
+            'limit_pageviews_per_month' => 50000,
+            'monthly_price_stripe_id' => null,
+        ],
+        'basic' => [
+            'id' => 'basic',
+            'label' => 'Basic',
+            'monthly_price' => 5,
+            'limit_funnels' => 3,
+            'limit_data_view_days' => 30,
+            'limit_users' => 3,
+            'limit_pageviews_per_month' => 50000,
+            'monthly_price_stripe_id' => 'price_1KDajCAOLKXPgWftZ1Fv8BFS',
+        ],
+        'plus' => [
+            'id' => 'plus',
+            'label' => 'Plus',
+            'monthly_price' => 10,
+            'limit_funnels' => 5,
+            'limit_data_view_days' => 90,
+            'limit_users' => 5,
+            'limit_pageviews_per_month' => 100000,
+            'monthly_price_stripe_id' => 'price_1KDbvDAOLKXPgWftBXVWB3Cy',
+        ],
+        'pro' => [
+            'id' => 'pro',
+            'label' => 'Pro',
+            'monthly_price' => 15,
+            'limit_funnels' => 10,
+            'limit_data_view_days' => 365,
+            'limit_users' => 10,
+            'limit_pageviews_per_month' => 500000,
+            'monthly_price_stripe_id' => 'price_1KDbvTAOLKXPgWftZvy6X5CR',
+        ],
+        'enterprise' => [
+            'id' => 'enterprise',
+            'label' => 'Enterprise',
+            'monthly_price' => 30,
+            'limit_funnels' => null,
+            'limit_data_view_days' => null,
+            'limit_users' => null,
+            'limit_pageviews_per_month' => 1000000,
+            'monthly_price_stripe_id' => 'price_1KDbvlAOLKXPgWft3hgmRrYM',
+        ],
+    ],
+];

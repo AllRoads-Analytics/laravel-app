@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Organization;
 use App\Services\BigQueryService;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Cashier\Cashier;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Cashier::useCustomerModel(Organization::class);
+        // Cashier::calculateTaxes();
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Organization;
 use App\Models\User;
+use App\Services\PaymentCard;
 use Illuminate\Http\Request;
 
 class OrganizationController extends Controller
@@ -68,8 +69,13 @@ class OrganizationController extends Controller
             return abort(404);
         }
 
+        // dd($Organization->billingPortalUrl());
+
         return view('_pages.organizations.show', [
             'Organization' => $Organization,
+            'Plan' => $Organization->getPlan(),
+            'PaymentCard' => $Organization->getPaymentCard(),
+            'usages' => $Organization->getPlanUsage()->getAll(),
         ]);
     }
 

@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\FunnelController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\FunnelController;
+use App\Http\Controllers\BillingController;
 use App\Http\Controllers\PathfinderController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\OrganizationUserController;
@@ -47,6 +48,35 @@ Route::prefix('organizations/{organization}')->group(function() {
     Route::post('/invites/{invite}/remove', [
         OrganizationUserController::class, 'remove_invite'
     ])->name('organizations.invites.remove');
+
+
+    // =========================================================================
+    // Billing:
+    // =========================================================================
+
+    Route::middleware(['can:manage,organization'])->group(function () {
+        // =====================================================================
+        // Plan
+        // =====================================================================
+        Route::get('/select-plan', [
+            BillingController::class, 'get_select_plan'
+        ])->name('organizations.billing.get_select_plan');
+
+        Route::post('/select-plan', [
+            BillingController::class, 'post_select_plan'
+        ])->name('organizations.billing.post_select_plan');
+
+        // =====================================================================
+        // Payment
+        // =====================================================================
+        Route::get('/payment', [
+            BillingController::class, 'get_update_payment_method'
+        ])->name('organizations.billing.get_update_payment_method');
+
+        Route::post('/payment', [
+            BillingController::class, 'post_update_payment_method'
+        ])->name('organizations.billing.post_update_payment_method');
+    });
 
 
     // =============================================================================

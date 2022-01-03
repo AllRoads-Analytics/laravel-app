@@ -159,6 +159,7 @@
                             x-data="{ open: false }">
                                 <button class="btn btn-success"
                                 x-on:click="open = true" x-show=" ! open">
+                                    <i class="fas fa-plus"></i>
                                     Add
                                 </button>
 
@@ -199,25 +200,129 @@
 
                     <div class="card">
                         <div class="card-header fs-5 fw-bold">
-                            Plan/Billing
+                            Plan / Billing / Usage
                         </div>
 
                         <div class="card-body">
-                            <p>// todo</p>
+                            <div class="row g-4">
+                                <div class="col-md-5">
+                                    <h5 class="mb-2">Current Plan</h5>
 
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <div>
+                                            <span class="badge bg-info text-black fs-6">
+                                                {{ $Plan->label }}
+                                            </span>
+                                        </div>
+
+                                        <div class="">
+                                            ${{ number_format($Plan->monthly_price, 2) }}
+                                            per month
+                                        </div>
+                                    </div>
+
+                                    @if ($endsAt = $Organization->subscription('default')->ends_at ?? false)
+                                        <div class="mt-2">
+                                            <span class="badge bg-warning text-black fs-6">
+                                                <i class="fas fa-stopwatch"></i>
+                                                Switches to "Free" on
+                                                {{ $endsAt->format('M jS') }}
+                                            </span>
+                                        </div>
+                                    @endif
+
+                                    @if ($PaymentCard)
+                                        <h5 class="mt-4 mb-2">Payment Method</h5>
+
+                                        <div class="d-flex flex-wrap gap-3 align-items-center">
+                                            <div class="fs-3">
+                                                {!! $PaymentCard->getBrandIcon() !!}
+                                            </div>
+
+                                            <div>
+                                                {!! $PaymentCard->getObscuredNumber() !!}
+                                            </div>
+
+                                            <div>
+                                                Exp: {!! $PaymentCard->getExpirationDate() !!}
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-2">
+                                            <a href="{{ route('organizations.billing.get_update_payment_method', $Organization) }}"
+                                            class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-wrench"></i>
+                                                Replace Payment Method
+                                            </a>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <div class="col-md-7">
+                                    <h5 class="mb-2">Usage</h5>
+
+                                    <div class="d-grid gap-2">
+                                        @foreach ($usages as $usage)
+                                            <div>
+                                                <div class="">
+                                                    {{ $usage['label'] }}:
+                                                    {{ number_format($usage['usage']) }} / {{ number_format($usage['limit']) }}
+                                                </div>
+
+                                                <div class="mt-1">
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-info text-black"
+                                                        aria-valuenow="{{ $usage['usage'] }}"
+                                                        aria-valuemin="0"
+                                                        aria-valuemax="{{ $usage['limit'] }}"
+                                                        style="width: {{ (string) $usage['percentage'] }}%;"
+                                                        >{{ (string) $usage['percentage'] }}%</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+
+                                        <div class="">
+                                            Data retention:
+                                            {{ $Plan->limit_data_view_days }}
+                                            days
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <a href="{{ route('organizations.billing.get_select_plan', $Organization) }}"
+                                        class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-wrench"></i>
+                                            Update Plan
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-danger text-center">
+                        <div class="card-header fs-5 fw-bold bg-danger text-white text-start">
+                            Danger Zone
+                        </div>
+
+                        <div class="card-body">
                             <div>
                                 <form action="{{ route('organizations.destroy', $Organization->id) }}" method="POST"
                                     onsubmit="return confirm('Are you sure you want to PERMANENTLY DELETE this Organization?')">
                                     @csrf
                                     @method('DELETE')
 
-                                    <button class="btn btn-danger">
+                                    <div>
+                                        PERMANENTLY DELETE this Organization:
+                                    </div>
+
+                                    <button class="btn btn-danger mt-1">
                                         Delete
                                     </button>
                                 </form>
                             </div>
                         </div>
-                    </div>
                 @endif
             </div>
         </div>
