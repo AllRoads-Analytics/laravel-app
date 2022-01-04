@@ -14,6 +14,7 @@ class PixelDataAbstract {
         'utm_term' => 'Term (utm_term)',
         'utm_content' => 'Content (utm_content)',
         'utm_campaign' => 'Name (utm_campaign)',
+        'host' => 'Hostname',
     ];
 
     /** @var Tracker */

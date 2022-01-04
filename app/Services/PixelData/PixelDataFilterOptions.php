@@ -1,13 +1,6 @@
 <?php namespace App\Services\PixelData;
 
 class PixelDataFilterOptions extends PixelDataAbstract {
-    protected $host;
-
-    public function setHost(string $host) {
-        $this->host = $host;
-        return $this;
-    }
-
     /**
      * [
      *      [
@@ -43,7 +36,6 @@ class PixelDataFilterOptions extends PixelDataAbstract {
                 SELECT $filters_string FROM :table as ev0
                 WHERE date(ev0.ts) >= '$start_string'
                     AND date(ev0.ts) <= '$end_string'
-                    AND ev0.host = @host
                     AND ev0.id = @pixel_id
                     AND ( ev0.ev = 'pageload' OR ev0.ev = 'pageview' )
             )
@@ -54,7 +46,6 @@ class PixelDataFilterOptions extends PixelDataAbstract {
         // dd($query);
 
         $results = $this->runRawQuery($query, [
-            'host' => $this->host,
             'pixel_id' => $this->Tracker->pixel_id
         ]);
 

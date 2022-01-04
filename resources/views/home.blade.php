@@ -12,29 +12,30 @@
 
                 <div class="card mb-2">
                     <div class="card-body">
-                        <div class="row align-items-center g-2">
-                            <div class="col-md-5 fs-5">
+                        <div class="d-grid d-md-flex justify-content-between align-items-center gap-2">
+                            <div class="fs-5">
                                 {{ $Organization->name }}
                             </div>
 
-                            <div class="col-md-6 text-md-center">
+                            <div class="text-md-center">
                                 <a href="{{ $Organization->getTracker()->getRoute() }}"
                                 class="btn btn-sm btn-primary me-2">
-                                    <i class="fas fa-compass"></i>
-                                    Pathfinder
+                                    <i class="fas fa-compass me-1"></i>
+                                    Explore
                                 </a>
 
                                 <a href="{{ route('funnels.index', ['organization' => $Organization->id]) }}"
                                 class="btn btn-sm btn-primary">
-                                    <i class="fas fa-filter"></i>
+                                    <i class="fas fa-filter me-1"></i>
                                     Saved Funnels
                                 </a>
                             </div>
 
-                            <div class="col-md-1 text-md-end">
+                            <div class="text-md-end">
                                 <a href="{{ route('organizations.show', $Organization->id) }}"
                                 class="btn btn-secondary btn-sm">
-                                    <i class="fas fa-cog"></i>
+                                    <i class="fas fa-cog me-1"></i>
+                                    Settings
                                 </a>
                             </div>
                         </div>
@@ -43,7 +44,7 @@
             @endforeach
 
             <a href="{{ route('organizations.create') }}" class="btn btn-success mt-2">
-                <i class="fas fa-plus"></i>
+                <i class="fas fa-plus me-1"></i>
                 New Organization
             </a>
         </div>

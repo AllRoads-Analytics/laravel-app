@@ -1,13 +1,15 @@
 <?php namespace App\Services\PixelData;
 
 class PixelDataUniquePageviews extends PixelDataAbstract {
-    protected $host;
     protected $previous_pages;
     protected $search;
     protected $filters = [];
 
     public function setHost(string $host) {
-        $this->host = $host;
+        $this->setFilters([
+            'host' => $host,
+        ]);
+
         return $this;
     }
 
@@ -22,28 +24,28 @@ class PixelDataUniquePageviews extends PixelDataAbstract {
     }
 
     public function setFilters(array $filters) {
-        $this->filters = array_intersect_key($filters, $this::FILTERABLE_FIELDS);
+        $this->filters = array_filter(array_intersect_key($filters, $this::FILTERABLE_FIELDS));
         return $this;
     }
 
     public function getUniquePageviews() {
-        $search_where = $this->search ? " AND path LIKE '%$this->search%'" : '';
+        $search_where = $this->search ? " AND path LIKE '%$this->search%' " : ' ';
 
         $filter_wheres = count($this->filters)
-            ? 'AND ' . $this->generateWhereString($this->filters)
-            : '';
+            ? ' AND ' . $this->generateWhereString($this->filters) . ' '
+            : ' ';
 
         if ( ! count($this->previous_pages)) {
             $query = ('
-                SELECT path, count(distinct uid) as views
+                SELECT host_path, count(distinct uid) as views
                 FROM :table
                 WHERE DATE(ts) >= "' . $this->start_date->toDateString() . '"' .
                     ' AND DATE(ts) <= "' . $this->end_date->toDateString() . '"' .
-                    ' AND id = "' . $this->Tracker->pixel_id . '"' .
-                    ' AND host = "' . $this->host . '"' .
+                    ' AND id = @pixel_id' .
                     ' AND ( ev = "pageload" OR ev = "pageview" )' .
+                    ' AND host_path IS NOT null' .
                     $search_where . $filter_wheres .
-                ' GROUP BY path ORDER BY views desc, path'
+                ' GROUP BY host_path ORDER BY views desc, host_path'
             );
         } else {
             $uids_query = $this->getUidsQuery($this->previous_pages, $this->start_date, $this->end_date);
@@ -55,17 +57,19 @@ class PixelDataUniquePageviews extends PixelDataAbstract {
                 SET pages_all = $this->previous_pages_string;
 
                 WITH uidz as ( $uids_query )
-                SELECT evNext.path, COUNT(DISTINCT evNext.uid) as views
+                SELECT evNext.host_path, COUNT(DISTINCT evNext.uid) as views
                 FROM :table evNext
                     JOIN uidz
                         ON uidz.paths = $page_count
                             AND uidz.uid = evNext.uid
                             AND evNext.ts > uidz.end_ts
-                WHERE evNext.path NOT IN UNNEST(pages_all)
+                WHERE evNext.host_path NOT IN UNNEST(pages_all)
+                    AND evNext.host_path IS NOT null
+                    AND evNext.id = @pixel_id
                     $search_where
                     $filter_wheres
-                GROUP BY evNext.path
-                ORDER BY views DESC, evNext.path
+                GROUP BY evNext.host_path
+                ORDER BY views DESC, evNext.host_path
             SQL;
         }
 
@@ -102,16 +106,16 @@ class PixelDataUniquePageviews extends PixelDataAbstract {
                 $joins_string .= "
                     FULL OUTER JOIN :table ev$idx
                         ON ev$idx.uid = ev0.uid
+                            AND ev$idx.id = @pixel_id
                             AND ev$idx.ts > ev$prev_idx.ts
                             AND date(ev$idx.ts) <= '$end_string'
-                            AND ev$idx.host = '$this->host'
                             AND ( ev$idx.ev = 'pageload' OR ev$idx.ev = 'pageview' )
-                            AND ev$idx.path = '$_page'
+                            AND ev$idx.host_path = '$_page'
                             $filter_wheres
                 ";
             }
 
-            $paths_select_string .= "IF(ev$idx.path IS NOT NULL, 1, 0)";
+            $paths_select_string .= "IF(ev$idx.host_path IS NOT NULL, 1, 0)";
         }
 
         $filter_wheres = count($this->filters)
@@ -127,11 +131,11 @@ class PixelDataUniquePageviews extends PixelDataAbstract {
                 FROM :table ev0
                     $joins_string
 
-                WHERE date(ev0.ts) >= '$start_string'
+                WHERE ev0.id = @pixel_id
+                    AND date(ev0.ts) >= '$start_string'
                     AND date(ev0.ts) <= '$end_string'
-                    AND ev0.host = '$this->host'
                     AND ( ev0.ev = 'pageload' OR ev0.ev = 'pageview' )
-                    AND ev0.path = '$first_page'
+                    AND ev0.host_path = '$first_page'
                     $filter_wheres
                 ) inz
             GROUP BY uid

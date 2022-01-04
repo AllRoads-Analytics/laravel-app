@@ -33,9 +33,8 @@ class Funnel extends ModelAbstract
     }
 
     public function getRoute() {
-        return route('pathfinder.tracker.host', [
+        return route('pathfinder.tracker', [
             'tracker' => $this->Organization->getTracker()->pixel_id,
-            'host' => $this->hostname,
             'funnel' => $this->id,
         ]);
     }
@@ -61,10 +60,9 @@ class Funnel extends ModelAbstract
     // Public static functions.
     // =========================================================================
 
-    public static function createFromPages(Organization $Organization, string $hostname, string $name, array $pages) {
+    public static function createFromPages(Organization $Organization, string $name, array $pages) {
         return static::create([
             'organization_id' => $Organization->id,
-            'hostname' => $hostname,
             'name' => $name,
             'steps' => array_map(function($page) {
                 return [

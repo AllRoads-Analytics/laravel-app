@@ -20,9 +20,6 @@ class Funnels extends Component
     // =========================================================================
 
     public $funnels;
-    public $options_host;
-    public $selected_host;
-
 
     // =========================================================================
     // Component implementation.
@@ -34,10 +31,6 @@ class Funnels extends Component
 
     public function mount() {
         $this->updateFunnels();
-
-        $this->options_host = $this->Organization->Funnels()
-            ->groupBy('hostname')
-            ->pluck('hostname');
     }
 
 
@@ -47,9 +40,6 @@ class Funnels extends Component
 
     protected function updateFunnels() {
         $this->funnels = $this->Organization->Funnels()
-            ->where(array_filter([
-                'hostname' => $this->selected_host,
-            ]))
             ->orderBy('name')
             ->get();
     }

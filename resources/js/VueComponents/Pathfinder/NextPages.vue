@@ -5,8 +5,21 @@
                 Select {{ first ? 'starting' : 'next' }} page:
             </h5>
 
-            <div class="row mt-2 mb-1">
-                <div class="col-lg-8">
+            <div class="row mt-2 mb-1 g-2">
+                <div class="col-lg-6">
+                    <select name="host" id="host" class="form-select"
+                    v-model="selected_hostname"
+                    @change="update">
+                        <option value="">-- Filter Hostname --</option>
+
+                        <option v-for="option, idx in options_hostname" :key="idx"
+                        :value="option">
+                            {{ option }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-lg-6">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Search"
                         ref="search_input"
@@ -21,7 +34,7 @@
             </div>
         </div>
 
-        <div class="card-body">
+        <div class="card-body pb-3 pt-1">
             <div class="row justify-content-center my-1">
                 <div class="col">
                     <div>
@@ -40,8 +53,8 @@
                                 <tr v-for="path, idx in next_pages" :key="idx" >
                                     <td>
                                         <button type="button" class="btn btn-link text-start"
-                                        @click="$emit('addPreviousPage', path.path)">
-                                            {{ path.path }}
+                                        @click="$emit('addPreviousPage', path.host_path)">
+                                            {{ path.host_path }}
                                         </button>
                                     </td>
 
@@ -93,9 +106,9 @@
 export default {
     props: {
         pixel_id: String,
-        host: String,
         filters: Object,
         ready: Boolean,
+        options_hostname: Array,
     },
 
     data() {
@@ -106,6 +119,7 @@ export default {
             page: 0,
             page_size: 0,
             search_term: '',
+            selected_hostname: '',
         };
     },
 
@@ -115,9 +129,9 @@ export default {
 
             Axios.get( route('pathfinder.ajax.get_next_pages', {
                 tracker: this.pixel_id,
-                host: this.host,
                 page: this.page,
                 search: this.search_term,
+                host: this.selected_hostname,
                 ...this.filters,
             })).then( (response) => {
                 this.next_pages = response.data.paths;

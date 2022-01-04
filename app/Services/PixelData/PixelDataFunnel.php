@@ -1,14 +1,8 @@
 <?php namespace App\Services\PixelData;
 
 class PixelDataFunnel extends PixelDataAbstract {
-    protected $host;
     protected $previous_pages;
     protected $filters = [];
-
-    public function setHost(string $host) {
-        $this->host = $host;
-        return $this;
-    }
 
     public function setPreviousPages(array $previous_pages) {
         $this->previous_pages = $previous_pages;
@@ -49,7 +43,9 @@ class PixelDataFunnel extends PixelDataAbstract {
 
         // dd($query);
 
-        $results = $this->runRawQuery($query);
+        $results = $this->runRawQuery($query, [
+            'pixel_id' => $this->Tracker->pixel_id,
+        ]);
 
         $step_users = [];
         foreach ($results as $row) {
@@ -129,16 +125,16 @@ class PixelDataFunnel extends PixelDataAbstract {
                 $joins_string .= "
                     FULL OUTER JOIN :table ev$idx
                         ON ev$idx.uid = ev0.uid
+                            AND ev$idx.id = @pixel_id
                             AND ev$idx.ts > ev$prev_idx.ts
                             AND date(ev$idx.ts) <= '$end_string'
-                            AND ev$idx.host = '$this->host'
                             AND ( ev$idx.ev = 'pageload' OR ev$idx.ev = 'pageview' )
-                            AND ev$idx.path = '$_page'
+                            AND ev$idx.host_path = '$_page'
                             $filter_wheres
                 ";
             }
 
-            $paths_select_string .= "IF(ev$idx.path IS NOT NULL, 1, 0)";
+            $paths_select_string .= "IF(ev$idx.host_path IS NOT NULL, 1, 0)";
         }
 
         $filter_wheres = count($this->filters)
@@ -154,11 +150,11 @@ class PixelDataFunnel extends PixelDataAbstract {
                 FROM :table ev0
                     $joins_string
 
-                WHERE date(ev0.ts) >= '$start_string'
+                WHERE ev0.id = @pixel_id
+                    AND date(ev0.ts) >= '$start_string'
                     AND date(ev0.ts) <= '$end_string'
-                    AND ev0.host = '$this->host'
                     AND ( ev0.ev = 'pageload' OR ev0.ev = 'pageview' )
-                    AND ev0.path = '$first_page'
+                    AND ev0.host_path = '$first_page'
                     $filter_wheres
                 ) inz
             GROUP BY uid

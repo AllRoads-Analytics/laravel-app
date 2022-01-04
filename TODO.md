@@ -1,4 +1,3 @@
-* Subscriptions / pricing
 * Welcome email.
 * Marketing homepage.
 * unique org<>user relation. "you already belong" on invite accept
@@ -9,3 +8,7 @@
 * Consolidate Org/Tracker?
 
 * Domain name for Laravel & Pixel.
+
+* stripe setup.
+  * invoice portal page
+  * txn emails

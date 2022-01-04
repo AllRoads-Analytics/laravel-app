@@ -150,7 +150,6 @@
 
             <funnel
                 :pixel_id="pixel_id"
-                :host="host"
                 :filters="filters_all"
                 :init_funnel_id="funnel_id"
                 :editing="editing"
@@ -163,8 +162,8 @@
             <div class="col-lg-8">
                 <next-pages
                     :pixel_id="pixel_id"
-                    :host="host"
                     :filters="filters_all"
+                    :options_hostname="options_hostname"
                     @addPreviousPage="addPreviousPage"
                 ></next-pages>
             </div>
@@ -193,7 +192,6 @@ export default {
 
     props: {
         pixel_id: String,
-        host: String,
     },
 
     // setup() {
@@ -278,7 +276,6 @@ export default {
         updateFilterOptions() {
             Axios.get( route('pathfinder.ajax.get_filter_options', {
                 tracker: this.pixel_id,
-                host: this.host,
                 start_date: this.filters.start_date,
                 end_date: this.filters.end_date,
             })).then( (response) => {
@@ -328,7 +325,6 @@ export default {
             Axios.post( route('pathfinder.ajax.post_funnel', {
                 id: this.funnel_id,
                 tracker: this.pixel_id,
-                host: this.host,
                 pages: this.filters.previous_pages,
                 name: this.input_funnel_name,
             })).then( (response) => {
@@ -391,7 +387,15 @@ export default {
                 ...this.filters,
                 ...this.filters_secondary,
             };
-        }
+        },
+
+        options_hostname: function() {
+            const FilterOption = _.find(this.filter_options, (_option) => {
+                return 'host' === _option.key;
+            });
+
+            return FilterOption ? FilterOption.options : [];
+        },
     },
 
 

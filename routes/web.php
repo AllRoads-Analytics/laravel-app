@@ -110,23 +110,19 @@ Route::get('/pathfinder/{tracker:pixel_id}', [
     PathfinderController::class, 'get_tracker'
 ])->name('pathfinder.tracker');
 
-Route::get('/pathfinder/{tracker:pixel_id}/{host}', [
-    PathfinderController::class, 'get_tracker_host'
-])->name('pathfinder.tracker.host');
-
-Route::get('/pathfinder/ajax/{tracker:pixel_id}/{host}/filter_options', [
+Route::get('/pathfinder/ajax/{tracker:pixel_id}/filter_options', [
     PathfinderController::class, 'ajax_get_filter_options'
 ])->name('pathfinder.ajax.get_filter_options');
 
-Route::get('/pathfinder/ajax/{tracker:pixel_id}/{host}/next_pages', [
+Route::get('/pathfinder/ajax/{tracker:pixel_id}/next_pages', [
     PathfinderController::class, 'ajax_get_next_pages'
 ])->name('pathfinder.ajax.get_next_pages');
 
-Route::get('/pathfinder/ajax/{tracker:pixel_id}/{host}/funnel', [
+Route::get('/pathfinder/ajax/{tracker:pixel_id}/funnel', [
     PathfinderController::class, 'ajax_get_funnel'
 ])->name('pathfinder.ajax.get_funnel');
 
-Route::post('/pathfinder/ajax/{tracker:pixel_id}/{host}/funnel', [
+Route::post('/pathfinder/ajax/{tracker:pixel_id}/funnel', [
     PathfinderController::class, 'ajax_post_funnel'
 ])->name('pathfinder.ajax.post_funnel');
 

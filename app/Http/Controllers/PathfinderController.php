@@ -18,22 +18,8 @@ class PathfinderController extends Controller
     public function get_tracker(Request $Request, Tracker $Tracker) {
         $this->authorize('view', $Tracker->Organization);
 
-        $hosts = PixelDataHosts::init()
-            ->setTracker($Tracker)
-            ->getHosts();
-
-        return view('_pages.pathfinder.hosts', [
+        return view('_pages.pathfinder.tracker', [
             'Tracker' => $Tracker,
-            'hosts' => $hosts,
-        ]);
-    }
-
-    public function get_tracker_host(Request $Request, Tracker $Tracker, $host) {
-        $this->authorize('view', $Tracker->Organization);
-
-        return view('_pages.pathfinder.tracker_host', [
-            'Tracker' => $Tracker,
-            'host' => $host,
         ]);
     }
 
@@ -42,10 +28,9 @@ class PathfinderController extends Controller
     // Ajax.
     // =========================================================================
 
-    public function ajax_get_filter_options(Request $Request, Tracker $Tracker, $host) {
+    public function ajax_get_filter_options(Request $Request, Tracker $Tracker) {
         $filter_options = PixelDataFilterOptions::init()
             ->setTracker($Tracker)
-            ->setHost($host)
             ->setDateRange(
                 Carbon::createFromFormat('Y-m-d', $Request->input('start_date')),
                 Carbon::createFromFormat('Y-m-d', $Request->input('end_date'))
@@ -56,14 +41,13 @@ class PathfinderController extends Controller
         ];
     }
 
-    public function ajax_get_next_pages(Request $Request, Tracker $Tracker, $host) {
+    public function ajax_get_next_pages(Request $Request, Tracker $Tracker) {
         $this->authorize('view', $Tracker->Organization);
 
         $previous_pages = $Request->query('previous_pages', []);
 
-        $pageviews = PixelDataUniquePageviews::init()
+        $PixelDataUniquePageviews = PixelDataUniquePageviews::init()
             ->setTracker($Tracker)
-            ->setHost($host)
             ->setPreviousPages($previous_pages)
             ->setSearch($Request->input('search') ?? '')
             ->setFilters($Request->only(array_keys(PixelDataFunnel::FILTERABLE_FIELDS)))
@@ -72,10 +56,13 @@ class PathfinderController extends Controller
                 Carbon::createFromFormat('Y-m-d', $Request->input('end_date'))
             )
             ->setLimit($this::PAGE_SIZE)
-            ->setOffset($Request->input('page', 0) * $this::PAGE_SIZE)
-            ->getUniquePageviews();
+            ->setOffset($Request->input('page', 0) * $this::PAGE_SIZE);
 
-        $pageviews = iterator_to_array($pageviews);
+        if ($host = $Request->input('host')) {
+            $PixelDataUniquePageviews->setHost($host);
+        }
+
+        $pageviews = iterator_to_array($PixelDataUniquePageviews->getUniquePageviews());
 
         return [
             'paths' => $pageviews,
@@ -83,14 +70,13 @@ class PathfinderController extends Controller
         ];
     }
 
-    public function ajax_get_funnel(Request $Request, Tracker $Tracker, $host) {
+    public function ajax_get_funnel(Request $Request, Tracker $Tracker) {
         $this->authorize('view', $Tracker->Organization);
 
         $pages = $Request->query('previous_pages', []);
 
         $page_views = PixelDataFunnel::init()
             ->setTracker($Tracker)
-            ->setHost($host)
             ->setPreviousPages($pages)
             ->setFilters($Request->only(array_keys(PixelDataFunnel::FILTERABLE_FIELDS)))
             ->setDateRange(
@@ -118,7 +104,7 @@ class PathfinderController extends Controller
         ];
     }
 
-    public function ajax_post_funnel(Request $Request, Tracker $Tracker, $host) {
+    public function ajax_post_funnel(Request $Request, Tracker $Tracker) {
         $this->authorize('edit', $Tracker->Organization);
 
         $pages = $Request->query('pages', []);
@@ -130,7 +116,7 @@ class PathfinderController extends Controller
             $Funnel->save();
 
         } else {
-            $Funnel = Funnel::createFromPages($Tracker->Organization, $host, $Request->input('name'), $pages);
+            $Funnel = Funnel::createFromPages($Tracker->Organization, $Request->input('name'), $pages);
         }
 
         return [

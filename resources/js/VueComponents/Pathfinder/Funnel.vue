@@ -27,13 +27,13 @@
         <div class="row mt-2">
             <div style="min-height: 100px;">
                 <div class="d-flex flex-wrap">
-                    <div class="col-12 col-md-6 col-lg-3" v-for="page, idx in page_views" :key="idx">
+                    <div class="col-12 col-md-6 col-lg-4 col-xl-3" v-for="page, idx in page_views" :key="idx">
                         <div class="p-1 w-100">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="fw-bold d-flex align-items-center">
                                         <div class="badge bg-dark me-3 fs-6">{{ idx + 1 }}</div>
-                                        <div>{{ page.page }}</div>
+                                        <div class="text-break" v-html="page.page.replace('/', '<br>/')"></div>
                                     </div>
 
                                     <div class="mt-3">
@@ -95,7 +95,6 @@
 export default {
     props: {
         pixel_id: String,
-        host: String,
         filters: Object,
         ready: Boolean,
         editing: Boolean,
@@ -124,7 +123,6 @@ export default {
 
             Axios.get( route('pathfinder.ajax.get_funnel', {
                 tracker: this.pixel_id,
-                host: this.host,
                 ...this.filters,
             })).then( (response) => {
                 this.page_views = response.data.page_views;

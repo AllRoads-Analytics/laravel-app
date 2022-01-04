@@ -1,11 +1,11 @@
 <div>
     {{-- Filters --}}
-    <div x-data="{ show: false}">
+    {{-- <div x-data="{ show: false}">
         <div class="card bg-light">
             <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        Filter
+                        Filters
                     </div>
 
                     <div>
@@ -34,29 +34,26 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     {{-- Funnel list --}}
     <div class="mt-3">
         @foreach ($funnels as $Funnel)
             <div class="card mb-2">
                 <div class="card-body">
-                    <div class="row align-items-center g-2">
+                    <div class="row align-items-top g-3">
                         <div class="col-md-5">
-                            <a href="{{ $Funnel->getRoute() }}">
-                                <span class="fs-5">{{ $Funnel->name }}</span>
-                            </a>
-                        </div>
-
-                        <div class="col-md-5">
-                            Site:
-                            {{ $Funnel->hostname }}
+                            <div class="mt-md-1">
+                                <a href="{{ $Funnel->getRoute() }}">
+                                    <span class="fs-6">{{ $Funnel->name }}</span>
+                                </a>
+                            </div>
                         </div>
 
                         <div x-data="{ show: false}"
-                        class="col-md-2 text-md-end">
+                        class="col-md-7 text-md-end">
                             <div>
-                                <button x-on:click="show = !show" class="btn btn-light">
+                                <button x-on:click="show = !show" class="btn btn-sm btn-light">
                                     Pages
                                     <span x-show="!show" x-cloak><i class="fas fa-chevron-down"></i></span>
                                     <span x-show="show"><i class="fas fa-chevron-up"></i></span>
