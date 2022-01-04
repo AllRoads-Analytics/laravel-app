@@ -394,7 +394,7 @@ export default {
                 return 'host' === _option.key;
             });
 
-            return FilterOption ? FilterOption.options : [];
+            return FilterOption ? _.toArray(FilterOption.options) : [];
         },
     },
 

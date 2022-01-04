@@ -33,6 +33,15 @@
                             </button>
                         </div>
 
+                        <p class="mt-4">
+                            By default cross-site-tracking is turned on. Cross-site-tracking is accomplished by adding a parameter
+                            to links to pages outside of the site of the current page.
+                            To disable this functionality, change
+                            <code>{follow:true}</code>
+                            to
+                            <code>{follow:false}</code>.
+                        </p>
+
                         <p class="mt-4 mb-2">
                             For Single Page Applications (SPAs), call the following JavaScript code each time the URL path changes.
                         </p>
