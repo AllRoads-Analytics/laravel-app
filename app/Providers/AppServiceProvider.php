@@ -19,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(BigQueryService::class, function($app) {
             return new BigQueryService();
         });
+
+        Cashier::ignoreMigrations();
     }
 
     /**
