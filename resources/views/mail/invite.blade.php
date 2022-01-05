@@ -8,5 +8,5 @@ Accept
 @endcomponent
 
 Thanks,<br>
-{{ config('app.name') }}
+AllRoads Analytics
 @endcomponent
