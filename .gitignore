@@ -17,4 +17,3 @@ yarn-error.log
 /public/css
 /public/build
 /public/mix-manifest.json
-/config/bigquery.php
