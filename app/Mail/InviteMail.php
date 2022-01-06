@@ -34,6 +34,6 @@ class InviteMail extends Mailable
     {
         return $this->markdown('mail.invite', [
             'Invite' => $this->Invite,
-        ])->subject('Pathfinder Analytics Invite');
+        ])->subject('AllRoads Analytics Invite');
     }
 }
