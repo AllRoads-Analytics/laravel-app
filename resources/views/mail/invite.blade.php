@@ -1,5 +1,5 @@
 @component('mail::message')
-# Pathfinder Invite
+# AllRoads Analytics Invite
 
 You have been invited to join _{{ $Invite->Organization->name }}_.
 

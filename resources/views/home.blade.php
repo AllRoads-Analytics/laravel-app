@@ -12,12 +12,12 @@
 
                 <div class="card mb-2">
                     <div class="card-body">
-                        <div class="d-grid d-md-flex justify-content-between align-items-center gap-2">
-                            <div class="fs-5">
+                        <div class="row align-items-center g-2">
+                            <div class="fs-5 col-md-5">
                                 {{ $Organization->name }}
                             </div>
 
-                            <div class="text-md-center">
+                            <div class="text-md-center col-md-5">
                                 <a href="{{ $Organization->getTracker()->getRoute() }}"
                                 class="btn btn-sm btn-primary me-2">
                                     <i class="fas fa-compass me-1"></i>
@@ -31,7 +31,7 @@
                                 </a>
                             </div>
 
-                            <div class="text-md-end">
+                            <div class="text-md-end col-md-2">
                                 <a href="{{ route('organizations.show', $Organization->id) }}"
                                 class="btn btn-secondary btn-sm">
                                     <i class="fas fa-cog me-1"></i>

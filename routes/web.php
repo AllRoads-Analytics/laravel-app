@@ -106,31 +106,31 @@ Route::post('/accept-invite/{invite_code}', [
 // Pathfinder:
 // =============================================================================
 
-Route::get('/pathfinder/{tracker:pixel_id}', [
+Route::get('/funnel-explorer/{tracker:pixel_id}', [
     PathfinderController::class, 'get_tracker'
 ])->name('pathfinder.tracker');
 
-Route::get('/pathfinder/ajax/{tracker:pixel_id}/filter_options', [
+Route::get('/funnel-explorer/ajax/{tracker:pixel_id}/filter_options', [
     PathfinderController::class, 'ajax_get_filter_options'
 ])->name('pathfinder.ajax.get_filter_options');
 
-Route::get('/pathfinder/ajax/{tracker:pixel_id}/next_pages', [
+Route::get('/funnel-explorer/ajax/{tracker:pixel_id}/next_pages', [
     PathfinderController::class, 'ajax_get_next_pages'
 ])->name('pathfinder.ajax.get_next_pages');
 
-Route::get('/pathfinder/ajax/{tracker:pixel_id}/funnel', [
+Route::get('/funnel-explorer/ajax/{tracker:pixel_id}/funnel', [
     PathfinderController::class, 'ajax_get_funnel'
 ])->name('pathfinder.ajax.get_funnel');
 
-Route::post('/pathfinder/ajax/{tracker:pixel_id}/funnel', [
+Route::post('/funnel-explorer/ajax/{tracker:pixel_id}/funnel', [
     PathfinderController::class, 'ajax_post_funnel'
 ])->name('pathfinder.ajax.post_funnel');
 
-Route::get('/pathfinder/ajax/saved_funnel_pages/{funnel}', [
+Route::get('/funnel-explorer/ajax/saved_funnel_pages/{funnel}', [
     PathfinderController::class, 'ajax_get_saved_funnel_pages'
 ])->name('pathfinder.ajax.get_saved_funnel_pages');
 
-Route::post('/pathfinder/ajax/funnel/{funnel}/delete', [
+Route::post('/funnel-explorer/ajax/funnel/{funnel}/delete', [
     PathfinderController::class, 'post_funnel_delete'
 ])->name('pathfinder.ajax.post_funnel_delete');
 
