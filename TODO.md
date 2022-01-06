@@ -1,5 +1,3 @@
-* Mailgun
-* bugsnag
 * Marketing homepage.
 
 * user mgmt
