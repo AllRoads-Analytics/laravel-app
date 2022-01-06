@@ -1,13 +1,17 @@
-* Welcome email.
+* Mailgun
+* bugsnag
 * Marketing homepage.
-* unique org<>user relation. "you already belong" on invite accept
-* cross-site (host) funnels
 
-* Re-do dynamic hostname in queries
+* user mgmt
+ * pw update
+
+* "admin" user type
+* Plan enforcement (retention, pageview limit, users, funnels)
+* utm params follow?
+* follow: change how addMinutes done, in param check
+
 * parametize values from frontend (like pages) in queries, like @host
 * Consolidate Org/Tracker?
-
-* Domain name for Laravel & Pixel.
 
 * stripe setup.
   * invoice portal page

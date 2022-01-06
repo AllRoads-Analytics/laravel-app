@@ -97,19 +97,25 @@ class OrganizationUserController extends Controller
             return abort(403, 'Invite not found.');
         }
 
-        if ( ! auth()->user()) {
-            $Request->session()->put('invite_code', $invite_code);
-        } else {
+        $already_belongs = false;
+
+        if ($User = auth()->user()) {
             $Request->session()->pull('invite_code');
+            $already_belongs = $Invite->Organization->Users()->where('id', $User->id)->count()
+                ? true : false;
+        } else {
+            $Request->session()->put('invite_code', $invite_code);
         }
 
         return view('_pages.invites.accept', [
             'Organization' => $Invite->Organization,
+            'already_belongs' => $already_belongs,
         ]);
     }
 
     public function post_accept_invite(Request $Request, $invite_code) {
         $Invite = Invite::where('code', $invite_code)->first();
+        $User = auth()->user();
 
         if ( ! $Invite) {
             return abort(403, 'Invite not found.');
@@ -117,9 +123,11 @@ class OrganizationUserController extends Controller
 
         $Organization = $Invite->Organization;
 
-        $Organization->Users()->attach(auth()->user(), [
-            'role' => $Invite->role,
-        ]);
+        if ( ! $Organization->Users()->where('id', $User->id)->count()) {
+            $Organization->Users()->attach($User, [
+                'role' => $Invite->role,
+            ]);
+        }
 
         $Invite->delete();
 

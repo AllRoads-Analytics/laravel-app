@@ -23,28 +23,31 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-    <!-- Start AllRoads Snippet -->
-    <script>
-    ! function(e, t, n, a, p, r, s) {
-    e[a] || ((p = e[a] = function() {
-    p.process ? p.process.apply(p, arguments) : p.queue.push(arguments)
-    }).queue = [], p.t = +new Date, (r = t.createElement(n)).async = 1, r.src = "https://events.allroadsanalytics.com/allroads.min.js?t=" + 864e5 * Math.ceil(new Date / 864e5), (s = t.getElementsByTagName(n)[0]).parentNode.insertBefore(r, s))
-    }(window, document, "script", "allroads"),
-    allroads("init", "ID-timcom", {follow: true}),
-    allroads("event", "pageload");
-    </script>
-    <!-- End AllRoads Snippet -->
+    @if ('production' === config('app.env'))
+        <!-- Start AllRoads Snippet -->
+        <script>
+        ! function(e, t, n, a, p, r, s) {
+        e[a] || ((p = e[a] = function() {
+        p.process ? p.process.apply(p, arguments) : p.queue.push(arguments)
+        }).queue = [], p.t = +new Date, (r = t.createElement(n)).async = 1, r.src = "https://events.allroadsanalytics.com/allroads.min.js?t=" + 864e5 * Math.ceil(new Date / 864e5), (s = t.getElementsByTagName(n)[0]).parentNode.insertBefore(r, s))
+        }(window, document, "script", "allroads"),
+        allroads("init", "ID-timcom", {follow: true}),
+        allroads("event", "pageload");
+        </script>
+        <!-- End AllRoads Snippet -->
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R2B4E76E6P"></script>
-   <script>
-   window.dataLayer = window.dataLayer || [];
-   function gtag(){dataLayer.push(arguments);}
-   gtag('js', new Date());
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-R2B4E76E6P"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
-   gtag('config', 'G-R2B4E76E6P');
-   </script>
-    <!-- end Global site tag (gtag.js) - Google Analytics -->
+        gtag('config', 'G-R2B4E76E6P');
+        </script>
+        <!-- end Global site tag (gtag.js) - Google Analytics -->
+    @endif
+
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">

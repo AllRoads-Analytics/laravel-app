@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Mail\WelcomeMail;
+use App\Models\Organization;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -42,6 +45,18 @@ class User extends Authenticatable
         self::ROLE_EDITOR,
         self::ROLE_VIEWER,
     ];
+
+
+    // =========================================================================
+    // Lifecycle event handlers.
+    // =========================================================================
+
+    protected static function booted() {
+        static::created( function($User) {
+            Mail::to($User->email)->send(new WelcomeMail($User));
+        });
+    }
+
 
     // =========================================================================
     // Relations.
