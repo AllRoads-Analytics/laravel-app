@@ -1,6 +1,4 @@
-# Pathfinder
-
-1-jebkb5yy-kvlccbrl
+# AllRoads Analytics
 
 ## Query examples
 

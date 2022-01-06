@@ -1,3 +1,11 @@
+$new_palette: (
+    a: #AD8500,
+    b: #FFD13B,
+    c: #FAC000,
+    d: #0017AD,
+    e: #8292FA
+);
+
 // Body
 $body-bg: #fffdee;
 
@@ -19,13 +27,13 @@ $gray-800: #343a40 !default;
 $gray-900: #212529 !default;
 $black:    #000 !default;
 
-$blue: #0b52bb;
+$blue: #0017AD;
 $indigo: #6574cd;
 $purple: #9561e2;
 $pink: #f66d9b;
 $red: #96221e;
 $orange: #f6993f;
-$yellow: #ffe100;
+$yellow: #f1ea0c;
 $green: #157e41;
 $teal: #4dc0b5;
 $cyan: #cfe5e3;
