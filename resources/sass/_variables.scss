@@ -7,7 +7,7 @@ $new_palette: (
 );
 
 // Body
-$body-bg: #fffdee;
+$body-bg: #f3f3f3;
 
 // Typography
 $font-family-sans-serif: 'Nunito', sans-serif;
@@ -44,14 +44,11 @@ $success:       $green !default;
 $info:          $cyan !default;
 $warning:       $yellow !default;
 $danger:        $red !default;
-$light:         $gray-100 !default;
+$light:         $gray-200 !default;
 $dark:          $gray-900 !default;
 
 // Spacing
 $headings-margin-bottom: 1rem;
-
-// Cards
-$card-cap-bg: $gray-300;
 
 // Inputs
 $input-bg: white;
@@ -59,3 +56,7 @@ $input-bg: white;
 // Navbar
 $navbar-dark-color: rgba($white, .75);
 $navbar-dark-hover-color: rgba($white, .95);
+
+// Cards
+$card-cap-bg: $gray-700;
+$card-cap-color: white;

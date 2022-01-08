@@ -20,6 +20,8 @@ class BillingController extends Controller
             'Organization' => $Organization,
             'Plan' => $Organization->getPlan(),
             'plans' => config('billing.plans'),
+            'allowed_plan_ids' => $Organization->getAllowedPlans()
+                ->pluck('id')->toArray(),
         ]);
     }
 

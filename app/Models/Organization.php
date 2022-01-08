@@ -66,7 +66,9 @@ class Organization extends ModelAbstract
         return $this->Plan = Plan::getById('free');
     }
 
-    /** @var PlanUsage */
+    /**
+     * @return PlanUsage
+     */
     public function getPlanUsage() {
         return PlanUsage::init($this, $this->getPlan());
     }
@@ -103,5 +105,17 @@ class Organization extends ModelAbstract
         return $this;
     }
 
-    // public function newOrUpdateSubscription
+    public function getAllowedPlans() {
+        $usage = $this->getPlanUsage()->getAll();
+
+        return Plan::all()->reduce( function($plans, $Plan) use ($usage) {
+            foreach (PlanUsage::LIMITS as $key => $label) {
+                if (null !== $Plan->$key && $usage[$key]['usage'] > $Plan->$key) {
+                    return $plans;
+                }
+            }
+
+            return $plans->push($Plan);
+        }, collect());
+    }
 }

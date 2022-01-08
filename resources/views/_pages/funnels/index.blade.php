@@ -14,10 +14,20 @@
                 @livewire('funnels', ['Organization' => $Organization])
             </div>
 
-            <a href="{{ route('pathfinder.tracker', $Tracker->pixel_id) }}" class="btn btn-success mt-2">
-                <i class="fas fa-plus"></i>
-                New Funnel
-            </a>
+            @if ($Organization->getPlanUsage()->limitReached('limit_funnels'))
+                <div class="mt-3 row">
+                    <div class="col-md-5">
+                        <x-plan-limit-reached :organization="$Organization">
+                            Funnel limit reached.
+                        </x-plan-limit-reached>
+                    </div>
+                </div>
+            @else
+                <a href="{{ route('pathfinder.tracker', $Tracker->pixel_id) }}" class="btn btn-success mt-2">
+                    <i class="fas fa-plus"></i>
+                    New Funnel
+                </a>
+            @endif
         </div>
     </div>
 </div>

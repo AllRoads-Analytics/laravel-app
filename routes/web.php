@@ -85,7 +85,7 @@ Route::prefix('organizations/{organization}')->group(function() {
 
     Route::get('/funnels', [
         FunnelController::class, 'index'
-    ])->name('funnels.index');
+    ])->name('funnels.index')->middleware('plan_usage.pageviews');
 });
 
 
@@ -108,7 +108,7 @@ Route::post('/accept-invite/{invite_code}', [
 
 Route::get('/funnel-explorer/{tracker:pixel_id}', [
     PathfinderController::class, 'get_tracker'
-])->name('pathfinder.tracker');
+])->name('pathfinder.tracker')->middleware('plan_usage.pageviews');
 
 Route::get('/funnel-explorer/ajax/{tracker:pixel_id}/filter_options', [
     PathfinderController::class, 'ajax_get_filter_options'

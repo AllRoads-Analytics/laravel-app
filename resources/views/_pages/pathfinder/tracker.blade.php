@@ -22,6 +22,7 @@
         <div class="col">
             <pathfinder
             pixel_id="{{ $Tracker->pixel_id }}"
+            view_days="{{ $view_days }}"
             ></pathfinder>
         </div>
     </div>

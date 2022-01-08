@@ -20,6 +20,7 @@ class PathfinderController extends Controller
 
         return view('_pages.pathfinder.tracker', [
             'Tracker' => $Tracker,
+            'view_days' => $Tracker->Organization->getPlan()->limit_data_view_days,
         ]);
     }
 

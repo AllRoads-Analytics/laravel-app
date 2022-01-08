@@ -59,10 +59,8 @@ class OrganizationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Organization $Organization)
     {
-        $Organization = Organization::find($id);
-
         $this->authorize('view', $Organization);
 
         if ( ! $Organization) {

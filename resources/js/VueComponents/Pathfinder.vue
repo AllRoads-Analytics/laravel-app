@@ -6,6 +6,7 @@
                 <div class="col-md-3">
                     <label for="start_date">Start</label>
                     <input type="date" class="form-control" id="start_date"
+                    :min="input_min_date" :max="input_end_date"
                     @change="setStartDate"
                     v-model="input_start_date">
                 </div>
@@ -13,13 +14,14 @@
                 <div class="col-md-3">
                     <label for="start_date">End</label>
                     <input type="date" class="form-control" id="end_date"
+                    :min="input_min_date" :max="input_end_date"
                     @change="setEndDate"
                     v-model="input_end_date">
                 </div>
 
                 <div class="col-md-6">
-                    <div class="card bg-light">
-                        <div class="card-header">
+                    <div class="card">
+                        <div class="card-header bg-light text-dark">
                             <button @click="filters_open = ! filters_open" class="btn-plain w-100">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
@@ -177,37 +179,22 @@ import NextPages from './Pathfinder/NextPages.vue';
 
 import date from 'date-and-time';
 
-// import { reactive } from "vue";
-
 const queryString = require('query-string');
-
-const endDate = new Date();
-const startDate = date.addMonths(endDate, -1);
-
-const startDateString = date.format(startDate, 'YYYY-MM-DD');
-const endDateString = date.format(endDate, 'YYYY-MM-DD');
 
 export default {
     components: [ NextPages, Funnel ],
 
     props: {
         pixel_id: String,
+        view_days: String,
     },
-
-    // setup() {
-    //     let filters_secondary = reactive({});
-
-    //     return {
-    //         filters_secondary
-    //     };
-    // },
 
     data() {
         return {
             filters: {
                 previous_pages: [],
-                start_date: startDateString,
-                end_date: endDateString,
+                start_date: null,
+                end_date: null,
                 ready: false,
             },
 
@@ -217,8 +204,9 @@ export default {
             funnel_id: null,
             funnel_name: null,
 
-            input_start_date: startDateString,
-            input_end_date: endDateString,
+            input_start_date: null,
+            input_end_date: null,
+            input_min_date: null,
             input_funnel_name: '',
             filters_open: false,
 
@@ -274,6 +262,10 @@ export default {
         // },
 
         updateFilterOptions() {
+            if ( ! (this.filters.start_date && this.filters.end_date) ) {
+                return;
+            }
+
             Axios.get( route('pathfinder.ajax.get_filter_options', {
                 tracker: this.pixel_id,
                 start_date: this.filters.start_date,
@@ -409,14 +401,23 @@ export default {
     },
 
     beforeMount() {
+        const view_days_int = parseInt(this.view_days);
+
+        const endDate = new Date();
+        const minDate = date.addDays(endDate, -1 * view_days_int);
+        const startDate = view_days_int > 30 ? date.addDays(endDate, -1 * 30) : minDate;
+
+        const startDateString = date.format(startDate, 'YYYY-MM-DD');
+        const endDateString = date.format(endDate, 'YYYY-MM-DD');
+        const minDateString = date.format(minDate, 'YYYY-MM-DD');
+
+        this.input_start_date = startDateString;
+        this.input_end_date = endDateString;
+        this.input_min_date = minDateString;
+        this.filters.start_date = startDateString;
+        this.filters.end_date = endDateString;
+
         this.parseUrl();
-        this.updateFilterOptions();
-
-        // const end = new Date();
-        // const start = date.addMonths(end, -1);
-
-        // this.filters.start_date = date.format(start, 'YYYY-MM-DD');
-        // this.filters.end_date = date.format(end, 'YYYY-MM-DD');
 
         if ( ! this.funnel_id) {
             this.editing = true;

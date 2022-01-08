@@ -23,19 +23,26 @@
 
         <div class="row g-2">
             @foreach ($plans as $id => $plan)
+                @php
+                    $allowed = in_array($id, $allowed_plan_ids);
+                @endphp
+
                 <div class="col-md">
                     <div class="card">
                         <label for="{{ $id }}" style="cursor: pointer;">
-                            <div class="card-header bg-primary-z text-white-z fw-bold fs-5">
+                            <div class="card-header bg-light text-dark fw-bold fs-5">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div>
                                         {{ $plan['label'] }}
                                     </div>
 
+
+
                                     <div>
                                         <input type="radio" name="plan" class="form-check-input" id="{{ $id }}"
                                         value="{{ $id }}"
-                                        {{ $Plan->id === $id ? 'checked' : '' }}>
+                                        {{ $Plan->id === $id ? 'checked' : '' }}
+                                        {{ $allowed ? '' : 'disabled'}}>
                                     </div>
                                 </div>
                             </div>
@@ -75,8 +82,12 @@
                                 </div>
                             @endif
 
-                            @if ('free' === $id && $Plan && $Plan->id !== 'free')
-                                <div class="alert alert-secondary p-2 m-0" role="alert">
+                            @if ( ! $allowed)
+                                <div class="alert alert-danger small px-2 py-1 m-0">
+                                    Current usage is too high for this plan.
+                                </div>
+                            @elseif ('free' === $id && $Plan && $Plan->id !== 'free')
+                                <div class="alert alert-secondary small px-2 py-1 m-0">
                                     Will stay on current plan until end of billing cycle.
                                 </div>
                             @endif
@@ -90,6 +101,16 @@
             <button class="btn btn-primary btn-lg" type="submit" style="width: 100%; max-width: 300px;">
                 Select
             </button>
+        </div>
+
+        <div class="row mt-4 text-muted text-center">
+            <div class="col">
+                To cancel subscription and delete account, please email
+                <a href="mailto:{{ config('allroads.contact_email') }}"
+                class="text-reset">
+                    {{ config('allroads.contact_email') }}
+                </a>
+            </div>
         </div>
     </div>
 </form>

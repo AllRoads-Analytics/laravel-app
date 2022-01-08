@@ -1,5 +1,7 @@
 <?php namespace App\Services;
 
+use Illuminate\Support\Fluent;
+
 /**
  * @property-read string $id
  * @property-read string $label
@@ -10,12 +12,12 @@
  * @property-read integer $limit_pageviews_per_month
  * @property-read string $monthly_price_stripe_id
  */
-class Plan {
-    protected $config;
+class Plan extends Fluent {
+    protected $attributes;
 
     public function __get($name) {
-        if (in_array($name, array_keys($this->config))) {
-            return $this->config[$name];
+        if (in_array($name, array_keys($this->attributes))) {
+            return $this->attributes[$name];
         }
 
         return null;
@@ -30,7 +32,7 @@ class Plan {
             throw new \Exception("Invalid plan ID [$id].");
         }
 
-        $this->config = config("billing.plans.$id");
+        $this->attributes = config("billing.plans.$id");
     }
 
     public static function getById(string $id) {
@@ -54,6 +56,12 @@ class Plan {
 
     public static function allIds() {
         return array_keys(config('billing.plans'));
+    }
+
+    public static function all() {
+        return collect(static::allIds())->reduce( function ($plans, $id) {
+            return $plans->push(static::getById($id));
+        }, collect());
     }
 
 

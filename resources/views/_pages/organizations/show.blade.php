@@ -166,11 +166,21 @@
 
                             <div class="mt-3"
                             x-data="{ open: false }">
-                                <button class="btn btn-success"
-                                x-on:click="open = true" x-show=" ! open">
-                                    <i class="fas fa-plus"></i>
-                                    Add
-                                </button>
+                                @if ($Organization->getPlanUsage()->limitReached('limit_users'))
+                                    <div class="mt-3 row">
+                                        <div class="col-md-6">
+                                            <x-plan-limit-reached :organization="$Organization">
+                                                User limit reached.
+                                            </x-plan-limit-reached>
+                                        </div>
+                                    </div>
+                                @else
+                                    <button class="btn btn-success"
+                                    x-on:click="open = true" x-show=" ! open">
+                                        <i class="fas fa-plus"></i>
+                                        Add
+                                    </button>
+                                @endif
 
                                 <div x-show="open" x-cloak
                                 class="col-lg-6">
@@ -310,7 +320,7 @@
                         </div>
                     </div>
 
-                    <div class="card card-danger text-center">
+                    {{-- <div class="card card-danger text-center">
                         <div class="card-header fs-5 fw-bold bg-danger text-white text-start">
                             Danger Zone
                         </div>
@@ -332,24 +342,26 @@
                                 </form>
                             </div>
                         </div>
+                    </div> --}}
                 @endif
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        function copyCode() {
-            /* Get the text field */
-            var copyText = document.getElementById("codeSnippet");
+<script>
+    function copyCode() {
+        /* Get the text field */
+        var copyText = document.getElementById("codeSnippet");
 
-            /* Select the text field */
-            copyText.select();
-            copyText.setSelectionRange(0, 99999); /* For mobile devices */
+        /* Select the text field */
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /* For mobile devices */
 
-            /* Copy the text inside the text field */
-            navigator.clipboard.writeText(copyText.value);
+        /* Copy the text inside the text field */
+        navigator.clipboard.writeText(copyText.value);
 
-            copyText.setSelectionRange(0,0);
-        }
-    </script>
+        copyText.setSelectionRange(0,0);
+    }
+</script>
 @endsection

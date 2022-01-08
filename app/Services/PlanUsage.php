@@ -33,7 +33,7 @@ class PlanUsage {
 
 
     // =========================================================================
-    // Public instance functions.
+    // Getters.
     // =========================================================================
 
     public function getAll() {
@@ -62,13 +62,13 @@ class PlanUsage {
     }
 
     public function get_usage_limit_users() {
-        return $this->Organization->Users()->count();
+        return $this->Organization->Users()->count() + $this->Organization->Invites()->count();
     }
 
     public function get_usage_limit_pageviews_per_month() {
         return (integer) cache()->remember(
             "usage_limit_pageviews_per_month_{$this->Organization->id}",
-            300, // 300 sec = 5 min
+            1800, // 1800 sec = 30 min
             function() {
                 return PixelDataTotalPageviews::init()
                     ->setTracker($this->Organization->getTracker())
@@ -76,5 +76,28 @@ class PlanUsage {
                     ->getPageviewCount();
             }
         );
+    }
+
+
+    // =========================================================================
+    // Public instance functions.
+    // =========================================================================
+
+    public function limitReached($key) {
+        if ( ! in_array($key, array_keys(self::LIMITS))) {
+            throw new \Exception("Plan limit [$key] does not exist.");
+        }
+
+        return $this->{"get_usage_$key"}() >= $this->Plan->$key;
+    }
+
+    public function anyLimitReached() {
+        foreach (self::LIMITS as $key => $value) {
+            if ($this->limitReached($key)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

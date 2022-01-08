@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-        <div class="card-header bg-info p-3">
+        <div class="card-header bg-info text-black p-3">
             <h5 class=" m-0">
                 Select {{ first ? 'starting' : 'next' }} page:
             </h5>
