@@ -9,16 +9,28 @@
     <div class="row">
         <div class="col">
               <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item active">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item">
                         {{ $Tracker->Organization->name }}
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('funnels.index', $Tracker->Organization) }}">
+                            Saved Funnels
+                        </a>
                     </li>
                 </ol>
               </nav>
         </div>
     </div>
 
-    <div class="row">
+    <div class="row mt-2">
+        <h1 class="m-0">
+            Funnel Explorer
+        </h1>
+    </div>
+
+    <div class="row mt-2">
         <div class="col">
             <pathfinder
             pixel_id="{{ $Tracker->pixel_id }}"

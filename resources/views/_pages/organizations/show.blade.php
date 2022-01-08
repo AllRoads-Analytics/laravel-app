@@ -18,7 +18,8 @@
 
                     <div class="card-body">
                         <p class="mb-2">
-                            Add the following, before the end of the <code>{{ '<body>' }}</code> tag.
+                            Add the following, before the end of the <code>{{ '<body>' }}</code> tag,
+                            <b>on all sites</b> you wish to track.
                         </p>
 
                         <div class="form">

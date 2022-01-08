@@ -4,7 +4,6 @@
  * pw update
 
 * "admin" user type
-* Plan enforcement (retention, pageview limit, users, funnels)
 
 * pixel: session id
 

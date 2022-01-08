@@ -93,13 +93,12 @@
 
         <!-- Funnel -->
         <div v-show="filters.previous_pages.length > 0" class="mb-5">
-            <div class="row mb-3">
+            <div class="row mb-3 mb-md-1">
                 <div class="col">
                     <div class="row g-2 align-items-center justify-content-between">
                         <div class="col-md">
                             <h4 class="mb-1">
-                                {{ funnel_id ? '' : 'New' }}
-                                Funnel
+                                {{ funnel_id ? 'Saved Funnel:' : 'New Funnel' }}
                             </h4>
 
                             <h5 class="m-0" v-if="!editing"><i>{{ funnel_name ? funnel_name : '' }}</i></h5>
@@ -118,6 +117,13 @@
                                     @click="editing = true">
                                         <i class="fas fa-edit"></i> Edit
                                     </button>
+
+                                    <a class="btn btn-outline-success ms-2"
+                                    :href="window_location"
+                                    v-show="!editing">
+                                        <i class="fas fa-sync-alt"></i>
+                                        New Funnel
+                                    </a>
 
                                     <button type="button" class="btn btn-link"
                                     v-show="editing"
@@ -213,6 +219,8 @@ export default {
             filter_options: [],
             selected_filter: '',
             selected_filter_option: '',
+
+            window_location: window.location.pathname,
         };
     },
 
