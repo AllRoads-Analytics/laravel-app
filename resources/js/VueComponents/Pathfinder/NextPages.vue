@@ -69,7 +69,7 @@
             <div class="row justify-content-center mt-3" v-show=" ! loading">
                 <div class="col">
                     <nav aria-label="Page navigation">
-                        <ul class="pagination">
+                        <ul class="pagination justify-content-cente">
                             <li class="page-item" :class="page === 0 ? 'disabled' : ''">
                                 <button class="page-link"
                                 @click="decrementPage()">
