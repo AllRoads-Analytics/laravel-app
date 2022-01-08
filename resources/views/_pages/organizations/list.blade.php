@@ -30,10 +30,10 @@
                 <div class="card mb-2">
                     <div class="card-body">
                         <div class="row align-items-center g-2">
-                            <div class="fs-5 col-md-6">
+                            <div class="fs-6 col-md-6">
                                 {{ $Organization->name }}
 
-                                <span class="badge bg-info text-dark ms-1" style="font-size: .65em">
+                                <span class="badge bg-info text-dark ms-1">
                                     {{ $Organization->pivot->role }}
                                 </span>
                             </div>

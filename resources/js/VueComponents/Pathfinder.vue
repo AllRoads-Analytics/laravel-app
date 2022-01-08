@@ -21,7 +21,7 @@
 
                 <div class="col-md-6">
                     <div class="card">
-                        <div class="card-header bg-light text-dark">
+                        <div class="card-header bg-white text-dark">
                             <button @click="filters_open = ! filters_open" class="btn-plain w-100">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
