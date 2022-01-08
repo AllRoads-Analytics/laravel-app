@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 
 class PathfinderController extends Controller
 {
-    const PAGE_SIZE = 5;
+    const PAGE_SIZE = 10;
 
     public function get_tracker(Request $Request, Tracker $Tracker) {
         $this->authorize('view', $Tracker->Organization);

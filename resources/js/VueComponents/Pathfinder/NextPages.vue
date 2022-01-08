@@ -34,51 +34,41 @@
             </div>
         </div>
 
-        <div class="card-body pb-3 pt-1">
+        <div class="card-body pb-3 pt-1 px-0">
             <div class="row justify-content-center my-1">
                 <div class="col">
-                    <div>
-                        <table class="table align-middle">
-                            <!-- <thead>
-                                <tr>
-                                    <th scope="col">
-                                        Select {{ first ? 'starting' : 'next' }} page
-                                    </th>
-
-                                    <th scope="col">Views</th>
-                                </tr>
-                            </thead> -->
-
-                            <tbody v-show=" ! loading">
-                                <tr v-for="path, idx in next_pages" :key="idx" >
-                                    <td>
-                                        <button type="button" class="btn btn-link text-start"
-                                        @click="$emit('addPreviousPage', path.host_path)">
-                                            {{ path.host_path }}
+                    <div v-show=" ! loading">
+                        <div v-for="path, idx in next_pages" :key="idx">
+                            <div class="p-2 px-md-4 border-bottom">
+                                <div class="d-flex align-items-center justify-content-between gap-2">
+                                    <div class="flex-grow-1 text-break">
+                                        <button type="button" class="btn btn-link text-start px-0"
+                                        @click="$emit('addPreviousPage', path.host_path)"
+                                        v-html="path.host_path">
                                         </button>
-                                    </td>
+                                    </div>
 
-                                    <td class="text-end">
+                                    <div class="">
                                         {{ path.views }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div v-show="loading" class="mx-3 text-secondary">
+                    <div v-show="loading" class="mx-3 text-secondary mt-3">
                         <i>Loading...</i>
                     </div>
 
-                    <div v-show=" ! loading && next_pages.length < 1 && this.page === 0" class="mx-3 mb-2">
+                    <div v-show=" ! loading && next_pages.length < 1 && this.page === 0" class="mx-3 mt-3 mb-2">
                         <i>No subsequent pages.</i>
                     </div>
                 </div>
             </div>
 
-            <div class="row justify-content-center mt-1" v-show=" ! loading">
+            <div class="row justify-content-center mt-3" v-show=" ! loading">
                 <div class="col">
-                    <nav aria-label="Page navigation example">
+                    <nav aria-label="Page navigation">
                         <ul class="pagination">
                             <li class="page-item" :class="page === 0 ? 'disabled' : ''">
                                 <button class="page-link"
