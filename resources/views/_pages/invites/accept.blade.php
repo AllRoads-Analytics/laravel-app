@@ -20,7 +20,7 @@
                 @else
                     <h5>
                         Please
-                        <a href="{{ route('login') }}">{{ __('login') }}</a>
+                        <a href="{{ route('login') }}">{{ __('Log in') }}</a>
                         or
                         <a href="{{ route('register') }}">{{ __('sign up') }}</a>
                         to accept.

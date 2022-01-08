@@ -24,8 +24,8 @@
                 </div>
             @else
                 <a href="{{ route('pathfinder.tracker', $Tracker->pixel_id) }}" class="btn btn-success mt-2">
-                    <i class="fas fa-plus"></i>
-                    New Funnel
+                    <i class="fas fa-compass me-1"></i>
+                    New Funnel Explorer
                 </a>
             @endif
         </div>

@@ -27,7 +27,7 @@
                     $allowed = in_array($id, $allowed_plan_ids);
                 @endphp
 
-                <div class="col-md">
+                <div class="col-lg">
                     <div class="card">
                         <label for="{{ $id }}" style="cursor: pointer;">
                             <div class="card-header bg-light text-dark fw-bold fs-5">

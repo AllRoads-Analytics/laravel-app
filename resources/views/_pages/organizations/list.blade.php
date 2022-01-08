@@ -4,7 +4,27 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            <h3>Your Organizations</h3>
+            @if ($organizations->count())
+                <h3>Your Organizations</h3>
+            @else
+                <div class="row">
+                    <div class="col">
+                        <p>
+                            Welcome!
+                        </p>
+
+                        <p>
+                            If you signed-up to join an existing organization,
+                            click on the link in the invite email you recieved.
+                        </p>
+
+                        <p>
+                            Otherwise, click below to create a new Organization
+                            (free plan available) and get started!
+                        </p>
+                    </div>
+                </div>
+            @endif
 
             @foreach ($organizations as $Organization)
                 <div class="card mb-2">

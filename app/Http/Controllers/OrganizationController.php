@@ -50,7 +50,7 @@ class OrganizationController extends Controller
             'name' => $request->input('company'),
         ])->addUser(auth()->user(), User::ROLE_ADMIN);
 
-        return redirect()->route('organizations.show', $Organization->id);
+        return redirect()->route('organizations.billing.get_select_plan', $Organization->id);
     }
 
     /**

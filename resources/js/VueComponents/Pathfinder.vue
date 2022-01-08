@@ -121,8 +121,8 @@
                                     <a class="btn btn-outline-success ms-2"
                                     :href="window_location"
                                     v-show="!editing">
-                                        <i class="fas fa-sync-alt"></i>
-                                        New Funnel
+                                        <i class="fas fa-compass me-1"></i>
+                                        New Funnel Explorer
                                     </a>
 
                                     <button type="button" class="btn btn-link"
