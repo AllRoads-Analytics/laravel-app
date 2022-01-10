@@ -6,6 +6,8 @@
 * "admin" user type
 
 * pixel: session id
+* test follow=false
+* pages: wildcard, "or" logic
 
 * parametize values from frontend (like pages) in queries, like @host
 * Consolidate Org/Tracker?
@@ -16,4 +18,8 @@
   * webhooks
   * txn emails
 
+* privacy policy / compliance
+
 * Account delete -> subscription cancellation.
+
+* Demo video

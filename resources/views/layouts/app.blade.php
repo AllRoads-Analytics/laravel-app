@@ -20,8 +20,9 @@
     <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&family=Fugaz+One&display=swap" rel="stylesheet">
 
     @if ('production' === config('app.env'))
         <!-- Start AllRoads Snippet -->
@@ -57,9 +58,9 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    <img src="{{ asset('favicon-32x32.png') }}" alt="{{ config('app.label', 'Laravel') }}"
-                    class="">
+                <a class="navbar-brand font-allroads fs-4" href="{{ url('/') }}">
+                    <img src="{{ asset('android-chrome-192x192.png') }}" alt="{{ config('app.label', 'Laravel') }}"
+                    class="" style="width: 38px;">
                     {{ config('app.label', 'Laravel') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">

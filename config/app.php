@@ -14,7 +14,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
-    'label' => 'ALLRoads Analytics',
+    'label' => 'AllRoads Analytics',
 
     /*
     |--------------------------------------------------------------------------

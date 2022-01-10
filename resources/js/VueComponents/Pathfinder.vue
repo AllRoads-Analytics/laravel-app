@@ -92,7 +92,7 @@
         <hr>
 
         <!-- Funnel -->
-        <div v-show="filters.previous_pages.length > 0" class="mb-5">
+        <div v-show="filters.previous_pages.length > 0" class="mb-3">
             <div class="row mb-3 mb-md-1">
                 <div class="col">
                     <div class="row g-2 align-items-center justify-content-between">
@@ -112,13 +112,13 @@
                         <div class="col-md text-md-end">
                             <div class="d-flex align-items-center justify-content-md-end">
                                 <div class="mr-2" v-if="funnel_id">
-                                    <button type="button" class="btn btn-primary"
+                                    <button type="button" class="btn btn-sm btn-outline-primary"
                                     v-show="!editing"
                                     @click="editing = true">
                                         <i class="fas fa-edit"></i> Edit
                                     </button>
 
-                                    <a class="btn btn-outline-success ms-2"
+                                    <a class="btn btn-outline-success btn-sm ms-2"
                                     :href="window_location"
                                     v-show="!editing">
                                         <i class="fas fa-compass me-1"></i>

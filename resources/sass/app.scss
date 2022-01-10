@@ -1,5 +1,5 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+// @import url('https://fonts.googleapis.com/css?family=Nunito&family=Fugaz+One&display=swap');
 
 // Variables
 @import 'variables';
@@ -13,6 +13,10 @@
 @import "~@fortawesome/fontawesome-free/css/brands";
 
 [x-cloak] { display: none !important; }
+
+.font-allroads {
+    font-family: Fugaz One, cursive;
+}
 
 ul, ol {
     margin-bottom: 0;
