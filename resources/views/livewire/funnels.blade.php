@@ -55,13 +55,14 @@
                             <div>
                                 <button x-on:click="show = !show" class="btn btn-sm btn-light">
                                     Steps
-                                    <span x-show="!show" x-cloak><i class="fas fa-chevron-down"></i></span>
-                                    <span x-show="show"><i class="fas fa-chevron-up"></i></span>
+                                    <span x-show="!show"><i class="fas fa-chevron-down"></i></span>
+                                    <span x-show="show" x-cloak><i class="fas fa-chevron-up"></i></span>
                                 </button>
                             </div>
-                            <div x-show="show" x-cloak class="mt-2 ms-2 ms-md-0 text-secondary">
-                                @foreach ($Funnel->steps as $step)
+                            <div x-show="show" x-cloak class="md-0 text-start rounded bg-light p-2">
+                                @foreach ($Funnel->steps as $idx => $step)
                                     <div>
+                                        <b>{{ $idx + 1 }}.</b>
                                         {{ $step['label'] }}
                                     </div>
                                 @endforeach
