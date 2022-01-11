@@ -33,7 +33,7 @@
                                 <div class="card-body">
                                     <div class="fw-bold d-flex align-items-center">
                                         <div class="badge bg-dark me-3 fs-6">{{ idx + 1 }}</div>
-                                        <div class="text-break" v-html="page.page.replace('/', '<br>/')"></div>
+                                        <div class="text-break" v-html="page.label.replace('/', '<br>/')"></div>
                                     </div>
 
                                     <div class="mt-3">
@@ -78,7 +78,7 @@
 
                                     <button type="button" class="btn btn-sm btn-outline-danger mt-3"
                                     v-show="editing"
-                                    @click="$emit('removePage', page.page)">
+                                    @click="$emit('removeStep', idx)">
                                         <i class="fas fa-minus-circle"></i>
                                     </button>
                                 </div>
@@ -110,7 +110,7 @@ export default {
 
     methods: {
         update() {
-            if (0 === this.filters.previous_pages.length) {
+            if (0 === this.filters.previous_steps.length) {
                 this.page_views = [];
                 this.loading = false;
                 return;

@@ -12,6 +12,9 @@ class Funnel extends ModelAbstract
         'steps' => 'array',
     ];
 
+    const STEP_TYPE_PAGELOAD_HOST_PATH = 'pageload_host_path';
+    const STEP_TYPE_PAGELOAD_HOST_PATH_LIKE = 'pageload_host_path_like';
+
     // =========================================================================
     // Relations.
     // =========================================================================
@@ -25,33 +28,10 @@ class Funnel extends ModelAbstract
     // Public getters.
     // =========================================================================
 
-    public function getPages() {
-        return collect($this->steps)
-            ->filter( fn($step) => 'pageload' === $step['ev'] )
-            ->pluck('path')
-            ->toArray();
-    }
-
     public function getRoute() {
         return route('pathfinder.tracker', [
             'tracker' => $this->Organization->getTracker()->pixel_id,
             'funnel' => $this->id,
-        ]);
-    }
-
-
-    // =========================================================================
-    // Public mutators.
-    // =========================================================================
-
-    public function updatePages(array $pages) {
-        return $this->fill([
-            'steps' => array_map(function($page) {
-                return [
-                    'ev' => 'pageload',
-                    'path' => $page,
-                ];
-            }, $pages),
         ]);
     }
 

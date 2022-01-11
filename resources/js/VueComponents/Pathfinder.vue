@@ -4,19 +4,28 @@
         <div class="mb-3 form">
             <div class="row g-3 align-items-end">
                 <div class="col-md-3">
-                    <label for="start_date">Start</label>
-                    <input type="date" class="form-control" id="start_date"
-                    :min="input_min_date" :max="input_end_date"
-                    @change="setStartDate"
-                    v-model="input_start_date">
+                    <div class="row">
+                        <label for="start_date" class="col-2 col-md-12 col-form-label">Start</label>
+                        <div class="col-10 col-md-12">
+                            <input type="date" class="form-control" id="start_date"
+                            :min="input_min_date" :max="input_end_date"
+                            @change="setStartDate"
+                            v-model="input_start_date">
+                        </div>
+                    </div>
                 </div>
 
                 <div class="col-md-3">
-                    <label for="start_date">End</label>
-                    <input type="date" class="form-control" id="end_date"
-                    :min="input_min_date" :max="input_end_date"
-                    @change="setEndDate"
-                    v-model="input_end_date">
+                    <div class="row">
+                        <label for="start_date" class="col-2 col-md-12 col-form-label">End</label>
+
+                        <div class="col-10 col-md-12">
+                            <input type="date" class="form-control" id="end_date"
+                            :min="input_min_date" :max="input_end_date"
+                            @change="setEndDate"
+                            v-model="input_end_date">
+                        </div>
+                    </div>
                 </div>
 
                 <div class="col-md-6">
@@ -92,20 +101,26 @@
         <hr>
 
         <!-- Funnel -->
-        <div v-show="filters.previous_pages.length > 0" class="mb-3">
+        <div v-show="filters.previous_steps.length > 0" class="mb-3">
             <div class="row mb-3 mb-md-1">
                 <div class="col">
-                    <div class="row g-2 align-items-center justify-content-between">
+                    <div class="row g-3 align-items-center justify-content-between">
                         <div class="col-md">
                             <h4 class="mb-1">
-                                {{ funnel_id ? 'Saved Funnel:' : 'New Funnel' }}
+                                {{ funnel_id ? 'Saved Funnel' : 'New Funnel' }}
                             </h4>
 
-                            <h5 class="m-0" v-if="!editing"><i>{{ funnel_name ? funnel_name : '' }}</i></h5>
+                            <h5 class="m-0" v-if="!editing">
+                                <div v-show="funnel_name">
+                                    <i class="fas fa-save me-1 text-secondary"></i>
+                                    <i>{{ funnel_name }}</i>
+                                </div>
+                            </h5>
 
                             <input type="text" class="form-control"
                             style="min-width: 40vw;"
                             v-model="input_funnel_name"
+                            v-on:keyup.enter="saveFunnel"
                             v-if="editing">
                         </div>
 
@@ -161,7 +176,7 @@
                 :filters="filters_all"
                 :init_funnel_id="funnel_id"
                 :editing="editing"
-                @removePage="removePreviousPage"
+                @removeStep="removePreviousStep"
             ></funnel>
         </div>
 
@@ -172,7 +187,7 @@
                     :pixel_id="pixel_id"
                     :filters="filters_all"
                     :options_hostname="options_hostname"
-                    @addPreviousPage="addPreviousPage"
+                    @addPreviousStep="addPreviousStep"
                 ></next-pages>
             </div>
         </div>
@@ -198,7 +213,7 @@ export default {
     data() {
         return {
             filters: {
-                previous_pages: [],
+                previous_steps: [],
                 start_date: null,
                 end_date: null,
                 ready: false,
@@ -225,13 +240,13 @@ export default {
     },
 
     methods: {
-        addPreviousPage(page) {
-            this.filters.previous_pages.push(page);
+        addPreviousStep(step) {
+            this.filters.previous_steps.push(step);
             // this.updateUrl();
         },
 
-        removePreviousPage(page) {
-            _.pull(this.filters.previous_pages, page);
+        removePreviousStep(step_idx) {
+            this.filters.previous_steps.splice(step_idx, 1);
             // this.updateUrl();
         },
 
@@ -260,10 +275,10 @@ export default {
         // updateUrl() {
         //     const url = new URL(window.location);
 
-        //     url.searchParams.delete('previous_pages');
+        //     url.searchParams.delete('previous_steps');
 
-        //     this.filters.previous_pages.forEach(page => {
-        //         url.searchParams.append('previous_pages', page);
+        //     this.filters.previous_steps.forEach(page => {
+        //         url.searchParams.append('previous_steps', page);
         //     });
 
         //     window.history.pushState({}, '', url);
@@ -291,16 +306,16 @@ export default {
         parseUrl() {
             const parsed = queryString.parse(location.search);
 
-            // const previous_pages = parsed ? (parsed.previous_pages ?? [] ) : [];
-            // this.filters.previous_pages = Array.isArray(previous_pages) ? previous_pages : [ previous_pages ];
+            // const previous_steps = parsed ? (parsed.previous_steps ?? [] ) : [];
+            // this.filters.previous_steps = Array.isArray(previous_steps) ? previous_steps : [ previous_steps ];
 
             this.funnel_id = parsed ? (parsed.funnel ?? null) : null;
 
             if (this.funnel_id) {
-                Axios.get( route('pathfinder.ajax.get_saved_funnel_pages', {
+                Axios.get( route('pathfinder.ajax.get_saved_funnel_steps', {
                     funnel: this.funnel_id
                 })).then( (response) => {
-                    this.filters.previous_pages = response.data.pages;
+                    this.filters.previous_steps = response.data.steps;
                     this.funnel_name = response.data.name;
                     this.input_funnel_name = this.funnel_name;
                     this.organization_id = response.data.organization_id;
@@ -321,15 +336,19 @@ export default {
             //     container: this.$refs.loader,
             //     backgroundColor: '#f8fafc',
             // });
+            if ( ! this.input_funnel_name) {
+                return alert('Name required.');
+            }
 
             Axios.post( route('pathfinder.ajax.post_funnel', {
                 id: this.funnel_id,
                 tracker: this.pixel_id,
-                pages: this.filters.previous_pages,
+                steps: this.filters.previous_steps,
                 name: this.input_funnel_name,
             })).then( (response) => {
                 this.funnel_id = response.data.Funnel.id;
                 this.funnel_name = response.data.Funnel.name;
+                this.organization_id = response.data.Funnel.organization_id;
                 this.editing = false;
 
                 const searchParams = new URLSearchParams(window.location.search);
@@ -356,7 +375,7 @@ export default {
                 window.location.replace(route('funnels.index', {organization: this.organization_id}));
             }).catch( (error) => {
                 console.log(error);
-                window.alert('Something went wrong.');
+                window.alert('Something went wrong. (delete funnel)');
             }).then( () => {
                 this.loading = false;
                 // loader.hide();

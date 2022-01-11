@@ -1,5 +1,6 @@
 <?php namespace App\Services\PixelData;
 
+use App\Models\Funnel;
 use Carbon\Carbon;
 use App\Models\Tracker;
 use App\Services\BigQueryService;
@@ -146,5 +147,82 @@ class PixelDataAbstract {
                 throw new \Exception("Attribute [$attribute] must be set on [" . $this::class . '] .');
             }
         }
+    }
+
+    protected function getUidsQuery($previous_steps) {
+        $start_string = $this->start_date->toDateString();
+        $end_string = $this->end_date->toDateString();
+
+        $first_step_where = $this->getStepWhere($previous_steps[0]);
+
+        $last_step_idx = count($previous_steps) -1;
+
+        $paths_select_string = '';
+        $joins_string = '';
+        foreach ($this->previous_steps as $idx => $_step) {
+            if ($idx !== 0) {
+                $filter_wheres = count($this->filters)
+                    ? 'AND ' . $this->generateWhereString($this->filters, "ev$idx")
+                    : '';
+
+                $paths_select_string .= ' + ';
+
+                $step_where = $this->getStepWhere($_step);
+
+                $prev_idx = $idx-1;
+                $joins_string .= "
+                    FULL OUTER JOIN :table ev$idx
+                        ON ev$idx.uid = ev0.uid
+                            AND ev$idx.id = @pixel_id
+                            AND ev$idx.ts > ev$prev_idx.ts
+                            AND date(ev$idx.ts) <= '$end_string'
+                            AND ( ev$idx.ev = 'pageload' OR ev$idx.ev = 'pageview' )
+                            AND ev$idx.$step_where
+                            $filter_wheres
+                ";
+            }
+
+            $paths_select_string .= "IF(ev$idx.host_path IS NOT NULL, 1, 0)";
+        }
+
+        $filter_wheres = count($this->filters)
+            ? 'AND ' . $this->generateWhereString($this->filters, "ev0")
+            : '';
+
+        $query = <<<SQL
+            SELECT uid, MAX(paths) as paths,
+                MIN(last_ts) as end_ts
+            FROM (
+                SELECT ev0.uid as uid, ev$last_step_idx.ts as last_ts,
+                    ( $paths_select_string ) AS paths
+                FROM :table ev0
+                    $joins_string
+
+                WHERE ev0.id = @pixel_id
+                    AND date(ev0.ts) >= '$start_string'
+                    AND date(ev0.ts) <= '$end_string'
+                    AND ( ev0.ev = 'pageload' OR ev0.ev = 'pageview' )
+                    AND ev0.$first_step_where
+                    $filter_wheres
+                ) inz
+            GROUP BY uid
+        SQL;
+
+        return $query;
+    }
+
+    protected function getStepWhere($step) {
+        if ( ! (isset($step['type']) && isset($step['match_data']))) {
+            throw new \Exception("Invalid step format.");
+        }
+
+        switch ($step['type']) {
+            case Funnel::STEP_TYPE_PAGELOAD_HOST_PATH:
+                return "host_path = '" . $step['match_data'] . "' ";
+            case Funnel::STEP_TYPE_PAGELOAD_HOST_PATH_LIKE:
+                return "host_path LIKE '" . $step['match_data'] . "' ";
+        }
+
+        throw new \Exception("Invalid step type: " . $step['type']);
     }
 }

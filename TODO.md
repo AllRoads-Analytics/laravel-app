@@ -5,11 +5,8 @@
 
 * "admin" user type
 
-* pixel: session id
-* test follow=false
-* pages: wildcard, "or" logic
+* parametize values from frontend (like pages) in queries, like @host (made access read-only, already)
 
-* parametize values from frontend (like pages) in queries, like @host
 * Consolidate Org/Tracker?
 
 * stripe setup.
@@ -23,3 +20,6 @@
 * Account delete -> subscription cancellation.
 
 * Demo video
+
+* bigger laravel server
+  * move DB and sessions?

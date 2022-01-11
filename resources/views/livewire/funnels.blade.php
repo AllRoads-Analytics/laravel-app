@@ -54,13 +54,17 @@
                         class="col-md-7 text-md-end">
                             <div>
                                 <button x-on:click="show = !show" class="btn btn-sm btn-light">
-                                    Pages
+                                    Steps
                                     <span x-show="!show" x-cloak><i class="fas fa-chevron-down"></i></span>
                                     <span x-show="show"><i class="fas fa-chevron-up"></i></span>
                                 </button>
                             </div>
                             <div x-show="show" x-cloak class="mt-2 ms-2 ms-md-0 text-secondary">
-                                {!! implode('<br>', $Funnel->getPages()) !!}
+                                @foreach ($Funnel->steps as $step)
+                                    <div>
+                                        {{ $step['label'] }}
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>

@@ -127,8 +127,8 @@ Route::post('/funnel-explorer/ajax/{tracker:pixel_id}/funnel', [
 ])->name('pathfinder.ajax.post_funnel');
 
 Route::get('/funnel-explorer/ajax/saved_funnel_pages/{funnel}', [
-    PathfinderController::class, 'ajax_get_saved_funnel_pages'
-])->name('pathfinder.ajax.get_saved_funnel_pages');
+    PathfinderController::class, 'ajax_get_saved_funnel_steps'
+])->name('pathfinder.ajax.get_saved_funnel_steps');
 
 Route::post('/funnel-explorer/ajax/funnel/{funnel}/delete', [
     PathfinderController::class, 'post_funnel_delete'

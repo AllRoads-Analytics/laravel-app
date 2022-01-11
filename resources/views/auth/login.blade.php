@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <div class="row">
+    <div class="row mt-2">
         <div class="col text-center fs-5">
             Don't have an account yet?
             <a class="btn btn-primary btn ms-1" href="{{ route('register') }}">
@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div class="row justify-content-center mt-3">
+    <div class="row justify-content-center mt-4">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Log in') }}</div>

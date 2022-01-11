@@ -45,11 +45,11 @@ class PathfinderController extends Controller
     public function ajax_get_next_pages(Request $Request, Tracker $Tracker) {
         $this->authorize('view', $Tracker->Organization);
 
-        $previous_pages = $Request->query('previous_pages', []);
+        $previous_steps = $Request->query('previous_steps', []);
 
         $PixelDataUniquePageviews = PixelDataUniquePageviews::init()
             ->setTracker($Tracker)
-            ->setPreviousPages($previous_pages)
+            ->setPreviousSteps($previous_steps)
             ->setSearch($Request->input('search') ?? '')
             ->setFilters($Request->only(array_keys(PixelDataFunnel::FILTERABLE_FIELDS)))
             ->setDateRange(
@@ -74,11 +74,11 @@ class PathfinderController extends Controller
     public function ajax_get_funnel(Request $Request, Tracker $Tracker) {
         $this->authorize('view', $Tracker->Organization);
 
-        $pages = $Request->query('previous_pages', []);
+        $steps = $Request->query('previous_steps', []);
 
         $page_views = PixelDataFunnel::init()
             ->setTracker($Tracker)
-            ->setPreviousPages($pages)
+            ->setPreviousSteps($steps)
             ->setFilters($Request->only(array_keys(PixelDataFunnel::FILTERABLE_FIELDS)))
             ->setDateRange(
                 Carbon::createFromFormat('Y-m-d', $Request->input('start_date')),
@@ -90,17 +90,12 @@ class PathfinderController extends Controller
         ];
     }
 
-    public function ajax_get_saved_funnel_pages(Request $Request, Funnel $Funnel) {
+    public function ajax_get_saved_funnel_steps(Request $Request, Funnel $Funnel) {
         $this->authorize('view', $Funnel->Organization);
-
-        $pages = collect($Funnel->steps)
-            ->filter( fn($step) => in_array($step['ev'], Tracker::PAGEVIEW_EVENTS) )
-            ->pluck('path')
-            ->toArray();
 
         return [
             'name' => $Funnel->name,
-            'pages' => $pages,
+            'steps' => $Funnel->steps,
             'organization_id' => $Funnel->Organization->id,
         ];
     }
@@ -108,16 +103,21 @@ class PathfinderController extends Controller
     public function ajax_post_funnel(Request $Request, Tracker $Tracker) {
         $this->authorize('edit', $Tracker->Organization);
 
-        $pages = $Request->query('pages', []);
+        $steps = $Request->query('steps', []);
 
         if ($id = $Request->input('id')) {
             $Funnel = Funnel::find($id);
-            $Funnel->updatePages($pages);
-            $Funnel->name = $Request->input('name');
-            $Funnel->save();
+            $Funnel->update([
+                'name' => $Request->input('name'),
+                'steps' => $Request->query('steps', [])
+            ]);
 
         } else {
-            $Funnel = Funnel::createFromPages($Tracker->Organization, $Request->input('name'), $pages);
+            $Funnel = Funnel::create([
+                'organization_id' => $Tracker->Organization->id,
+                'name' => $Request->input('name'),
+                'steps' => $steps,
+            ]);
         }
 
         return [
