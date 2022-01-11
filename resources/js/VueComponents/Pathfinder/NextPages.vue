@@ -11,7 +11,7 @@
                     @click="pages_mode = !pages_mode">
                         <div v-show="pages_mode">
                             <i class="fas fa-asterisk"></i>
-                            Custom URL
+                            Wildcard Step
                         </div>
 
                         <div v-show=" ! pages_mode">
@@ -238,13 +238,15 @@ export default {
 
         searchMe(search_term) {
             this.search_term = search_term;
+            this.page = 0;
             this.update();
         },
 
         clearSearch() {
-            if (this.search_term !== '') {
+            if (this.search_term !== '' || this.page !== 0) {
                 this.$refs.search_input.value = '';
                 this.search_term = '';
+                this.page = 0;
                 this.update();
             }
         },

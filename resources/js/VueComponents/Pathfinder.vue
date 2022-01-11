@@ -80,8 +80,8 @@
                                     </div>
                                 </div>
 
-                                <div class="grid g-2 mt-2">
-                                    <div class="g-col" v-for="value, field in filters_secondary" :key="field+value">
+                                <div class="d-flex flex-wrap g-2 mt-2">
+                                    <div class="" v-for="value, field in filters_secondary" :key="field+value">
                                         <button class="btn-plain" @click="removeFilter(field)">
                                             <span class="badge bg-secondary">
                                                 <b>{{ field }}:</b> {{ value }}
