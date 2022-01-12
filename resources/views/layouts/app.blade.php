@@ -59,9 +59,15 @@
         <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
             <div class="container">
                 <a class="navbar-brand font-allroads fs-4 me-4" href="{{ url('/') }}">
-                    <img src="{{ asset('android-chrome-192x192.png') }}" alt="{{ config('app.label', 'Laravel') }}"
-                    class="" style="width: 38px;">
-                    {{ config('app.label', 'Laravel') }}
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <img src="{{ asset('img/allroads_logo_stroke_150.png') }}" alt="{{ config('app.label', 'Laravel') }}"
+                            class="" style="width: 38px;">
+                        </div>
+                        <div>
+                            {{ config('app.label', 'Laravel') }}
+                        </div>
+                    </div>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>

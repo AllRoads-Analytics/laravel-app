@@ -94,9 +94,9 @@
                         </p>
 
                         <p class="m-0">
-                            <div class="form">
-                                <textarea style="resize: none" readonly id="codeSnippet" class="form-control bg-light" rows="1"
-                                >pathfinder("event", "pageview");</textarea>
+                            <div class="form col-md-6">
+                                <input style="resize: none" disabled class="form-control bg-light"
+                                value="pathfinder(&quot;event&quot;, &quot;pageview&quot;);" />
                             </div>
                         </p>
                     </div>
