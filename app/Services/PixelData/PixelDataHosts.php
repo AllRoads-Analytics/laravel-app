@@ -3,7 +3,7 @@
 class PixelDataHosts extends PixelDataAbstract {
     public function getHosts() {
         $this->checkRequiredAttributes([
-            'Tracker'
+            'pixel_id'
         ]);
 
         $query = <<<SQL
@@ -16,7 +16,7 @@ class PixelDataHosts extends PixelDataAbstract {
         SQL;
 
         return $this->runRawQuery($query, [
-            'pixel_id' => $this->Tracker->pixel_id,
+            'pixel_id' => $this->pixel_id,
         ]);
     }
 }

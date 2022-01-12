@@ -15,6 +15,8 @@ class Funnel extends ModelAbstract
     const STEP_TYPE_PAGELOAD_HOST_PATH = 'pageload_host_path';
     const STEP_TYPE_PAGELOAD_HOST_PATH_LIKE = 'pageload_host_path_like';
 
+    protected $cached_route;
+
     // =========================================================================
     // Relations.
     // =========================================================================
@@ -29,10 +31,13 @@ class Funnel extends ModelAbstract
     // =========================================================================
 
     public function getRoute() {
-        return route('pathfinder.tracker', [
-            'tracker' => $this->Organization->getTracker()->pixel_id,
-            'funnel' => $this->id,
-        ]);
+        if ( ! isset($this->cached_route)) {
+            $this->cached_route = route('pathfinder.tracker', [
+                'organization' => $this->Organization->pixel_id,
+                'funnel' => $this->id,
+            ]);
+        }
+        return $this->cached_route;
     }
 
 

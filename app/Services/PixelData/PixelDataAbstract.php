@@ -2,7 +2,6 @@
 
 use App\Models\Funnel;
 use Carbon\Carbon;
-use App\Models\Tracker;
 use App\Services\BigQueryService;
 use Illuminate\Support\Facades\App;
 
@@ -18,8 +17,8 @@ class PixelDataAbstract {
         'host' => 'Hostname',
     ];
 
-    /** @var Tracker */
-    protected $Tracker;
+    /** @var string */
+    protected $pixel_id;
 
     /** @var Carbon */
     protected $start_date;
@@ -37,8 +36,8 @@ class PixelDataAbstract {
     // Setters.
     // =========================================================================
 
-    public function setTracker(Tracker $Tracker) {
-        $this->Tracker = $Tracker;
+    public function setPixelId(string $pixel_id) {
+        $this->pixel_id = $pixel_id;
         return $this;
     }
 

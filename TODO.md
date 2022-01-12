@@ -1,13 +1,9 @@
-* Marketing homepage.
-
 * user mgmt
  * pw update
 
 * "admin" user type
 
 * parametize values from frontend (like pages) in queries, like @host (made access read-only, already)
-
-* Consolidate Org/Tracker?
 
 * stripe setup.
   * bank info

@@ -290,7 +290,7 @@ export default {
             }
 
             Axios.get( route('pathfinder.ajax.get_filter_options', {
-                tracker: this.pixel_id,
+                organization: this.pixel_id,
                 start_date: this.filters.start_date,
                 end_date: this.filters.end_date,
             })).then( (response) => {
@@ -342,7 +342,7 @@ export default {
 
             Axios.post( route('pathfinder.ajax.post_funnel', {
                 id: this.funnel_id,
-                tracker: this.pixel_id,
+                organization: this.pixel_id,
                 steps: this.filters.previous_steps,
                 name: this.input_funnel_name,
             })).then( (response) => {

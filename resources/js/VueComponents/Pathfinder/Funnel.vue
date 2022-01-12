@@ -122,7 +122,7 @@ export default {
             });
 
             Axios.get( route('pathfinder.ajax.get_funnel', {
-                tracker: this.pixel_id,
+                organization: this.pixel_id,
                 ...this.filters,
             })).then( (response) => {
                 this.page_views = response.data.page_views;

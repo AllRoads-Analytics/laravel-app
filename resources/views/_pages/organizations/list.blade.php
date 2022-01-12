@@ -45,7 +45,7 @@
                             </div>
 
                             <div class="text-md-center col-md-4">
-                                <a href="{{ $Organization->getTracker()->getRoute() }}"
+                                <a href="{{ $Organization->getExploreRoute() }}"
                                 class="btn btn-sm btn-primary me-2">
                                     <i class="fas fa-compass me-1"></i>
                                     Explore

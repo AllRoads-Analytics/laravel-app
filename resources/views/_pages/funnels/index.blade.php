@@ -5,10 +5,10 @@
     <div class="row justify-content-center">
         <div class="col-lg-10 col-xl-8">
             <p class="m-0 text-secondary">
-                {{ $Tracker->Organization->name }}
+                {{ $Organization->name }}
             </p>
 
-            <h2>Saved Funnels</h2>
+            <h2 class="mt-2">Saved Funnels</h2>
 
             <div>
                 @livewire('funnels', ['Organization' => $Organization])
@@ -23,9 +23,9 @@
                     </div>
                 </div>
             @else
-                <a href="{{ route('pathfinder.tracker', $Tracker->pixel_id) }}" class="btn btn-success mt-2">
+                <a href="{{ route('pathfinder.tracker', $Organization->pixel_id) }}" class="btn btn-success mt-2">
                     <i class="fas fa-compass me-1"></i>
-                    New Funnel Explorer
+                    Funnel Explorer
                 </a>
             @endif
         </div>

@@ -220,7 +220,7 @@ export default {
             this.loading = true;
 
             Axios.get( route('pathfinder.ajax.get_next_pages', {
-                tracker: this.pixel_id,
+                organization: this.pixel_id,
                 page: this.page,
                 search: this.search_term,
                 host: this.selected_hostname,

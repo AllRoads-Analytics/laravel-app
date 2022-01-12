@@ -32,7 +32,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // https://laravel.com/docs/8.x/controllers#actions-handled-by-resource-controller
 Route::resource('organizations', OrganizationController::class);
 
-Route::prefix('trackers/{organization}')->group(function() {
+Route::prefix('organizations/{organization}')->group(function() {
     Route::post('/invites/create', [
         OrganizationUserController::class, 'create_invite'
     ])->name('organizations.invites.create');
@@ -106,23 +106,23 @@ Route::post('/accept-invite/{invite_code}', [
 // Pathfinder:
 // =============================================================================
 
-Route::get('/funnel-explorer/{tracker:pixel_id}', [
+Route::get('/funnel-explorer/{organization:pixel_id}', [
     PathfinderController::class, 'get_tracker'
 ])->name('pathfinder.tracker')->middleware('plan_usage.pageviews');
 
-Route::get('/funnel-explorer/ajax/{tracker:pixel_id}/filter_options', [
+Route::get('/funnel-explorer/ajax/{organization:pixel_id}/filter_options', [
     PathfinderController::class, 'ajax_get_filter_options'
 ])->name('pathfinder.ajax.get_filter_options');
 
-Route::get('/funnel-explorer/ajax/{tracker:pixel_id}/next_pages', [
+Route::get('/funnel-explorer/ajax/{organization:pixel_id}/next_pages', [
     PathfinderController::class, 'ajax_get_next_pages'
 ])->name('pathfinder.ajax.get_next_pages');
 
-Route::get('/funnel-explorer/ajax/{tracker:pixel_id}/funnel', [
+Route::get('/funnel-explorer/ajax/{organization:pixel_id}/funnel', [
     PathfinderController::class, 'ajax_get_funnel'
 ])->name('pathfinder.ajax.get_funnel');
 
-Route::post('/funnel-explorer/ajax/{tracker:pixel_id}/funnel', [
+Route::post('/funnel-explorer/ajax/{organization:pixel_id}/funnel', [
     PathfinderController::class, 'ajax_post_funnel'
 ])->name('pathfinder.ajax.post_funnel');
 

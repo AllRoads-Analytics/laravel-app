@@ -71,7 +71,7 @@ class PlanUsage {
             1800, // 1800 sec = 30 min
             function() {
                 return PixelDataTotalPageviews::init()
-                    ->setTracker($this->Organization->getTracker())
+                    ->setPixelId($this->Organization->pixel_id)
                     ->setDateRange(now()->setDay(1), now())
                     ->getPageviewCount();
             }

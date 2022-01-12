@@ -29,7 +29,7 @@ class PixelDataFunnel extends PixelDataAbstract {
      */
     public function getFunnelViews() {
         $this->checkRequiredAttributes([
-            'Tracker', 'start_date', 'end_date', 'previous_steps',
+            'pixel_id', 'start_date', 'end_date', 'previous_steps',
         ]);
 
         $uids_query = $this->getUidsQuery($this->previous_steps);
@@ -46,7 +46,7 @@ class PixelDataFunnel extends PixelDataAbstract {
         // dd($query);
 
         $results = $this->runRawQuery($query, [
-            'pixel_id' => $this->Tracker->pixel_id,
+            'pixel_id' => $this->pixel_id,
         ]);
 
         $step_users = [];

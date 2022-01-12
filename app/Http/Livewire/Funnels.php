@@ -40,6 +40,7 @@ class Funnels extends Component
 
     protected function updateFunnels() {
         $this->funnels = $this->Organization->Funnels()
+            ->with('Organization')
             ->orderBy('name')
             ->get();
     }

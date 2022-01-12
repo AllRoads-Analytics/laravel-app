@@ -2,25 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Funnel;
-use App\Models\Tracker;
-use App\Services\PixelData\PixelDataFilterOptions;
-use App\Services\PixelData\PixelDataFunnel;
-use App\Services\PixelData\PixelDataHosts;
-use App\Services\PixelData\PixelDataUniquePageviews;
 use Carbon\Carbon;
+use App\Models\Funnel;
+use App\Models\Organization;
 use Illuminate\Http\Request;
+use App\Services\PixelData\PixelDataFunnel;
+use App\Services\PixelData\PixelDataFilterOptions;
+use App\Services\PixelData\PixelDataUniquePageviews;
 
 class PathfinderController extends Controller
 {
     const PAGE_SIZE = 10;
 
-    public function get_tracker(Request $Request, Tracker $Tracker) {
-        $this->authorize('view', $Tracker->Organization);
+    public function get_tracker(Request $Request, Organization $Organization) {
+        $this->authorize('view', $Organization);
 
         return view('_pages.pathfinder.tracker', [
-            'Tracker' => $Tracker,
-            'view_days' => $Tracker->Organization->getPlan()->limit_data_view_days,
+            'Organization' => $Organization,
+            'view_days' => $Organization->getPlan()->limit_data_view_days,
         ]);
     }
 
@@ -29,9 +28,9 @@ class PathfinderController extends Controller
     // Ajax.
     // =========================================================================
 
-    public function ajax_get_filter_options(Request $Request, Tracker $Tracker) {
+    public function ajax_get_filter_options(Request $Request, Organization $Organization) {
         $filter_options = PixelDataFilterOptions::init()
-            ->setTracker($Tracker)
+            ->setPixelId($Organization->pixel_id)
             ->setDateRange(
                 Carbon::createFromFormat('Y-m-d', $Request->input('start_date')),
                 Carbon::createFromFormat('Y-m-d', $Request->input('end_date'))
@@ -42,13 +41,13 @@ class PathfinderController extends Controller
         ];
     }
 
-    public function ajax_get_next_pages(Request $Request, Tracker $Tracker) {
-        $this->authorize('view', $Tracker->Organization);
+    public function ajax_get_next_pages(Request $Request, Organization $Organization) {
+        $this->authorize('view', $Organization);
 
         $previous_steps = $Request->query('previous_steps', []);
 
         $PixelDataUniquePageviews = PixelDataUniquePageviews::init()
-            ->setTracker($Tracker)
+            ->setPixelId($Organization->pixel_id)
             ->setPreviousSteps($previous_steps)
             ->setSearch($Request->input('search') ?? '')
             ->setFilters($Request->only(array_keys(PixelDataFunnel::FILTERABLE_FIELDS)))
@@ -71,13 +70,13 @@ class PathfinderController extends Controller
         ];
     }
 
-    public function ajax_get_funnel(Request $Request, Tracker $Tracker) {
-        $this->authorize('view', $Tracker->Organization);
+    public function ajax_get_funnel(Request $Request, Organization $Organization) {
+        $this->authorize('view', $Organization);
 
         $steps = $Request->query('previous_steps', []);
 
         $page_views = PixelDataFunnel::init()
-            ->setTracker($Tracker)
+            ->setPixelId($Organization->pixel_id)
             ->setPreviousSteps($steps)
             ->setFilters($Request->only(array_keys(PixelDataFunnel::FILTERABLE_FIELDS)))
             ->setDateRange(
@@ -100,8 +99,8 @@ class PathfinderController extends Controller
         ];
     }
 
-    public function ajax_post_funnel(Request $Request, Tracker $Tracker) {
-        $this->authorize('edit', $Tracker->Organization);
+    public function ajax_post_funnel(Request $Request, Organization $Organization) {
+        $this->authorize('edit', $Organization);
 
         $steps = $Request->query('steps', []);
 
@@ -114,7 +113,7 @@ class PathfinderController extends Controller
 
         } else {
             $Funnel = Funnel::create([
-                'organization_id' => $Tracker->Organization->id,
+                'organization_id' => $Organization->id,
                 'name' => $Request->input('name'),
                 'steps' => $steps,
             ]);

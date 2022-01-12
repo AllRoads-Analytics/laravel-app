@@ -84,7 +84,7 @@ class PixelDataUniquePageviews extends PixelDataAbstract {
         // dd($query);
 
         return $this->runRawQuery($query, [
-            'pixel_id' => $this->Tracker->pixel_id,
+            'pixel_id' => $this->pixel_id,
         ]);
     }
 }

@@ -17,7 +17,7 @@ class PlanUsagePageviews
      */
     public function handle(Request $Request, Closure $next)
     {
-        $Organization = $Request->organization ?: $Request->tracker->Organization;
+        $Organization = $Request->organization;
 
         if ($Organization->getPlanUsage()->limitReached('limit_pageviews_per_month')) {
             $Request->session()->flash('alert', [

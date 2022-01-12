@@ -17,7 +17,7 @@ class PixelDataFilterOptions extends PixelDataAbstract {
      */
     public function getFilterOptions() {
         $this->checkRequiredAttributes([
-            'Tracker', 'start_date', 'end_date',
+            'pixel_id', 'start_date', 'end_date',
         ]);
 
         $filters_string = implode(', ', array_keys($this::FILTERABLE_FIELDS));
@@ -46,7 +46,7 @@ class PixelDataFilterOptions extends PixelDataAbstract {
         // dd($query);
 
         $results = $this->runRawQuery($query, [
-            'pixel_id' => $this->Tracker->pixel_id
+            'pixel_id' => $this->pixel_id
         ]);
 
         $filter_options = [];

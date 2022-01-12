@@ -11,14 +11,14 @@
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item">
-                        {{ $Tracker->Organization->name }}
+                        {{ $Organization->name }}
                     </li>
 
-                    <li class="breadcrumb-item">
-                        <a href="{{ route('funnels.index', $Tracker->Organization) }}">
+                    {{-- <li class="breadcrumb-item">
+                        <a href="{{ route('funnels.index', $Organization) }}">
                             Saved Funnels
                         </a>
-                    </li>
+                    </li> --}}
                 </ol>
               </nav>
         </div>
@@ -33,7 +33,7 @@
     <div class="row mt-2">
         <div class="col">
             <pathfinder
-            pixel_id="{{ $Tracker->pixel_id }}"
+            pixel_id="{{ $Organization->pixel_id }}"
             view_days="{{ $view_days }}"
             ></pathfinder>
         </div>

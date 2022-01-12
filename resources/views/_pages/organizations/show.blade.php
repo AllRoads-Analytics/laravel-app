@@ -70,7 +70,7 @@
 
                         <div class="form">
                             <textarea style="resize: none" readonly id="codeSnippet" class="form-control bg-light" rows="10"
-                            >{{ $Organization->getTracker()->getCodeSnippet() }}</textarea>
+                            >{{ $Organization->getCodeSnippet() }}</textarea>
                         </div>
 
                         <div class="mt-2">

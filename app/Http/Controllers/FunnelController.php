@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Funnel;
 use App\Models\Organization;
-use App\Models\Tracker;
 use Illuminate\Http\Request;
 
 class FunnelController extends Controller
@@ -18,7 +17,6 @@ class FunnelController extends Controller
 
         return view('_pages.funnels.index', [
             'Organization' => $Organization,
-            'Tracker' => $Organization->getTracker(),
         ]);
     }
 }

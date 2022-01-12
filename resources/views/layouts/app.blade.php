@@ -58,7 +58,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
             <div class="container">
-                <a class="navbar-brand font-allroads fs-4" href="{{ url('/') }}">
+                <a class="navbar-brand font-allroads fs-4 me-4" href="{{ url('/') }}">
                     <img src="{{ asset('android-chrome-192x192.png') }}" alt="{{ config('app.label', 'Laravel') }}"
                     class="" style="width: 38px;">
                     {{ config('app.label', 'Laravel') }}
@@ -69,12 +69,28 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
+                    <ul class="navbar-nav me-auto">
+                        @if ($req_Org = request('organization'))
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                href="{{ $req_Org->getExploreRoute() }}">
+                                    <i class="fas fa-compass me-0"></i>
+                                    Explore
+                                </a>
+                            </li>
 
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                href="{{ route('funnels.index', ['organization' => $req_Org->id]) }}">
+                                    <i class="fas fa-filter me-0"></i>
+                                    Saved Funnels
+                                </a>
+                            </li>
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))
