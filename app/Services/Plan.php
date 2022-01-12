@@ -16,6 +16,10 @@ class Plan extends Fluent {
     protected $attributes;
 
     public function __get($name) {
+        if ('monthly_price_stripe_id' === $name) {
+            return $this->attributes[config('billing.stripe_mode') . '_monthly_price_stripe_id'];
+        }
+
         if (in_array($name, array_keys($this->attributes))) {
             return $this->attributes[$name];
         }
@@ -41,7 +45,7 @@ class Plan extends Fluent {
 
     public static function getByStripePriceId(string $stripe_price_id) {
         foreach (config('billing.plans') as $_plan) {
-            if ($stripe_price_id === $_plan['monthly_price_stripe_id']) {
+            if ($stripe_price_id === $_plan[config('billing.stripe_mode') . '_monthly_price_stripe_id']) {
                 return new self($_plan['id']);
             }
         }

@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'stripe_mode' => env('STRIPE_MODE', 'test'), // test or live
+
     'plans' => [
         'free' => [
             'id' => 'free',
@@ -10,7 +12,8 @@ return [
             'limit_data_view_days' => 7,
             'limit_users' => 1,
             'limit_pageviews_per_month' => 10000,
-            'monthly_price_stripe_id' => null,
+            'test_monthly_price_stripe_id' => null,
+            'live_monthly_price_stripe_id' => null,
         ],
         'basic' => [
             'id' => 'basic',
@@ -20,7 +23,8 @@ return [
             'limit_data_view_days' => 30,
             'limit_users' => 3,
             'limit_pageviews_per_month' => 50000,
-            'monthly_price_stripe_id' => 'price_1KDajCAOLKXPgWftZ1Fv8BFS',
+            'test_monthly_price_stripe_id' => 'price_1KHEeuAOLKXPgWftpOcOoP24',
+            'live_monthly_price_stripe_id' => 'price_1KHECiAOLKXPgWftjlEG1gAp',
         ],
         'plus' => [
             'id' => 'plus',
@@ -30,7 +34,8 @@ return [
             'limit_data_view_days' => 90,
             'limit_users' => 5,
             'limit_pageviews_per_month' => 100000,
-            'monthly_price_stripe_id' => 'price_1KDbvDAOLKXPgWftBXVWB3Cy',
+            'test_monthly_price_stripe_id' => 'price_1KHEfbAOLKXPgWft9Vrzi5nz',
+            'live_monthly_price_stripe_id' => 'price_1KHECoAOLKXPgWftSiHupACn',
         ],
         'pro' => [
             'id' => 'pro',
@@ -40,7 +45,8 @@ return [
             'limit_data_view_days' => 365,
             'limit_users' => 10,
             'limit_pageviews_per_month' => 500000,
-            'monthly_price_stripe_id' => 'price_1KDbvTAOLKXPgWftZvy6X5CR',
+            'test_monthly_price_stripe_id' => 'price_1KHEgpAOLKXPgWftmwbOmhPq',
+            'live_monthly_price_stripe_id' => 'price_1KHECuAOLKXPgWft4FXbxpYG',
         ],
         'enterprise' => [
             'id' => 'enterprise',
@@ -50,7 +56,8 @@ return [
             'limit_data_view_days' => null,
             'limit_users' => null,
             'limit_pageviews_per_month' => 1000000,
-            'monthly_price_stripe_id' => 'price_1KDbvlAOLKXPgWft3hgmRrYM',
+            'test_monthly_price_stripe_id' => 'price_1KDbvlAOLKXPgWft3hgmRrYM',
+            'live_monthly_price_stripe_id' => 'price_1KHECyAOLKXPgWft4pyy3PM9',
         ],
     ],
 ];
