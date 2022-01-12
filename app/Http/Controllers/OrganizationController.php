@@ -97,7 +97,22 @@ class OrganizationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $Organization = Organization::find($id);
+
+        $this->authorize('manage', $Organization);
+
+        $request->validate([
+            'name' => 'string|max:255',
+        ]);
+
+        $Organization->update(['name' => $request->input('name')]);
+
+        $request->session()->flash('alert', [
+            'type' => 'success',
+            'message' => "Name successfully updated.",
+        ]);
+
+        return redirect()->route('organizations.show', $Organization->id);
     }
 
     /**
@@ -116,7 +131,7 @@ class OrganizationController extends Controller
 
         $request->session()->flash('alert', [
             'type' => 'success',
-            'message' => "Organization [$Organization->name] deleted.",
+            'message' => "Tracker [$Organization->name] deleted.",
         ]);
 
         return redirect()->route('home');

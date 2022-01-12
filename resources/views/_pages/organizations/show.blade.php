@@ -8,10 +8,53 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <h1 class="fs-3">
-                Manage tracker:
-                <i>{{ $Organization->name }}</i>
-            </h1>
+            @error('name')
+                <div class="">
+                    <span class="invalid-feedback d-block" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                </div>
+            @enderror
+
+            <div class="mb-3" x-data="{ show: false}">
+                <h1 class="fs-3 m-0"
+                x-show=" ! show">
+                    Manage tracker:
+                    <i>{{ $Organization->name }}</i>
+
+                    <button class="btn btn-sm btn-link"
+                    x-on:click="show = true">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </h1>
+
+                <form action="{{ route('organizations.update', $Organization->id) }}"
+                method="POST"
+                x-show="show" x-cloak>
+                    @csrf
+                    @method('PUT')
+
+                    <div class="input-group mb-1">
+                        <input type="text" class="form-control"
+                        name="name"
+                        placeholder="Tracker name"
+                        aria-label="Tracker name"
+                        aria-describedby="button-name"
+                        value="{{ $Organization->name }}">
+
+                        <button class="btn btn-success" type="submit" id="button-name">
+                            <i class="fas fa-save"></i>
+                        </button>
+                    </div>
+
+                    <div>
+                        <button class="btn btn-link text-secondary" type="button"
+                        x-on:click="show = false">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
 
             <div class="d-grid gap-3">
                 <div class="card">

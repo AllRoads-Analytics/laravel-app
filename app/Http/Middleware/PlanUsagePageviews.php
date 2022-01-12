@@ -22,7 +22,7 @@ class PlanUsagePageviews
         if ($Organization->getPlanUsage()->limitReached('limit_pageviews_per_month')) {
             $Request->session()->flash('alert', [
                 'type' => 'warning',
-                'message' => "Your organization has exceeded its <b>monthly pageview limit</b>.
+                'message' => "Your tracker has exceeded its <b>monthly pageview limit</b>.
                     <br>
                     Please upgrade to a plan with a higher limit.
                 ",
