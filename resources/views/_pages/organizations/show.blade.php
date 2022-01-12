@@ -8,7 +8,10 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <h1>Manage <i>{{ $Organization->name }}</i></h1>
+            <h1 class="fs-3">
+                Manage tracker:
+                <i>{{ $Organization->name }}</i>
+            </h1>
 
             <div class="d-grid gap-3">
                 <div class="card">

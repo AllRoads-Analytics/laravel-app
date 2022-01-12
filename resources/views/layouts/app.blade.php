@@ -112,7 +112,7 @@
             </div>
         </nav>
 
-        <main class="py-4 mb-5">
+        <main class="py-4 mb-5" style="min-height: 80vh">
             @if ($alert = session('alert'))
                 <div class="alert alert-{{ $alert['type'] ?? 'primary' }}" role="alert">
                     <div class="container">
@@ -123,6 +123,13 @@
 
             @yield('content')
         </main>
+
+        <div class="my-3 text-center text-secondary">
+            Support, feedback, feature requests: email
+            <a href="mailto:{{ config('allroads.contact_email') }}">
+                {{ config('allroads.contact_email') }}
+            </a>
+        </div>
     </div>
 </body>
 </html>

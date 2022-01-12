@@ -32,7 +32,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // https://laravel.com/docs/8.x/controllers#actions-handled-by-resource-controller
 Route::resource('organizations', OrganizationController::class);
 
-Route::prefix('organizations/{organization}')->group(function() {
+Route::prefix('trackers/{organization}')->group(function() {
     Route::post('/invites/create', [
         OrganizationUserController::class, 'create_invite'
     ])->name('organizations.invites.create');

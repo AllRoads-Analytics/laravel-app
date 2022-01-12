@@ -5,7 +5,13 @@
     <div class="row justify-content-center">
         <div class="col-lg-10">
             @if ($organizations->count())
-                <h3>Your Organizations</h3>
+                <h1 class="fs-3 m-0">
+                    Your Trackers
+                </h1>
+
+                <div class="text-muted mb-3">
+                    A Tracker can be used on multiple sites. Each Tracker has it's own plan and users.
+                </div>
             @else
                 <div class="row">
                     <div class="col">
@@ -14,12 +20,12 @@
                         </p>
 
                         <p>
-                            If you signed-up to join an existing organization,
+                            If you signed-up to join an existing Tracker,
                             click on the link in the invite email you recieved.
                         </p>
 
                         <p>
-                            Otherwise, click below to create a new Organization
+                            Otherwise, click below to create a new Tracker
                             (free plan available) and get started!
                         </p>
                     </div>
@@ -66,7 +72,7 @@
 
             <a href="{{ route('organizations.create') }}" class="btn btn-outline-dark btn-sm mt-2">
                 <i class="fas fa-plus me-1"></i>
-                Create New Organization
+                Create New Tracker
             </a>
         </div>
     </div>

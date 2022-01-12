@@ -8,7 +8,7 @@
                 {{ $Tracker->Organization->name }}
             </p>
 
-            <h2>Funnels</h2>
+            <h2>Saved Funnels</h2>
 
             <div>
                 @livewire('funnels', ['Organization' => $Organization])
