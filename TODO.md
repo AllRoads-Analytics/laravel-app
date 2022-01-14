@@ -3,8 +3,6 @@
 
 * cloudflare in front of Google App? Probably no, b/c don't want to send cached gif. Maybe put allroads.js somewhere else?
 
-* disable save button, when funnel limit reached
-
 * "admin" user type
 
 * parametize values from frontend (like pages) in queries, like @host (made access read-only, already)

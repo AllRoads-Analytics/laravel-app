@@ -107,13 +107,13 @@
                     <div class="row g-3 align-items-center justify-content-between">
                         <div class="col-md">
                             <h4 class="mb-1">
-                                {{ funnel_id ? 'Saved Funnel' : 'New Funnel' }}
+                                {{ funnel_id ? 'Saved Funnel' : 'Unsaved Funnel' }}
                             </h4>
 
                             <h5 class="m-0" v-if="!editing">
                                 <div v-show="funnel_name">
                                     <i class="fas fa-save me-1 text-secondary"></i>
-                                    <i>{{ funnel_name }}</i>
+                                    {{ funnel_name }}
                                 </div>
                             </h5>
 
@@ -121,7 +121,7 @@
                             style="min-width: 40vw;"
                             v-model="input_funnel_name"
                             v-on:keyup.enter="saveFunnel"
-                            v-if="editing">
+                            v-show="save_allowed && editing">
                         </div>
 
                         <div class="col-md text-md-end">
@@ -148,12 +148,21 @@
                                 </div>
 
                                 <div class="">
-                                    <button type="button" class="btn btn-success"
-                                    v-show="editing"
-                                    @click="saveFunnel">
-                                        <i class="fas fa-save"></i>
-                                        Save
-                                    </button>
+                                    <div>
+                                        <button type="button" class="btn btn-success"
+                                        :disabled=" ! save_allowed"
+                                        v-show="editing"
+                                        @click="saveFunnel">
+                                            <i class="fas fa-save"></i>
+                                            Save
+                                        </button>
+                                    </div>
+
+                                    <div v-if=" ! save_allowed" class="text-muted">
+                                        Saved funnel limit reached.
+                                        <br>
+                                        <a :href="planRoute" class="text-muted">Upgrade plan</a>.
+                                    </div>
                                 </div>
                             </div>
 
@@ -208,6 +217,8 @@ export default {
     props: {
         pixel_id: String,
         view_days: String,
+        save_allowed: Boolean,
+        organization_id: String,
     },
 
     data() {
@@ -318,7 +329,6 @@ export default {
                     this.filters.previous_steps = response.data.steps;
                     this.funnel_name = response.data.name;
                     this.input_funnel_name = this.funnel_name;
-                    this.organization_id = response.data.organization_id;
                     this.filters.ready = true;
                 }).catch( (error) => {
                     console.log(error);
@@ -348,7 +358,6 @@ export default {
             })).then( (response) => {
                 this.funnel_id = response.data.Funnel.id;
                 this.funnel_name = response.data.Funnel.name;
-                this.organization_id = response.data.Funnel.organization_id;
                 this.editing = false;
 
                 const searchParams = new URLSearchParams(window.location.search);
@@ -384,6 +393,10 @@ export default {
     },
 
     computed: {
+        planRoute: function() {
+            return route('organizations.billing.get_select_plan', this.organization_id);
+        },
+
         from_date: function() {
             return this.filters.start_date;
         },

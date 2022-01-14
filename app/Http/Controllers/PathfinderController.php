@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Services\PixelData\PixelDataFunnel;
 use App\Services\PixelData\PixelDataFilterOptions;
 use App\Services\PixelData\PixelDataUniquePageviews;
+use App\Services\PlanUsage;
 
 class PathfinderController extends Controller
 {
@@ -20,6 +21,7 @@ class PathfinderController extends Controller
         return view('_pages.pathfinder.tracker', [
             'Organization' => $Organization,
             'view_days' => $Organization->getPlan()->limit_data_view_days,
+            'save_allowed' => ! $Organization->getPlanUsage()->limitReached('limit_funnels'),
         ]);
     }
 

@@ -35,6 +35,8 @@
             <pathfinder
             pixel_id="{{ $Organization->pixel_id }}"
             view_days="{{ $view_days }}"
+            :save_allowed="{{ $save_allowed ? 'true' : 'false' }}"
+            organization_id="{{ $Organization->id }}"
             ></pathfinder>
         </div>
     </div>
