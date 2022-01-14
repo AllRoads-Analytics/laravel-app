@@ -2,6 +2,13 @@
 
 @section('content')
 <div class="container">
+    <p class="m-0 text-secondary">
+        Tracker:
+        <a href="{{ $Organization->getSettingsRoute() }}" style="text-decoration: none">
+            {{ $Organization->name }}
+        </a>
+    </p>
+
     <div>
         <h1>New Payment Method</h1>
     </div>

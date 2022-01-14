@@ -8,7 +8,7 @@
                 {{ $Organization->name }}
             </p>
 
-            <h2 class="mt-2">Saved Funnels</h2>
+            <h1 class="mt-2">Saved Funnels</h1>
 
             <div>
                 @livewire('funnels', ['Organization' => $Organization])

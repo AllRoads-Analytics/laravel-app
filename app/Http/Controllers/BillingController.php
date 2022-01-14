@@ -109,6 +109,7 @@ class BillingController extends Controller
         return view('_pages.billing.payment', [
             'intent' => $Organization->createSetupIntent(),
             'Plan' => $Request->has('plan') ? Plan::getById($Request->input('plan')) : null,
+            'Organization' => $Organization,
         ]);
     }
 

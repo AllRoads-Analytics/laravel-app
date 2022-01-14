@@ -5,6 +5,13 @@
     @csrf
 
     <div class="container">
+        <p class="m-0 text-secondary">
+            Tracker:
+            <a href="{{ $Organization->getSettingsRoute() }}" style="text-decoration: none">
+                {{ $Organization->name }}
+            </a>
+        </p>
+
         <div class="row mb-3">
             <div class="col">
                 <div class="d-flex justify-content-between align-items-center">

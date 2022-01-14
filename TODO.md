@@ -3,8 +3,6 @@
 
 * cloudflare in front of Google App? Probably no, b/c don't want to send cached gif. Maybe put allroads.js somewhere else?
 
-* update plan / CC pages: "back to Org" button 
-
 * disable save button, when funnel limit reached
 
 * "admin" user type

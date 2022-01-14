@@ -88,6 +88,10 @@ class Organization extends ModelAbstract
         return route('pathfinder.tracker', $this->pixel_id);
     }
 
+    public function getSettingsRoute() {
+        return route('organizations.show', $this->id);
+    }
+
     public function addUser(User $User, string $role) {
         if ( ! in_array($role, User::ROLES)) {
             throw new \Exception("Role [$role] not legit.");
