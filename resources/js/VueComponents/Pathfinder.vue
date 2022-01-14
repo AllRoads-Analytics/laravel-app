@@ -34,7 +34,7 @@
                             <button @click="filters_open = ! filters_open" class="btn-plain w-100">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-sliders-h"></i>
                                         Filters
                                     </div>
 
