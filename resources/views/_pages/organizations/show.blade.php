@@ -321,6 +321,15 @@
                                                 Replace Payment Method
                                             </a>
                                         </div>
+
+                                        @if ($billing_portal_url)
+                                            <div class="mt-2">
+                                                <a href="{{ $billing_portal_url }}" class="btn btn-outline-secondary btn-sm">
+                                                    <i class="fas fa-eye"></i>
+                                                    View payment history
+                                                </a>
+                                            </div>
+                                        @endif
                                     @endif
                                 </div>
 
@@ -355,7 +364,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="mt-3">
+                                    <div class="mt-2">
                                         <a href="{{ route('organizations.billing.get_select_plan', $Organization) }}"
                                         class="btn btn-sm btn-outline-primary">
                                             <i class="fas fa-wrench"></i>

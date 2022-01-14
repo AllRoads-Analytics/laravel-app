@@ -67,13 +67,15 @@ class OrganizationController extends Controller
             return abort(404);
         }
 
-        // dd($Organization->billingPortalUrl());
-
         return view('_pages.organizations.show', [
             'Organization' => $Organization,
             'Plan' => $Organization->getPlan(),
             'PaymentCard' => $Organization->getPaymentCard(),
             'usages' => $Organization->getPlanUsage()->getAll(),
+            'billing_portal_url' => $Organization->hasStripeId()
+                ? $Organization->billingPortalUrl(
+                    route('organizations.show', $Organization)
+                ) : null,
         ]);
     }
 

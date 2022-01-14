@@ -1,15 +1,20 @@
 * user mgmt
  * pw update
 
+* cloudflare in front of Google App? Probably no, b/c don't want to send cached gif. Maybe put allroads.js somewhere else?
+
+* update plan / CC pages: "back to Org" button 
+
+* disable save button, when funnel limit reached
+
 * "admin" user type
 
 * parametize values from frontend (like pages) in queries, like @host (made access read-only, already)
 
 * stripe setup.
-  * bank info
   * invoice portal page
-  * webhooks
-  * txn emails
+  * webhooks test
+  * txn emails test
 
 * privacy policy / compliance
 
@@ -19,3 +24,5 @@
 
 * bigger laravel server
   * move DB and sessions?
+
+* Cloudflare SSL https://medium.com/@taylorotwell/free-wildcard-ssl-using-forge-cloudflare-ab0ebfbf129f
