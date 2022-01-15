@@ -24,3 +24,5 @@
 * email image
 
 * instead of 403 (unauthorized), redirect to login page "you must log-in first"
+
+* separate pixel code from event handler
