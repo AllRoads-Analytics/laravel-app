@@ -53,6 +53,15 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
         ],
 
+        'do_space_backups' => [
+            'driver' => 's3',
+            'key' => env('DO_SPACE_KEY'),
+            'secret' => env('DO_SPACE_SECRET'),
+            'region' => 'nyc3',
+            'bucket' => 'allroads-laravel-backups',
+            'endpoint' => 'https://nyc3.digitaloceanspaces.com',
+            'use_path_style_endpoint' => false,
+        ],
     ],
 
     /*
