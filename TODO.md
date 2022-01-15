@@ -12,13 +12,15 @@
   * webhooks test
   * txn emails test
 
-* privacy policy / compliance
+* privacy policy / compliance: reread
 
 * Account delete -> subscription cancellation.
 
-* Demo video
+* Demo video: choose
 
 * bigger laravel server
   * move DB and sessions?
 
 * Cloudflare SSL https://medium.com/@taylorotwell/free-wildcard-ssl-using-forge-cloudflare-ab0ebfbf129f
+
+* mysql backup https://spatie.be/docs/laravel-backup/v8/introduction

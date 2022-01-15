@@ -119,6 +119,7 @@
 
                             <input type="text" class="form-control"
                             style="min-width: 40vw;"
+                            placeholder="Funnel Name"
                             v-model="input_funnel_name"
                             v-on:keyup.enter="saveFunnel"
                             v-show="save_allowed && editing">

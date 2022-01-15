@@ -6,7 +6,10 @@ $new_palette: (
     e: #8292FA,
 
     f: #292929, // darkgrey
-    g: #f3f3f3 // lightgrey
+    g: #f3f3f3, // lightgrey
+
+    h: #c3cbff, // lightblue
+    i: #16226B, //darkblue
 );
 
 // Body
@@ -30,7 +33,7 @@ $gray-800: #343a40 !default;
 $gray-900: #212529 !default;
 $black:    #000 !default;
 
-$blue: #0017AD;
+$blue: #16226B;
 $indigo: #6574cd;
 $purple: #9561e2;
 $pink: #f66d9b;
@@ -39,7 +42,7 @@ $orange: #f6993f;
 $yellow: #FAC000;
 $green: #157e41;
 $teal: #4dc0b5;
-$cyan: #cfe5e3;
+$cyan: #c3cbff;
 
 $primary:       $blue !default;
 $secondary:     $gray-700 !default;
