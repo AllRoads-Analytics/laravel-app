@@ -22,3 +22,5 @@
 * Cloudflare SSL https://medium.com/@taylorotwell/free-wildcard-ssl-using-forge-cloudflare-ab0ebfbf129f
 
 * email image
+
+* instead of 403 (unauthorized), redirect to login page "you must log-in first"

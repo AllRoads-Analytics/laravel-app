@@ -21,7 +21,7 @@ class PathfinderController extends Controller
         return view('_pages.pathfinder.tracker', [
             'Organization' => $Organization,
             'view_days' => $Organization->getPlan()->limit_data_view_days,
-            'save_allowed' => ! $Organization->getPlanUsage()->limitReached('limit_funnels'),
+            'limit_reached' => $Organization->getPlanUsage()->limitReached('limit_funnels'),
         ]);
     }
 

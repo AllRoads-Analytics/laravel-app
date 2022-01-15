@@ -218,7 +218,7 @@ export default {
     props: {
         pixel_id: String,
         view_days: String,
-        save_allowed: Boolean,
+        limit_reached: Boolean,
         organization_id: String,
     },
 
@@ -246,6 +246,8 @@ export default {
             filter_options: [],
             selected_filter: '',
             selected_filter_option: '',
+
+            planRoute: '',
 
             window_location: window.location.pathname,
         };
@@ -394,8 +396,8 @@ export default {
     },
 
     computed: {
-        planRoute: function() {
-            return route('organizations.billing.get_select_plan', this.organization_id);
+        save_allowed: function() {
+            return ( this.funnel_id || ! this.limit_reached ) ? true : false;
         },
 
         from_date: function() {
@@ -442,6 +444,8 @@ export default {
     },
 
     beforeMount() {
+        this.planRoute = route('organizations.billing.get_select_plan', this.organization_id);
+
         const view_days_int = parseInt(this.view_days);
 
         const endDate = new Date();
