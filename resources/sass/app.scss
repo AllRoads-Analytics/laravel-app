@@ -46,3 +46,17 @@ pre {
 .glow-arlightblue {
     box-shadow: 0 0 5px 5px #8292FA;
 }
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: #0017AD;
+    border-color: #0017AD;
+}
+
+a:hover {
+    color: #0017AD;
+}
+
+.btn-link:hover {
+    color: #0017AD;
+}
