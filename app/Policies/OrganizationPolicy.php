@@ -47,6 +47,10 @@ class OrganizationPolicy
     }
 
     protected function isAdmin($User, $Organization) {
+        if ($User->flag_admin) {
+            return true;
+        }
+
         $Organization = $this->getUserOrganization($User, $Organization);
         return $Organization && $Organization->pivot->role === $User::ROLE_ADMIN;
     }

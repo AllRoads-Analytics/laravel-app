@@ -40,7 +40,7 @@
                                 {{ $Organization->name }}
 
                                 <span class="badge bg-info text-dark ms-1">
-                                    {{ $Organization->pivot->role }}
+                                    {{ $Organization->pivot->role ?? 'n/a' }}
                                 </span>
                             </div>
 

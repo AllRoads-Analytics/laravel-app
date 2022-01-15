@@ -32,6 +32,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // https://laravel.com/docs/8.x/controllers#actions-handled-by-resource-controller
 Route::resource('organizations', OrganizationController::class);
 
+Route::get('admin/organizations', [
+    OrganizationController::class, 'admin_index',
+])->name('admin.organizations.index')->middleware('is_global_admin');
+
 Route::prefix('organizations/{organization}')->group(function() {
     Route::post('/invites/create', [
         OrganizationUserController::class, 'create_invite'

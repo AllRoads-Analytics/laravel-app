@@ -117,6 +117,12 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    @if (Auth::user()->flag_admin)
+                                        <a href="{{ route('admin.organizations.index') }}" class="dropdown-item text-danger">
+                                            Admin Org List
+                                        </a>
+                                    @endif
+
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

@@ -24,6 +24,12 @@ class OrganizationController extends Controller
         return redirect()->route('home');
     }
 
+    public function admin_index() {
+        return view('_pages.organizations.list', [
+            'organizations' => Organization::all(),
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

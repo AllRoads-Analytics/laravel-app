@@ -29,6 +29,7 @@ class HomeController extends Controller
 
         return view('_pages.organizations.list', [
             'organizations' => $User->Organizations()
+                ->orderBy('name')
                 ->withPivot('role')->get(),
         ]);
     }

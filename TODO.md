@@ -1,7 +1,7 @@
 * user mgmt
  * pw update
 
-* "admin" user type
+* "admin" user type / Tracker-list
 
 * parametize values from frontend (like pages) in queries, like @host (made access read-only, already)
 
@@ -16,5 +16,3 @@
   * move DB and sessions?
 
 * email image
-
-* instead of 403 (unauthorized), redirect to login page "you must log-in first"

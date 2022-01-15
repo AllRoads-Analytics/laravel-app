@@ -66,6 +66,7 @@ class Kernel extends HttpKernel
 
         // Custom
         'plan_usage.pageviews' => \App\Http\Middleware\PlanUsagePageviews::class,
+        'is_global_admin' => \App\Http\Middleware\GlobalAdmin::class,
     ];
 
     protected function bootstrappers()
