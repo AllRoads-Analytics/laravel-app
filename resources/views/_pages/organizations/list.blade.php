@@ -9,7 +9,7 @@
                     Your Trackers
                 </h1>
 
-                <div class="text-muted mb-3">
+                <div class="text-secondary mb-3">
                     A Tracker can be used on multiple sites. Each Tracker has it's own plan and users.
                 </div>
             @else
