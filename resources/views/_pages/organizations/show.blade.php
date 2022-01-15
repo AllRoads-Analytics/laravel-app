@@ -109,106 +109,117 @@
                         </div>
 
                         <div class="card-body">
-                            <div>
-                                <ul class="list-unstyled">
-                                    @foreach ($Organization->Users()->withPivot('role')->get()->sortBy('name') as $User)
-                                        <li class="mb-2 pb-1 border-bottom" x-data="{ open: false }">
-                                            {{ $User->name }} &ndash; {{ $User->email }}
+                            <div class="row g-3">
+                                <div class="col-md-7">
+                                    <ul class="list-unstyled">
+                                        @foreach ($Organization->Users()->withPivot('role')->get()->sortBy('name') as $User)
+                                            <li class="mb-2 pb-1 border-bottom" x-data="{ open: false }">
+                                                {{ $User->name }} &ndash; {{ $User->email }}
 
-                                            <span class="badge rounded-pill bg-dark me-2"
-                                            x-show=" ! open">
-                                                {{ $User->pivot->role }}
-                                            </span>
+                                                <span class="badge rounded-pill bg-dark me-2"
+                                                x-show=" ! open">
+                                                    {{ $User->pivot->role }}
+                                                </span>
 
-                                            <div class="col-lg-6">
-                                                <form action="{{ route('organizations.users.edit', [
-                                                    'organization' => $Organization->id,
-                                                    'user' => $User->id,
-                                                ]) }}"
-                                                class="d-inline"
-                                                method="post">
-                                                    @csrf
-
-                                                    <span x-cloak x-show="open">
-                                                        <select name="role" id="role" class="form-select" required>
-                                                            @foreach (User::ROLES as $role)
-                                                                <option {{ $role === $User->pivot->role ? 'selected' : '' }}
-                                                                value="{{ $role }}">
-                                                                    {{ $role }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-
-                                                        <div class="mt-1">
-                                                            <button type="submit" class="btn btn-sm btn-primary">
-                                                                Update
-                                                            </button>
-
-                                                            <button type="button" class="btn btn-sm btn-link"
-                                                            x-on:click="open = false">
-                                                                Cancel
-                                                            </button>
-                                                        </div>
-                                                    </span>
-                                                </form>
-
-                                                @if ($User->id === auth()->user()->id)
-                                                    <span class="ms-2">(you)</span>
-                                                @else
-                                                    <button class="btn btn-link text-primary p-1"
-                                                    type="button"
-                                                    x-on:click="open = true"
-                                                    x-show=" ! open">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-
-                                                    <form action="{{ route('organizations.users.remove', [
+                                                <div class="col-lg-6">
+                                                    <form action="{{ route('organizations.users.edit', [
                                                         'organization' => $Organization->id,
                                                         'user' => $User->id,
                                                     ]) }}"
                                                     class="d-inline"
-                                                    method="post"
-                                                    onsubmit="return confirm('Are you sure you want to remove this user?')">
+                                                    method="post">
                                                         @csrf
-                                                        <button class="btn btn-link text-danger p-1" type="submit"
+
+                                                        <span x-cloak x-show="open">
+                                                            <select name="role" id="role" class="form-select" required>
+                                                                @foreach (User::ROLES as $role)
+                                                                    <option {{ $role === $User->pivot->role ? 'selected' : '' }}
+                                                                    value="{{ $role }}">
+                                                                        {{ $role }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+
+                                                            <div class="mt-1">
+                                                                <button type="submit" class="btn btn-sm btn-primary">
+                                                                    Update
+                                                                </button>
+
+                                                                <button type="button" class="btn btn-sm btn-link"
+                                                                x-on:click="open = false">
+                                                                    Cancel
+                                                                </button>
+                                                            </div>
+                                                        </span>
+                                                    </form>
+
+                                                    @if ($User->id === auth()->user()->id)
+                                                        <span class="ms-2">(you)</span>
+                                                    @else
+                                                        <button class="btn btn-link text-primary p-1"
+                                                        type="button"
+                                                        x-on:click="open = true"
                                                         x-show=" ! open">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+
+                                                        <form action="{{ route('organizations.users.remove', [
+                                                            'organization' => $Organization->id,
+                                                            'user' => $User->id,
+                                                        ]) }}"
+                                                        class="d-inline"
+                                                        method="post"
+                                                        onsubmit="return confirm('Are you sure you want to remove this user?')">
+                                                            @csrf
+                                                            <button class="btn btn-link text-danger p-1" type="submit"
+                                                            x-show=" ! open">
+                                                                <i class="fas fa-minus-circle"></i>
+                                                            </button>
+                                                        </form>
+                                                    @endif
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+
+                                    @if ($Organization->Invites->count())
+                                        <p class="mt-3 mb-1"><i>Invites:</i></p>
+                                    @endif
+
+                                    <div>
+                                        <ul>
+                                            @foreach ($Organization->Invites->sortBy('email') as $Invite)
+                                                <form action="{{ route('organizations.invites.remove', [
+                                                    'organization' => $Organization->id,
+                                                    'invite' => $Invite->id,
+                                                ]) }}"
+                                                method="post"
+                                                onsubmit="return confirm('Are you sure you want to remove this invite?')">
+                                                    @csrf
+
+                                                    <li class="fst-italic">
+                                                        {{ $Invite->email }}
+
+                                                        (<a href="{{ $Invite->getAcceptRoute() }}">Invite Link</a>)
+
+                                                        <button class="btn btn-link text-danger p-1" type="submit">
                                                             <i class="fas fa-minus-circle"></i>
                                                         </button>
-                                                    </form>
-                                                @endif
-                                            </div>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
+                                                    </li>
+                                                </form>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
 
-                            @if ($Organization->Invites->count())
-                                <p class="mt-3 mb-1"><i>Invites:</i></p>
-                            @endif
-
-                            <div>
-                                <ul>
-                                    @foreach ($Organization->Invites->sortBy('email') as $Invite)
-                                        <form action="{{ route('organizations.invites.remove', [
-                                            'organization' => $Organization->id,
-                                            'invite' => $Invite->id,
-                                        ]) }}"
-                                        method="post"
-                                        onsubmit="return confirm('Are you sure you want to remove this invite?')">
-                                            @csrf
-
-                                            <li class="fst-italic">
-                                                {{ $Invite->email }}
-
-                                                (<a href="{{ $Invite->getAcceptRoute() }}">Invite Link</a>)
-
-                                                <button class="btn btn-link text-danger p-1" type="submit">
-                                                    <i class="fas fa-minus-circle"></i>
-                                                </button>
-                                            </li>
-                                        </form>
-                                    @endforeach
-                                </ul>
+                                <div class="col-md-5 fst-italic">
+                                    <div class="p-2 bg-light rounded">
+                                        <div class="fs-5">Roles</div>
+                                        <div class=""><span class="fw-bold">Viewer:</span> Can view data, but not save funels.</div>
+                                        <div class="mt-1"><span class="fw-bold">Editor:</span> Can view data, and save/edit funnels.</div>
+                                        <div class="mt-1"><span class="fw-bold">Admin:</span> Can view data, save/edit funnels, view/manage users and billing.</div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="mt-3"

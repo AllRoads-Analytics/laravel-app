@@ -15,6 +15,10 @@ class PathfinderController extends Controller
 {
     const PAGE_SIZE = 10;
 
+    public function __construct() {
+        $this->middleware('auth');
+    }
+
     public function get_tracker(Request $Request, Organization $Organization) {
         $this->authorize('view', $Organization);
 
@@ -22,6 +26,7 @@ class PathfinderController extends Controller
             'Organization' => $Organization,
             'view_days' => $Organization->getPlan()->limit_data_view_days,
             'limit_reached' => $Organization->getPlanUsage()->limitReached('limit_funnels'),
+            'can_edit' => $Request->user()->can('edit', $Organization),
         ]);
     }
 
@@ -31,6 +36,8 @@ class PathfinderController extends Controller
     // =========================================================================
 
     public function ajax_get_filter_options(Request $Request, Organization $Organization) {
+        $this->authorize('view', $Organization);
+
         $filter_options = PixelDataFilterOptions::init()
             ->setPixelId($Organization->pixel_id)
             ->setDateRange(

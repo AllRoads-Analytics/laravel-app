@@ -36,6 +36,7 @@
             pixel_id="{{ $Organization->pixel_id }}"
             view_days="{{ $view_days }}"
             :limit_reached="{{ $limit_reached ? 'true' : 'false' }}"
+            :can_edit="{{ $can_edit ? 'true' : 'false' }}"
             organization_id="{{ $Organization->id }}"
             ></pathfinder>
         </div>

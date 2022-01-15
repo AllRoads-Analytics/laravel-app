@@ -122,10 +122,10 @@
                             placeholder="Funnel Name"
                             v-model="input_funnel_name"
                             v-on:keyup.enter="saveFunnel"
-                            v-show="save_allowed && editing">
+                            v-show="can_edit &&save_allowed && editing">
                         </div>
 
-                        <div class="col-md text-md-end">
+                        <div class="col-md text-md-end" v-if="can_edit">
                             <div class="d-flex align-items-center justify-content-md-end">
                                 <div class="mr-2" v-if="funnel_id">
                                     <button type="button" class="btn btn-sm btn-outline-primary"
@@ -219,6 +219,7 @@ export default {
         pixel_id: String,
         view_days: String,
         limit_reached: Boolean,
+        can_edit: Boolean,
         organization_id: String,
     },
 
