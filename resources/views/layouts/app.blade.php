@@ -24,13 +24,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito&family=Fugaz+One&display=swap" rel="stylesheet">
 
-    @if ('production' === config('app.env'))
+    @if (true || 'production' === config('app.env'))
         <!-- Start AllRoads Snippet -->
         <script>
         ! function(e, t, n, a, p, r, s) {
         e[a] || ((p = e[a] = function() {
         p.process ? p.process.apply(p, arguments) : p.queue.push(arguments)
-        }).queue = [], p.t = +new Date, (r = t.createElement(n)).async = 1, r.src = "https://events.allroadsanalytics.com/allroads.min.js?t=" + 864e5 * Math.ceil(new Date / 864e5), (s = t.getElementsByTagName(n)[0]).parentNode.insertBefore(r, s))
+        }).queue = [], p.t = + new Date, (r = t.createElement(n)).async = 1, r.src = "https://cdn.allroadsanalytics.com/allroads.min.js", (s = t.getElementsByTagName(n)[0]).parentNode.insertBefore(r, s))
         }(window, document, "script", "allroads"),
         allroads("init", "ID-timcom", {follow: true}),
         allroads("event", "pageload");
