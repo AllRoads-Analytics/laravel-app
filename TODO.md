@@ -1,8 +1,6 @@
 * user mgmt
  * pw update
 
-* "admin" user type / Tracker-list
-
 * parametize values from frontend (like pages) in queries, like @host (made access read-only, already)
 
 * stripe setup.

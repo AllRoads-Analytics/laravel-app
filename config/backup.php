@@ -169,8 +169,8 @@ return [
             'to' => 'tim@allroadsanalytics.com',
 
             'from' => [
-                'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-                'name' => env('MAIL_FROM_NAME', 'Example'),
+                'address' => 'backups@allroadsanalytics.com',
+                'name' => 'AllRoads Backups',
             ],
         ],
 
