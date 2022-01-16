@@ -49,7 +49,7 @@ class OrganizationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'company' => 'string|max:255',
+            'name' => 'required|string|min:3|max:255',
         ]);
 
         $Organization = Organization::create([

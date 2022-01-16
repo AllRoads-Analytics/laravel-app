@@ -16,13 +16,19 @@
                         @csrf
 
                         <div class="mb-3">
-                            <label for="input_company" class="form-label">
+                            <label for="name" class="form-label">
                                 Tracker Name
                             </label>
 
-                            <input type="text" class="form-control @error('company') is-invalid @enderror" id="input_company" name="company">
+                            <input type="text" class="form-control @error('name') is-invalid @enderror"
+                            aria-describedby="trackerHelp"
+                            id="name" name="name">
 
-                            @error('company')
+                            <div id="trackerHelp" class="form-text mt-1">
+                                Company or owner of site(s) where tracker will be used.
+                            </div>
+
+                            @error('name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
