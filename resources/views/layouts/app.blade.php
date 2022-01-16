@@ -38,12 +38,13 @@
         <!-- End AllRoads Snippet -->
 
         <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-R2B4E76E6P"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-216497173-1"></script>
         <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
+        gtag('config', 'UA-216497173-1');
         gtag('config', 'G-R2B4E76E6P');
         </script>
         <!-- end Global site tag (gtag.js) - Google Analytics -->
