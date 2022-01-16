@@ -53,7 +53,7 @@ class OrganizationController extends Controller
         ]);
 
         $Organization = Organization::create([
-            'name' => $request->input('company'),
+            'name' => $request->input('name'),
         ])->addUser(auth()->user(), User::ROLE_ADMIN);
 
         return redirect()->route('organizations.billing.get_select_plan', $Organization->id);
