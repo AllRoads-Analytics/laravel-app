@@ -92,6 +92,7 @@
                             @if ( ! $allowed)
                                 <div class="alert alert-danger small px-2 py-1 m-0">
                                     Current usage is too high for this plan.
+                                    Please remove saved funnels and/or users before changing to this plan.
                                 </div>
                             @elseif ('free' === $id && $Plan && $Plan->id !== 'free')
                                 <div class="alert alert-secondary small px-2 py-1 m-0">

@@ -107,7 +107,7 @@ class Organization extends ModelAbstract
         $usage = $this->getPlanUsage()->getAll();
 
         return Plan::all()->reduce( function($plans, $Plan) use ($usage) {
-            foreach (PlanUsage::LIMITS as $key => $label) {
+            foreach (['limit_users', 'limit_funnels'] as $key) {
                 if (null !== $Plan->$key && $usage[$key]['usage'] > $Plan->$key) {
                     return $plans;
                 }
