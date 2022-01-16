@@ -2,6 +2,7 @@
 
 return [
     'stripe_mode' => env('STRIPE_MODE', 'test'), // test or live
+    'stripe_public_key' => env('STRIPE_KEY'),
 
     'plans' => [
         'free' => [
