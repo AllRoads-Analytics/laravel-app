@@ -1,6 +1,6 @@
 {
     "name": "AllRoads Analytics",
-    "short_name": "AllRoads",
+    "short_name": "AllRoads Analytics",
     "start_url": ".",
     "icons": [
       {
@@ -14,7 +14,7 @@
         "type": "image/png"
       }
     ],
-    "theme_color": "#FAC000",
-    "background_color": "#c3cbff",
+    "theme_color": "#000000",
+    "background_color": "#FAC000",
     "display": "standalone"
   }
