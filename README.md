@@ -7,6 +7,11 @@ Our target market is businesses which operate multiple websites and want aggrega
 
 A free plan is offered. Monthly subscriptions are offered, to unlock greater tracking capacity. Customers will be charged at the time of subscription to a non-free plan.
 
+## Marketing description
+
+Explore and measure lead/sales funnel performance across your sites.
+Explore user journeys, without setting-up funnels ahead of time.
+
 ## Query examples
 
 ```

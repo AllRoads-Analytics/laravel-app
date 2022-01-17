@@ -24,7 +24,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito&family=Fugaz+One&display=swap" rel="stylesheet">
 
-    @if (true || 'production' === config('app.env'))
+    @if ('production' === config('app.env'))
         <!-- Start AllRoads Snippet -->
         <script>
         ! function(e, t, n, a, p, r, s) {
@@ -57,7 +57,7 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
             <div class="container">
                 <a class="navbar-brand font-allroads fs-4 me-4" href="{{ url('/') }}">
                     <div class="d-flex align-items-center">
@@ -76,7 +76,7 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
+                    <ul class="navbar-nav me-auto gap-2 py-2 py-lg-0">
                         @if ($req_Org = request('organization'))
                             <li class="nav-item">
                                 <a class="nav-link"
@@ -91,6 +91,14 @@
                                 href="{{ route('funnels.index', ['organization' => $req_Org->id]) }}">
                                     <i class="fas fa-filter me-0"></i>
                                     Saved Funnels
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                href="{{ $req_Org->getSettingsRoute() }}">
+                                <i class="fas fa-cog me-0"></i>
+                                Tracker Settings
                                 </a>
                             </li>
                         @endif
