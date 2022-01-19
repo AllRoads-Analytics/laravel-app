@@ -28,14 +28,11 @@ class PixelDataFilterOptions extends PixelDataAbstract {
             SQL;
         }, array_keys($this::FILTERABLE_FIELDS)));
 
-        $start_string = $this->start_date->toDateString();
-        $end_string = $this->end_date->toDateString();
-
         $query = <<<SQL
             WITH pageviews AS (
                 SELECT $filters_string FROM :table as ev0
-                WHERE date(ev0.ts) >= '$start_string'
-                    AND date(ev0.ts) <= '$end_string'
+                WHERE date(ev0.ts) >= @start_string
+                    AND date(ev0.ts) <= @end_string
                     AND ev0.id = @pixel_id
                     AND ( ev0.ev = 'pageload' OR ev0.ev = 'pageview' )
             )
@@ -45,13 +42,17 @@ class PixelDataFilterOptions extends PixelDataAbstract {
 
         // dd($query);
 
-        $results = $this->runRawQuery($query, [
-            'pixel_id' => $this->pixel_id
+        $this->addQueryParameters([
+            'pixel_id' => $this->pixel_id,
+            'start_string' => $this->start_date->toDateString(),
+            'end_string' => $this->end_date->toDateString(),
         ]);
+
+        $results = $this->runRawQuery($query);
 
         $filter_options = [];
         foreach ($results->current() as $_field => $_values) {
-            $filter_options[] = [
+            $filter_options[$_field] = [
                 'key' => $_field,
                 'label' => $this::FILTERABLE_FIELDS[$_field],
                 'options' => array_filter(array_map( function ($_value) {

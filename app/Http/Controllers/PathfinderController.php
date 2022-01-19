@@ -45,8 +45,12 @@ class PathfinderController extends Controller
                 Carbon::createFromFormat('Y-m-d', $Request->input('end_date'))
             )->getFilterOptions();
 
+        $options_hostname = $filter_options['host']['options'] ?? [];
+        unset($filter_options['host']);
+
         return [
-            'filter_options' => $filter_options,
+            'filter_options' => array_values($filter_options),
+            'options_hostname' => $options_hostname,
         ];
     }
 
@@ -55,11 +59,14 @@ class PathfinderController extends Controller
 
         $previous_steps = $Request->query('previous_steps', []);
 
+        $filters = PixelDataFunnel::FILTERABLE_FIELDS;
+        unset($filters['host']);
+
         $PixelDataUniquePageviews = PixelDataUniquePageviews::init()
             ->setPixelId($Organization->pixel_id)
             ->setPreviousSteps($previous_steps)
             ->setSearch($Request->input('search') ?? '')
-            ->setFilters($Request->only(array_keys(PixelDataFunnel::FILTERABLE_FIELDS)))
+            ->setFilters($Request->only(array_keys($filters)))
             ->setDateRange(
                 Carbon::createFromFormat('Y-m-d', $Request->input('start_date')),
                 Carbon::createFromFormat('Y-m-d', $Request->input('end_date'))

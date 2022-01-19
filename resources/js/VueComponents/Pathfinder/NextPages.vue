@@ -197,7 +197,7 @@ export default {
         pixel_id: String,
         filters: Object,
         ready: Boolean,
-        options_hostname: Array,
+        options_hostname: Object,
     },
 
     data() {

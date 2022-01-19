@@ -10,13 +10,11 @@ class PixelDataHosts extends PixelDataAbstract {
             SELECT DISTINCT host
             FROM :table
             WHERE {$this->generateWhereString(array_merge([
-                ['id', '=', '@pixel_id'],
+                ['id', '=', $this->pixel_id],
             ], $this->getDateWheres()))}
             ORDER BY host
         SQL;
 
-        return $this->runRawQuery($query, [
-            'pixel_id' => $this->pixel_id,
-        ]);
+        return $this->runRawQuery($query);
     }
 }

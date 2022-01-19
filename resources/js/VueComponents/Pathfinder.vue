@@ -245,6 +245,7 @@ export default {
             filters_open: false,
 
             filter_options: [],
+            options_hostname: [],
             selected_filter: '',
             selected_filter_option: '',
 
@@ -310,6 +311,7 @@ export default {
                 end_date: this.filters.end_date,
             })).then( (response) => {
                 this.filter_options = response.data.filter_options;
+                this.options_hostname = response.data.options_hostname;
             }).catch( (error) => {
                 console.log(error);
                 window.alert('Something went wrong (filter options).');
@@ -423,14 +425,6 @@ export default {
                 ...this.filters,
                 ...this.filters_secondary,
             };
-        },
-
-        options_hostname: function() {
-            const FilterOption = _.find(this.filter_options, (_option) => {
-                return 'host' === _option.key;
-            });
-
-            return FilterOption ? _.toArray(FilterOption.options) : [];
         },
     },
 

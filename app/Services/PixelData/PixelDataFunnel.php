@@ -45,9 +45,7 @@ class PixelDataFunnel extends PixelDataAbstract {
 
         // dd($query);
 
-        $results = $this->runRawQuery($query, [
-            'pixel_id' => $this->pixel_id,
-        ]);
+        $results = $this->runRawQuery($query);
 
         $step_users = [];
         foreach ($results as $row) {

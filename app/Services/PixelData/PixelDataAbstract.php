@@ -17,6 +17,11 @@ class PixelDataAbstract {
         'host' => 'Hostname',
     ];
 
+    /** @var array */
+    protected $parameters = [];
+
+    protected $parameter_idx = 0;
+
     /** @var string */
     protected $pixel_id;
 
@@ -73,8 +78,9 @@ class PixelDataAbstract {
             $query .= " OFFSET $this->offset";
         }
 
-        // dd($query);
-        return $this->getBigQueryService()->rawQuery($query, $parameters)->rows();
+        // dd([$query, $this->parameters]);
+
+        return $this->getBigQueryService()->rawQuery($query, $this->parameters)->rows();
     }
 
     protected function getTableRef() {
@@ -116,23 +122,19 @@ class PixelDataAbstract {
                 $string .= ' AND ';
             }
 
-            if (is_array($value)) {
-                $string .= "{$table_prefix}{$value[0]} {$value[1]} "
-                    . (
-                        is_int($value[2]) || substr($value[2], 0, 1) === '@'
-                        || 'true' === $value[2] || 'false' === $value[2]
-
-                        ? $value[2] : "\"{$value[2]}\""
-                    );
-            } else {
-                $string .= "{$table_prefix}{$key} = "
-                    . (
-                        is_int($value) || substr($value, 0, 1) === '@'
-                        || 'true' === $value || 'false' === $value
-
-                        ? $value : "\"{$value}\""
-                    );
+            if ( ! is_array($value)) {
+                $value = [ $key, '=', $value ];
             }
+
+            $value_prime = $value[2];
+
+            if ($value_prime === 'true' || $value_prime === 'false') {
+                $value_prime = $value_prime === 'true' ? true : false;
+            }
+
+            $placeholder = $this->addQueryParameter($value_prime);
+
+            $string .= "{$table_prefix}{$value[0]} {$value[1]} @$placeholder";
 
             $i++;
         }
@@ -149,9 +151,6 @@ class PixelDataAbstract {
     }
 
     protected function getUidsQuery($previous_steps) {
-        $start_string = $this->start_date->toDateString();
-        $end_string = $this->end_date->toDateString();
-
         $first_step_where = $this->getStepWhere($previous_steps[0]);
 
         $last_step_idx = count($previous_steps) -1;
@@ -174,7 +173,7 @@ class PixelDataAbstract {
                         ON ev$idx.uid = ev0.uid
                             AND ev$idx.id = @pixel_id
                             AND ev$idx.ts > ev$prev_idx.ts
-                            AND date(ev$idx.ts) <= '$end_string'
+                            AND date(ev$idx.ts) <= @end_string
                             AND ( ev$idx.ev = 'pageload' OR ev$idx.ev = 'pageview' )
                             AND ev$idx.$step_where
                             $filter_wheres
@@ -198,14 +197,20 @@ class PixelDataAbstract {
                     $joins_string
 
                 WHERE ev0.id = @pixel_id
-                    AND date(ev0.ts) >= '$start_string'
-                    AND date(ev0.ts) <= '$end_string'
+                    AND date(ev0.ts) >= @start_string
+                    AND date(ev0.ts) <= @end_string
                     AND ( ev0.ev = 'pageload' OR ev0.ev = 'pageview' )
                     AND ev0.$first_step_where
                     $filter_wheres
                 ) inz
             GROUP BY uid
         SQL;
+
+        $this->addQueryParameters([
+            'pixel_id' => $this->pixel_id,
+            'start_string' => $this->start_date->toDateString(),
+            'end_string' => $this->end_date->toDateString(),
+        ]);
 
         return $query;
     }
@@ -215,13 +220,32 @@ class PixelDataAbstract {
             throw new \Exception("Invalid step format.");
         }
 
+        $key = $this->addQueryParameter($step['match_data']);
+
         switch ($step['type']) {
             case Funnel::STEP_TYPE_PAGELOAD_HOST_PATH:
-                return "host_path = '" . $step['match_data'] . "' ";
+                return "host_path = @$key ";
             case Funnel::STEP_TYPE_PAGELOAD_HOST_PATH_LIKE:
-                return "host_path LIKE '" . $step['match_data'] . "' ";
+                return "host_path LIKE @$key ";
         }
 
         throw new \Exception("Invalid step type: " . $step['type']);
+    }
+
+    protected function addQueryParameter($value, $key = null) {
+        $key = $key ?: 'param';
+
+        $key = $key . '_' . $this->parameter_idx;
+
+        $this->parameters[$key] = $value;
+
+        $this->parameter_idx++;
+
+        return $key;
+    }
+
+    protected function addQueryParameters($new_params) {
+        $this->parameters = array_merge($this->parameters, $new_params);
+        return $this;
     }
 }

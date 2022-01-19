@@ -10,15 +10,13 @@ class PixelDataTotalPageviews extends PixelDataAbstract {
             SELECT count(*) pageviews
             FROM :table
             WHERE {$this->generateWhereString(array_merge([
-                ['id', '=', '@pixel_id'],
+                ['id', '=', $this->pixel_id],
             ], $this->getDateWheres()))}
                 AND (ev = 'pageload' OR ev = 'pageview')
         SQL;
 
         // dd($query);
 
-        return (integer) $this->runRawQuery($query, [
-            'pixel_id' => $this->pixel_id,
-        ])->current()['pageviews'];
+        return (integer) $this->runRawQuery($query)->current()['pageviews'];
     }
 }

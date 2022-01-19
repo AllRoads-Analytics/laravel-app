@@ -22,26 +22,6 @@ class BigQueryService {
         return config('bigquery.dataset') . '.' . config('bigquery.table');
     }
 
-    /**
-     * Select from table.
-     *
-     * @param array $fields
-     * @param string $suffix
-     * @return \Google\Cloud\BigQuery\QueryResults
-     */
-    public function select(array $fields, string $suffix = '') {
-        $query = 'SELECT ' . implode(', ', $fields) . ' ' .
-            'FROM ' . $this->getTableRef() . ' ' .
-            $suffix;
-
-        return $this->BigQuery->runQuery(
-            $this->BigQuery->query($query),
-            [
-                'returnRawResults' => true,
-            ]
-        );
-    }
-
 
     /**
      * Run a raw query.
@@ -57,8 +37,7 @@ class BigQueryService {
         // echo $query; die;
 
         return $this->BigQuery->runQuery(
-            $this->BigQuery->query($query)->parameters($parameters),
-            [
+            $this->BigQuery->query($query)->parameters($parameters), [
                 'returnRawResults' => true,
             ]
         );
