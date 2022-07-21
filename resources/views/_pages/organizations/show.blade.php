@@ -96,7 +96,7 @@
                         <p class="m-0">
                             <div class="form col-md-6">
                                 <input style="resize: none" disabled class="form-control bg-light"
-                                value="pathfinder(&quot;event&quot;, &quot;pageview&quot;);" />
+                                value="allroads(&quot;event&quot;, &quot;pageview&quot;);" />
                             </div>
                         </p>
                     </div>
