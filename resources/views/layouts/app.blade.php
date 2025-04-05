@@ -56,6 +56,12 @@
     @livewireStyles
 </head>
 <body>
+    <header class="bg-ar-yellow-2 ">
+      <div class="text-center py-2">
+        <p class="text-lg">AllRoads Analytics is going away on January 1st, 2026.</p>
+      </div>
+    </header>
+    
     <div id="app">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
             <div class="container">
